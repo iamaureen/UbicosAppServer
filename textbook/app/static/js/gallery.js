@@ -13,6 +13,9 @@ $(function(){
 //this method is used to load digital discussion gallery feed
 //called from digTextBook.js
 var loadGalleryFeed = function(act_id){
+    //clear the feed each time
+
+
     //based on the activity id, load the image, group member names, and set of comment made by the members
     gallery_act_id = act_id;
     //steps implemented
@@ -51,6 +54,8 @@ var loadGalleryFeed = function(act_id){
          success: function(response){
                 //console.log(response) //this returns the image comment img_msg as well as the group-member names
 
+                //clear the image feed so it doesn't add to the previously loaded feed
+                $('#image-feed').empty();
 
                 //if there is no image, then there is no comment
                 if(response.success) {
@@ -58,8 +63,7 @@ var loadGalleryFeed = function(act_id){
                     var obj = jQuery.parseJSON(msg_data);
                     //console.log(obj)
 
-                    //clear the image feed so it doesn't add to the previously loaded feed
-                    //$('#image-feed').empty();
+
 
                     //iterate through the response data to display the comments in the interface
                     $.each(obj, function(key, value){
@@ -74,6 +78,7 @@ var loadGalleryFeed = function(act_id){
                     var element = document.getElementById("image-feed");
                     element.scrollTop = element.scrollHeight;
                 }
+
 
                 //update group member ingo
                 group_member_list = response.group_member;

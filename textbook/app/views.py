@@ -281,6 +281,7 @@ def getIndividualCommentMsgs(request,imageId):
     return JsonResponse({'imageCommments': imageCommments});
 
 #used in gallery.js
+#display a random image outside the group
 def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id, ', act_id);
@@ -291,21 +292,22 @@ def getGalleryImage(request, act_id):
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 289 :: ', member_image_id_list);
+    print('line 295 :: ', member_image_id_list);
 
     all_image_id_query = imageModel.objects.filter(gallery_id=act_id).values('id');
     all_image_id_list = [item['id'] for item in all_image_id_query];
-    print('line 293 :: ', all_image_id_list);
+    print('line 299 :: ', all_image_id_list);
 
     outside_group_image = list(set(all_image_id_list) - set(member_image_id_list))
     #outside_group_image can be empty if no image is uploaded in this gallery activity
-    print('line 301 :: ', outside_group_image);
+    print('line 303 :: ', outside_group_image);
     if(len(outside_group_image) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
         return HttpResponse('');
     else:
         #the list is not empty
-        outside_group_image_id = random.choice(outside_group_image);
+        #outside_group_image_id = random.choice(outside_group_image); #not sending random as then participants from the same group also sees different image
+        outside_group_image_id = outside_group_image[0];
         print('debug purpose, def getGalleryImage,  outside_group_image_id :: ', outside_group_image_id);
 
         images = imageModel.objects.filter(id=outside_group_image_id).values('image');
@@ -313,6 +315,7 @@ def getGalleryImage(request, act_id):
             dict = {}
             dict['imagePk'] = outside_group_image_id;
             dict['url'] = images[0]['image'];
+
             return JsonResponse({'imageData': dict});
         else:
             return HttpResponse('');
@@ -349,11 +352,11 @@ def getSelfGalleryContent(request, act_id):
     # get the users' uploaded image for the given gallery
     print('debug purpose, def getSelfGalleryContent, gallery id, ', act_id);
     #img_data = imageModel.objects.filter(gallery_id=act_id, posted_by_id=request.user); #returns a queryset
-    img_data = list(imageModel.objects.filter(gallery_id=act_id, posted_by_id=request.user).values('id','image'));
+    # todo: what if the filter returns multiple image i.e., user uploaded more than one image
+    img_data = list(imageModel.objects.filter(gallery_id=act_id, posted_by_id=request.user).values('id','image').order_by('-id'));
+    print('line 252 ::', img_data);
     # print('line 251:', type(img_data)); #type -- list
     # print('line 252:', type(json.dumps(list(img_data)))); #type -- str
-    #todo: what if the filter returns multiple image i.e., user uploaded more than one image
-    #print('line 252 ::', img_data[0]['id']);
 
     dict = {};
     if img_data: #there is at least an image uploaded by the user (could be more than one, but selecting the first here, TODO)
@@ -373,7 +376,7 @@ def getSelfGalleryContent(request, act_id):
 def getBadgeNames(request):
     if request.method == 'POST':
         badgeType = request.POST.get('badgeType');
-        #print('346 :: ', badgeType)
+        #print('379 :: ', badgeType)
 
         #used value = "True" to get the three badgenames; true/false either way we have three badges
         badges = list(badgeInfo.objects.filter(charac=badgeType, value="True").values('badgeName', 'imgName', 'definition').distinct());
@@ -408,6 +411,7 @@ def getBadgeNames(request):
             badgeCountList.append(dict);
 
         #print('line 382 badge count list (debug) :: ', badgeCountList);
+        #print('line 414 badge list (debug) :: ', badges);
 
         return JsonResponse({'badgeNames': badges, 'badgeCount': badgeCountList});
     return HttpResponse('');
@@ -865,7 +869,7 @@ def groupAdd(request):
     #
 
     #rangeVal = total number of unique gallery activities
-    rangeVal = 6;
+    rangeVal = 9;
     for username in users_list:
         for i in range(1, rangeVal):
             member = groupInfo(activityID=i, group=username_groupID[usernames_array.index(username)],

@@ -7,7 +7,7 @@ $(function(){
 
     //load the first set of badge and highlight it
     updateBadgeCardBody('Understand Better!', 'msc');
-    //todo highlight
+
 
     badgeCardActionItems();
 

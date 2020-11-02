@@ -98,9 +98,9 @@ var buildFeedwithMsgs = function(message, container, username, time){
 var getCurrentTime = function(){
     //call to the method to post the message in the feed
     var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "-"
+    var datetime = "" + currentdate.getFullYear() + "-"
     + (currentdate.getMonth()+1)  + "-"
-    + currentdate.getFullYear() + " "
+    + currentdate.getDate() + " "
     + currentdate.getHours() + ":"
     + currentdate.getMinutes() + ":"
     + currentdate.getSeconds();

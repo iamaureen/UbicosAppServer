@@ -149,9 +149,9 @@ var postIndMessage = function (){
 
     if(imagePk == $('.slider img').attr('data-imgID')) {
         //just an additional verification that the selected image and displayed image are the same
-        console.log(imagePk);
+        //console.log(imagePk);
     }else{
-        console.log(imagePk);
+        //console.log(imagePk);
         console.log($('.slider img').attr('data-imgID'))
         console.log('not the same image, check');
     }
@@ -170,8 +170,9 @@ var postIndMessage = function (){
             //empty the message pane
             $("input[name='ind-msg-text']").val('');
 
+            time = getCurrentTime();
             //display the message in the feed when posted
-            buildFeedwithMsgs(message, "#ind-feed", logged_in);
+            buildFeedwithMsgs(message, "#ind-feed", logged_in, time);
 
         },
         error: function(){

@@ -215,7 +215,7 @@ var bindActivityButtons = function(){
         //id of each each activity
         var id = activityButton.attr('data-id');
         activity_id = id;
-        console.log('activity id::', id)
+        console.log('activity id::', id);
 
         //individual_act_id = id; //passing it to individual_gallery.js
 
@@ -248,7 +248,7 @@ var bindActivityButtons = function(){
             //using the whiteboard id and the logged in user
 
             var whiteboard_url = getWhiteboardURl(id); //this will come from the database
-            console.log('whiteboard URl', whiteboard_url);
+            //console.log('whiteboard URl', whiteboard_url);
             window.open(whiteboard_url, '_blank'); //open any external video in a new window
         }
 //        ------------------------------TABLE-----------------------
@@ -311,7 +311,6 @@ var bindActivityButtons = function(){
              card_extension_close();
 
              $('#upload-img input[name="act-id"]').attr('value', id);
-             $("input[name='group-id']").attr('value', 1); //TODO automate in the backend
 
              //https://stackoverflow.com/questions/52430558/dynamic-html-image-loading-using-javascript-and-django-templates
              $('img#default').attr('src', API_URL.picsBase + "/default.png");
@@ -357,6 +356,7 @@ var bindActivityButtons = function(){
             $('#gallery-description').text(activityButton.attr('data-description') +
             ' Use the badge option on the top-right corner to get an idea about how to help others.');
 
+            $('ul#image-feed').html('');
             loadGalleryFeed(id);
 
         }
