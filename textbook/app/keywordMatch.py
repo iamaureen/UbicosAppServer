@@ -8,25 +8,28 @@ import string
 #the following dict contains keywords from #1 and #2
 #the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
 keywords_dict = \
-    {'brainstorm': ['let\'s discuss', 'one way we could start', 'we can approach', 'one approach',
-                    'another approach', 'from the video', 'initial idea', 'one idea', 'another idea', 'one way', 'another way', 'one way we could start this problem'],
-     'question': ['how', 'what', 'where', 'why', 'can you', 'can',
-                  'did', 'do you', 'do we', 'does','what are your thoughts'],
-     'critique': ['what evidence', 'answer misses', 'missing', 'doesn\'t seem your answer'],
-     'elaborate': ['an example', 'explanation', 'perspective', 'because', 'because of', 'for example'],
-     'share': ['clarification', 'clarify', 'share my thoughts', 'we may consider'],
-     'challenge': ['what if', 'on the contrary', 'an alternative way', 'instead','what do you think', 'do you agree','do you disagree'],
-     'feedback': ['another thing to consider', 'I\'d like to suggest', 'suggestion', 'feedback', 'next time',
-                  'sugesting', 'disagree with your approach'],
-     'addon': ['add on', 'in addition', 'furthermore', 'moreover', 'an alternative approach', 'sharing an example'],
+    {'brainstorm': ['this reminds me', 'let\'s discuss', 'one way we could start', 'we can approach', 'one approach','i think',
+                    'another approach', 'from the video', 'initial idea', 'one idea', 'another idea', 'one way', 'another way', 'one way we could start this problem','what strategy'],
+     'question': ['how', 'what', 'where', 'why', 'can you', 'can', 'can someone', 'would you'
+                  'did', 'do you', 'do we', 'does','what are your thoughts','which', 'is this'],
+     'critique': ['your answer is wrong', 'what evidence', 'answer misses', 'missing', 'doesn\'t seem your answer', 'unless', 'convinced'],
+     'elaborate': ['since','this reminds me', 'in my opinion', 'an example', 'explanation', 'perspective', 'because', 'because of', 'for example'],
+     'share': ['I feel the same way', 'this reminds me', 'in my opinion', 'clarification', 'clarify', 'share my thoughts', 'we may consider','i think',
+               'can someone'],
+     'challenge': ['your answer is wrong','what if', 'on the contrary', 'an alternative way', 'instead','what do you think', 'do you agree','do you disagree','is this'],
+     'feedback': ['Maybe', 'either', 'another thing to consider', 'I\'d like to suggest', 'suggestion', 'feedback', 'next time',
+                  'sugesting', 'disagree with your approach', 'should', 'can', 'supposed to'],
+     'addon': ['this reminds me', 'add on', 'in addition', 'furthermore', 'moreover', 'an alternative approach', 'sharing an example'],
      'summarize': ['in summary', 'to summarize', 'summarizing', 'combine our approach', 'combine our opinion', 'in your opinion', 'based on the discussion',
                    'based on our discussion', 'based on this discussion'],
-     'answer': ['to answer your question', 'I understand what you said', 'I noticed you mentioned', 'you said'],
-     'reflect': ['I agree', 'I disagree', 'your answer made me wonder', 'wondering', 'if I understood correctly', 'you mean'],
-     'assess': ['is this the same as', 'have you consider', 'have I consider', 'are you saying'],
+     'answer': ['this reminds me', 'to answer your question', 'I understand what you said', 'I noticed you mentioned', 'you said', 'because'],
+     'reflect': ['I feel the same way', 'have to agree', 'have to disagree', 'in my opinion', 'I agree', 'I disagree', 'i kind of agree',
+                 'your answer made me wonder', 'wondering', 'if I understood correctly', 'you mean'],
+     'assess': ['is this the same as', 'have you consider', 'have I consider', 'are you saying', 'is this'],
      'participate': ['I think' , 'my answer is', 'why do we do'], # post length greater than 10,
-     'appreciate': ["thank you", "thanks", "good job", "great job", "great work",'that helped when you .. '],
-     'encourage': ['brilliant work', 'great job', 'I liked how']
+     'appreciate': ["thank you", "thanks", "good job", "great job", "great work",'that helped when you .. ',
+                    'like it', 'love it', 'cool work', 'really good', 'like how you'],
+     'encourage': ['brilliant work', 'great job', 'I liked how','it is fine','i like', 'like it','like how you']
      }
 
 week1_relevance = [];
