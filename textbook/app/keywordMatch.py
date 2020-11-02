@@ -8,21 +8,25 @@ import string
 #the following dict contains keywords from #1 and #2
 #the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
 keywords_dict = \
-    {'brainstorm': ['let\'s discuss', 'one way we could start', 'we can approach', 'one approach', 'another approach', 'from the video', 'initial idea', 'one idea', 'another idea', 'one way', 'another way'],
-     'question': ['how', 'what', 'where', 'why', 'can you', 'can', 'did', 'do', 'does'],
+    {'brainstorm': ['let\'s discuss', 'one way we could start', 'we can approach', 'one approach',
+                    'another approach', 'from the video', 'initial idea', 'one idea', 'another idea', 'one way', 'another way', 'one way we could start this problem'],
+     'question': ['how', 'what', 'where', 'why', 'can you', 'can',
+                  'did', 'do you', 'do we', 'does','what are your thoughts'],
      'critique': ['what evidence', 'answer misses', 'missing', 'doesn\'t seem your answer'],
      'elaborate': ['an example', 'explanation', 'perspective', 'because', 'because of', 'for example'],
-     'share': ['clarification', 'clarify', 'share my thoughts', 'consider'],
-     'challenge': ['what if', 'on the contrary', 'an alternative way', 'instead'],
-     'feedback': ['another thing to consider', 'I\'d like to suggest', 'suggestion', 'feedback', 'next time', 'sugesting'],
-     'addon': ['add on', 'in addition', 'furthermore', 'moreover', 'an alternative approach'],
-     'summarize': ['in summary', 'to summarize', 'summarizing', 'combine our approach', 'combine our opinion'],
+     'share': ['clarification', 'clarify', 'share my thoughts', 'we may consider'],
+     'challenge': ['what if', 'on the contrary', 'an alternative way', 'instead','what do you think', 'do you agree','do you disagree'],
+     'feedback': ['another thing to consider', 'I\'d like to suggest', 'suggestion', 'feedback', 'next time',
+                  'sugesting', 'disagree with your approach'],
+     'addon': ['add on', 'in addition', 'furthermore', 'moreover', 'an alternative approach', 'sharing an example'],
+     'summarize': ['in summary', 'to summarize', 'summarizing', 'combine our approach', 'combine our opinion', 'in your opinion', 'based on the discussion',
+                   'based on our discussion', 'based on this discussion'],
      'answer': ['to answer your question', 'I understand what you said', 'I noticed you mentioned', 'you said'],
-     'reflect': ['I agree', 'I disagree', 'your answer made me wonder', 'wondering', 'if I understood correctly'],
+     'reflect': ['I agree', 'I disagree', 'your answer made me wonder', 'wondering', 'if I understood correctly', 'you mean'],
      'assess': ['is this the same as', 'have you consider', 'have I consider', 'are you saying'],
      'participate': ['I think' , 'my answer is', 'why do we do'], # post length greater than 10,
-     'appreciate': ["thank you", "thanks", "good job", "great job", "great work"],
-     'ecourage': ['brilliant work', 'great job', 'I liked how']
+     'appreciate': ["thank you", "thanks", "good job", "great job", "great work",'that helped when you .. '],
+     'encourage': ['brilliant work', 'great job', 'I liked how']
      }
 
 week1_relevance = [];

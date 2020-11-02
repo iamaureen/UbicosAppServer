@@ -1,19 +1,26 @@
 
-<h2>Persona Profile Page</h2>
+<h1>Persona Profile Page</h1>
 
-<div class="initPersonality">
-
-    <p>
-        Based on your answers, your profile closely matched with <span class="namePersonality"><strong><i>Ekans</i></strong></span>. Would you like to change anything?
-    </p>
-     <img src="/ekans.png">
-     <!--    #defined in digTextBook.js-->
-    <button  id="editPersonalityOptionBtn"> Edit </button>
+<div>
+    <p>Remember you answered some questions about yourselves when we started! You closely matched with one of the fictional students.</p>
+<!--    this button call is declared in digTextbook.js and defined in personality.js-->
+    <button  id="getInitPersonality"> See who you match with! </button>
 </div>
 
-<div class="personalityProfiles">
+
+<div class="initPersonality" style="display: none">
+    <p>
+        Based on your answers, your profile closely matched with <span class="namePersonality" id="namePersonality"><strong><i>Ekans</i></strong></span>. Would you like to change anything?
+    </p>
+     <img src="/blank.png">
+     <!--    #defined in digTextBook.js-->
+    <!--    this button call is declared and defined in digTextbook.js-->
+    <button  id="editPersonalityOptionBtn"> Yes, Edit </button>
+</div>
+
+<div class="personalityProfiles" style="display: none">
     <p id="matchedPersonality">
-    Eevee is a student in 8th Grade math class. She considers that she is 1. <span class="personality-msc">pretty great at math</span>.
+    <span class="namePersonality"><strong><i>Ekans</i></strong></span> is a student in 8th Grade math class. She considers that she is 1. <span class="personality-msc">pretty great at math</span>.
     Of course, she works with other people on math in a lot of different settings 2. <span class="personality-hsc">but she doesn’t feel like she is very good at giving help to others </span>.
     When it comes to working on activities for class and other things, 3. <span class="personality-con"> she doesn’t always participate</span>. Sometimes, that depends on who she is working with.
     However, honestly 4. <span class="personality-fam"> she doesn’t mind working with anybody </span>. But, overall that’s her math life!

@@ -411,7 +411,7 @@ function drawLine(draw){
     //save the data points in database
 
     localStorage.setItem('table'+$("input[name='table-id']").val(), JSON.stringify(POINTS))
-    enterLogIntoDatabase('plot line pressed', 'table plot line' , JSON.stringify(POINTS), current_pagenumber)
+    enterLogIntoDatabase('plot line pressed', 'table plot line' , JSON.stringify(POINTS), global_current_pagenumber)
     tableDataInsert('table', POINTS);
 }
 

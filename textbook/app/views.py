@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
-    userQuesAnswerTable, groupInfo, userLogTable, badgeReceived, badgeSelected, studentCharacteristicModel, badgeInfo, KAPostModel,\
-    participationHistory, whiteboardInfoTable, khanAcademyInfoTable
+    userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, badgeSelected, studentCharacteristicModel, badgeInfo, KAPostModel,\
+    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -151,8 +151,8 @@ def saveCharacteristic(request):
     # note: added has_social true for badge update consistency (more into computional model method). while
     # the other four variables value will come from the survey, has_social will always be true.
     for o in User.objects.all():
-        student_char = studentCharacteristicModel(user=o, has_msc=True,
-                                                  has_hsc=True, has_fam=True, has_con=True, has_social=True);
+        student_char = studentCharacteristicModel(user=o, has_msc=False,
+                                                  has_hsc=False, has_fam=False, has_con=False, has_social=True);
         student_char.save();
 
 
@@ -415,19 +415,20 @@ def getBadgeNames(request):
 
 #this method is called from gallery.js/khan academy content.js, and teachable agent <fileName>
 #https://stackoverflow.com/questions/18045867/post-jquery-array-to-django
-def getBadgeOptions(request, username, platform, badgeKey):
+def getBadgeOptions(request, username, platform, badgeKey,activity_id):
 
     print('line 393 /getBadgeOptions :: ', badgeKey);
 
     #get the students characteristic VALUES from the database
     charac = getCharacteristic(request, username); #this is a dict
     #print('line 309 accessing charac list :: ', charac);
-    print('line 310 accessing charac value :: ', type(charac['social']));
+    #print('line 310 accessing charac value :: ', type(charac['social']));
 
     #separatae no participation badge vs constructive badge -- through badgeKey List
     dict = {};
     index_list = [1, 2, 3]; #initial list
     con2_list = []; #for con2
+    badgeOfferedList = []
     for elem in badgeKey:
         randomNO = str(random.choice(index_list))
         original_elem = elem; #msc, hsc, fam, con1, con2, social
@@ -442,28 +443,39 @@ def getBadgeOptions(request, username, platform, badgeKey):
                                                        value=charac[elem], index=con1_random).values(
                 'badgeName', 'prompt', 'sentence_opener' + randomNO));
 
+            badgeOfferedList.append(badge_item[0]['badgeName'])
+
+
         elif(elem == 'con2'):
             elem = elem.replace(elem, "con");
             badge_item = list(badgeInfo.objects.filter(charac=elem, platform=platform,
                                                        value=charac[elem], index=random.choice(con2_list)).values(
                 'badgeName', 'prompt', 'sentence_opener' + randomNO));
+            badgeOfferedList.append(badge_item[0]['badgeName'])
         else:
             #handle randomization using index key
             badge_item = list(badgeInfo.objects.filter(charac=elem,platform=platform,
                                                   value=charac[elem],index=random.choice(index_list)).values('badgeName','prompt','sentence_opener'+randomNO));
 
+            badgeOfferedList.append(badge_item[0]['badgeName'])
+
         #little adjustment made based on the front-end; front-end uses 'sentence_opener1' since we are picking randomly and it
         #can be 1,2,or3; so after picking randomly, changed the dict key to sentence_opener1
         #https://stackoverflow.com/questions/4406501/change-the-name-of-a-key-in-dictionary
         badge_item[0]['sentence_opener1'] = badge_item[0].pop('sentence_opener'+randomNO)
-        #print('line 444 :: ', badge_item);
-
-        # badge_item_dict = [dict(item) for item in badge_item];
-        # print('line 446 for debug purpose :: ', badge_item_dict[0]);
 
         dict[original_elem] = badge_item;
 
-    print('line 418 /getbadgeOptions', dict);
+
+
+    #print('line 467 :: ', badgeOfferedList);
+
+    #log this into the table
+    entry = badgeOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
+                         badgeTypeOffered=json.dumps(badgeOfferedList));
+    entry.save();
+
+    #print('line 418 /getbadgeOptions', dict);
 
     return dict; #goes back to computationalModel method
 
@@ -542,6 +554,7 @@ def computationalModel(request):
             #for TA, willParticipate will come from the csharp server; based on utterance count
             #True means participate; null means no participate (false)
             willParticipate = bool(request.POST.get('willParticipate')); #this comes from TA
+
         else:
             #for the other two platforms, calculate will participate variable here
             if int(activity_id) == 1:
@@ -574,8 +587,11 @@ def computationalModel(request):
             charac_dict = [dict(item) for item in charac];
             #print('link 510 :: ', charac_dict);
             likelihood = binaryLogisticModel.model(None, charac_dict, platform);
-            #print('from the view class, likelihood score', likelihood);
-            # todo log this (student id, activity id, platform, likelihood)
+            print('from the view class, likelihood score', likelihood);
+
+            entry = computationalModelLog(likelihood = likelihood, student = request.user, platform = platform,
+                                          activity_id=activity_id);
+            entry.save();
             # later from the data will verify whether students participated or not
             badgeKey = ['msc', 'hsc', 'fam']
         else:
@@ -583,7 +599,7 @@ def computationalModel(request):
             badgeKey = ['con1', 'con2', 'social']
 
 
-        badgeList = getBadgeOptions(request, username, platform, badgeKey);
+        badgeList = getBadgeOptions(request, username, platform, badgeKey,activity_id);
 
         return JsonResponse({'badgeList': badgeList}); #goes back to utility.js
 
@@ -764,6 +780,7 @@ def insertKhanAcademyInfo(request):
 
     return HttpResponse('');
 
+
 ############ handler methods end ############
 #############################################
 #
@@ -936,6 +953,143 @@ def createBulkUser(request):
 ##Codes used from the previous version-end##
 ##############################################
 
+#very poor code, rewrite
+def matchPersonalityProfile(request):
+
+    # get the students characteristic VALUES from the database
+    charac = getCharacteristic(request, request.user);  # this is a dict
+    #translate charac to a list, take the first four elem, fifth is the social
+    charac_list = list(charac.values())[0:4]
+    #print('debug matchPersonalityProfile', charac);
+    #print('debug matchPersonalityProfile', charac_list[0]);
+
+    #order: msc, hsc, fam, con
+    profile1 = [False, True, False, True]
+    profile2 = [False, True, True, True]
+    profile3 = [True, True, False, True]
+    profile4 = [True, False, True, False]
+
+    #calculate the difference
+    diff_list = {}
+    count1=count2=count3=count4=0;
+    for j in range(0, 4):
+        if (charac_list[j] ^ profile1[j]):  # this for loop is for maintaining the elem
+            count1 = count1 + 1
+            #print(count1)
+    diff_list['profile1'] = count1;
+
+    for j in range(0, 4):
+        if (charac_list[j] ^ profile2[j]):  # this for loop is for maintaining the elem
+            count2 = count2 + 1
+            #print(count2)
+    diff_list['profile2'] = count2;
+
+    for j in range(0, 4):
+        if (charac_list[j] ^ profile3[j]):  # this for loop is for maintaining the elem
+            count3 = count3 + 1
+            #print(count3)
+    diff_list['profile3'] = count3;
+
+    for j in range(0, 4):
+        if (charac_list[j] ^ profile4[j]):  # this for loop is for maintaining the elem
+            count4 = count4 + 1
+            #print(count4)
+    diff_list['profile4'] = count4;
+
+    #print('debug matchPersonalityProfile', diff_list);
+
+    #select the personality that has the lowest diff; if more than one, select the first one
+    matchedprofile = min(diff_list, key=diff_list.get)
+
+    #print('line 986 debug matchPersonalityProfile', matchedprofile);
+    msc_statements = {
+        'False': 'not that great at math',
+        'True': 'pretty great at math'
+    }
+
+    hsc_statements = {
+        'False': 'but she doesn’t feel like she is very good at giving help to others',
+        'True': 'she thinks she is pretty good at giving help to others'
+    }
+
+    fam_statements = {
+        'False': 'she prefers only working with people she knows',
+        'True': 'she doesn’t mind working with anybody'
+    }
+
+    con_statements = {
+        'True': 'she doesn’t always participate',
+        'False': 'she usually does what she is supposed to do'
+    }
+
+    selected_profile = ''
+    if matchedprofile == 'profile1':
+        selected_profile = profile1;
+    elif matchedprofile == 'profile2':
+        selected_profile = profile2;
+    elif matchedprofile == 'profile3':
+        selected_profile = profile3;
+    else: selected_profile = profile4
+
+    personality_dict = {}
+    #msc is true;
+    if selected_profile[0]:
+        personality_dict['msc'] = msc_statements['True'];
+    else:
+        personality_dict['msc'] = msc_statements['False'];
+
+    # msc is true;
+    if selected_profile[1]:
+        personality_dict['hsc'] = hsc_statements['True'];
+    else:
+        personality_dict['hsc'] = hsc_statements['False'];
+
+    # msc is true;
+    if selected_profile[2]:
+        personality_dict['fam'] = fam_statements['True'];
+    else:
+        personality_dict['fam'] = fam_statements['False'];
+
+    # msc is true;
+    if selected_profile[3]:
+        personality_dict['con'] = con_statements['True'];
+    else:
+        personality_dict['con'] = con_statements['False'];
+
+    name_dict = {
+        'profile1' : 'Seel',
+        'profile2' : 'Abra',
+        'profile3' : 'Bellsprout',
+        'profile4' : 'Caterpie'
+    }
+    personality_dict['name'] = name_dict[matchedprofile];
+
+    #save this into the database #the first entry shows the actual profile
+    entry = studentPersonalityChangeTable(posted_by=request.user, char_msc=personality_dict['msc'],
+                             char_hsc=personality_dict['hsc'],
+                             char_fam=personality_dict['fam'],
+                             char_con=personality_dict['con'],
+                             char_name=personality_dict['name'],
+                             event = 'load event');
+    entry.save();
+
+    #print('line 1021', personality_dict);
+
+    return JsonResponse({'profile': personality_dict});
+    #return HttpResponse('');
+
+def saveEditedPersonality(request):
+    print('line 1063 :: im here')
+    if request.method == 'POST':
+        entry = studentPersonalityChangeTable(posted_by=request.user, char_msc=request.POST.get('msc'),
+                                 char_hsc=request.POST.get('hsc'),
+                                 char_fam=request.POST.get('fam'),
+                                 char_con=request.POST.get('con'),
+                                 char_name=request.POST.get('name'),
+                                 event='change event')
+        entry.save();
+
+    return HttpResponse('');
 # def getImagePerUser(request, act_id, username):
 #     print('receiving parameter :: activity id :: username ' + act_id + '  ' + username);
 #

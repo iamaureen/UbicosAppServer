@@ -19,14 +19,15 @@ def F3_submodel(MSC, Platform):
     if Platform == "MB":
         platform_ka = 0
         platform_ta =0
+        return -1 + 1.5 * MSC + platform_ka + 1.5 * platform_ta - 0.5 * MSC * platform_ka - 1.5 * MSC * platform_ta
     elif Platform == "KA":
         platform_ka = 1
         platform_ta =0
-    elif Platform == "KA":
+        return -1 + 1.5 * MSC + platform_ka + 1.5 * platform_ta - 0.5 * MSC * platform_ka - 1.5 * MSC * platform_ta
+    elif Platform == "TA":
         platform_ka = 0
         platform_ta = 1
-
-    return -1 + 1.5 * MSC + platform_ka + 1.5 * platform_ta - 0.5 * MSC * platform_ka - 1.5 * MSC * platform_ta
+        return -1 + 1.5 * MSC + platform_ka + 1.5 * platform_ta - 0.5 * MSC * platform_ka - 1.5 * MSC * platform_ta
 
 
 #returns MSC, HSC,

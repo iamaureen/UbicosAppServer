@@ -15,7 +15,7 @@ window.onerror = function(message, file, line) {
     It is also used in: activityindex.js
 */
 
-var NUM_PAGES = 34;
+var NUM_PAGES = 35;
 
 //load all init function required for the digital textbook to load here
 $(function(){
@@ -29,6 +29,8 @@ $(function(){
 
     //If we start loading the cards dynamically, this needs to be called after the brainstorm card is built
     setupBrainstorm();
+
+
 
     //check for the last accessed page in the local storage
     if(localStorage.getItem("pageToBeRefreshed")){
@@ -139,6 +141,7 @@ var movePage = function(moveToNext){
 
 var loadPage = function(pageNum, pageContainer, successFn, notFoundFn){
     //console.log('next page (loadPage Function)', pageNum)
+
 
     loadHTML(
         API_URL.pagesBase + '/' + pageNum + '.html',
@@ -437,6 +440,11 @@ var bindActivityButtons = function(){
 
         });
 
+        $('#getInitPersonality').off().on('click', function(event){
+                setupPersonality();
+
+        });
+
         //personality page 0.html, personality edit button
         $('#changePersonalityBtn').off().on('click', function(event){
 
@@ -446,12 +454,11 @@ var bindActivityButtons = function(){
                 personality_con = $('#dropdown-con :selected').text();
                 personality_fam = $('#dropdown-fam :selected').text();
 
-                //todo: insert into logs
 
-                console.log(personality_msc);
-                console.log(personality_hsc);
-                console.log(personality_con);
-                console.log(personality_fam);
+//                console.log(personality_msc);
+//                console.log(personality_hsc);
+//                console.log(personality_con);
+//                console.log(personality_fam);
 
                 //update the p-tag (id=matchedPersonality) based on the responses
                 $('span.personality-msc').text(personality_msc);
@@ -459,7 +466,24 @@ var bindActivityButtons = function(){
                 $('span.personality-con').text(personality_con);
                 $('span.personality-fam').text(personality_fam);
 
+                personality_name = $('span#namePersonality').text();
+                console.log(personality_name);
+
+
                 //todo the matched personality thing
+
+                //saves to the database
+                $.ajax({
+                    type:'POST',
+                    url:'/saveEditedPersonality/',
+                    //async: false, //wait for ajax call to finish, else logged_in is null in the following if condition
+                    data: {'msc': personality_msc, 'hsc': personality_hsc, 'fam': personality_fam, 'con': personality_con,
+                            'name':personality_name},
+                    success: function(e){
+
+
+                    }
+                });
 
                 //show the p-tag(id=matchedPersonality) toggle
                 $("#matchedPersonality").toggle();

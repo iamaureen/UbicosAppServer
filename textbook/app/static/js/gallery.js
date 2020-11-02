@@ -136,7 +136,7 @@ var galleryMsgBtnAction = function(){
       });
 
       $('.badgeRequest img').on('click', function(e){
-            //Todo: update badge div option
+            computationalModelMethod(logged_in, 'MB', gallery_act_id);
             //if the badge-option div is visible do nothing, else toggle
             if($('#badge-option').is(":visible")){
                 //alert("visible");

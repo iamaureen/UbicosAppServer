@@ -56,6 +56,8 @@ urlpatterns = [
     url('insertWhiteboardInfo',views.insertWhiteboardInfo),
     url('getWhiteboardURl/(?P<board_id>\d+)',views.getWhiteboardURl),
     url('insertKhanAcademyInfo', views.insertKhanAcademyInfo),
+    url('matchPersonalityProfile', views.matchPersonalityProfile),
+    url('saveEditedPersonality', views.saveEditedPersonality),
 
 
     # url('getGalleryPerID/(?P<gid>\d+)', views.getGalleryPerID),

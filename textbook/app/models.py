@@ -13,6 +13,19 @@ class studentCharacteristicModel (models.Model):
     has_con = models.BooleanField(default=False)
     has_social = models.BooleanField(default=False)
 
+class studentPersonalityChangeTable (models.Model):
+    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    char_msc = models.CharField(max_length=200)
+    char_hsc = models.CharField(max_length=200)
+    char_fam = models.CharField(max_length=200)
+    char_con = models.CharField(max_length=200)
+    char_name = models.CharField(max_length=100)
+    event = models.CharField(max_length=50)
+
+    def natural_key(self):
+        return (self.posted_by.username)
+
+
 #saves students participation history
 class participationHistory (models.Model):
     platform = models.CharField(max_length=20)
@@ -22,6 +35,15 @@ class participationHistory (models.Model):
 
     def natural_key(self):
         return (self.posted_by.username)
+
+class computationalModelLog(models.Model):
+    likelihood = models.FloatField()
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    activity_id = models.IntegerField()
+    platform = models.CharField(max_length=20)
+
+    def natural_key(self):
+        return (self.student.username)
 
 
 # saves the image uploaded in the gallery
@@ -98,6 +120,18 @@ class badgeInfo(models.Model):
     sentence_opener1 = models.CharField(max_length=1000);
     sentence_opener2 = models.CharField(max_length=1000);
     sentence_opener3 = models.CharField(max_length=1000);
+
+
+
+# logs what badge user selected
+class badgeOffered(models.Model):
+    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    platform = models.CharField(max_length=10)
+    activity_id = models.IntegerField(null=True)
+    badgeTypeOffered = models.TextField(null=True)
+
+    def natural_key(self):
+        return (self.userid.username)
 
 # logs what badge user selected
 class badgeSelected(models.Model):
