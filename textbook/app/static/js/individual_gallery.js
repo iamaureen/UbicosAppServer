@@ -36,6 +36,7 @@ var loadIndividualFeed = function(act_id) {
                     image_pk = value['image_id'];
                     image_posted_by = value['posted_by'];
                     var id=key+1;
+                    console.log(id);
                     //we are only updating the a tags with the appropriate values;
                     //update the image src in the a tag
                     $("a[href='#slide-"+id).attr('data-imgSrc', image_src);

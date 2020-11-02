@@ -858,10 +858,11 @@ def groupAdd(request):
     users_list = [str(user) for user in User.objects.all()]
     print(len(users_list))
 
-    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Ekans", "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Psyduck",
-                       "Mew", "Dragonite", "Charizard", "Charmander", "Geodude", "Horsea","Tangela", "Gengar", "AW", "user1", "user2"];
+    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Ekans", "Horsea", "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Tangela",
+                       "Psyduck", "Mew", "Dragonite", "Charizard", "Charmander",  "Gengar", "AW", "user1", "user2"];
 
-    username_groupID = ['1', '1', '1', '1', '1', '2', '2', '2', '2', '2', '3', '3', '3', '3', '3', '4', '4','4', '4','5','5','5']
+    username_groupID = ['1', '1', '1', '1', '1', '1',  '2', '2', '2', '2', '2', '2',
+                        '3','3', '3','3','3','3', '4', '4', '4']
 
 
     # for i in range(len(usernames_array)):
@@ -920,7 +921,7 @@ def createBulkUser(request):
     user.save();
     user = User.objects.create_user('Lapras', '', 'study9251');
     user.save();
-    user = User.objects.create_user('Geodude', '', 'study8525');
+    user = User.objects.create_user('Ekans', '', 'study0922');
     user.save();
 
     # whiteboard-group 5
@@ -938,8 +939,7 @@ def createBulkUser(request):
     user.save();
     user = User.objects.create_user('Tangela', '', 'study6209');
     user.save();
-    user = User.objects.create_user('Ekans', '', 'study0922');
-    user.save();
+
 
 
     #group 11 - teacher/developers
