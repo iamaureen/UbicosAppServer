@@ -401,7 +401,7 @@ var bindActivityButtons = function(){
         }
 
         //user logging
-        //enterLogIntoDatabase('activity select', type , 'activity-id-'+id, global_current_pagenumber);
+        enterLogIntoDatabase('activity select', type , 'activity-id-'+id, global_current_pagenumber);
     });
     //left hand side curriculum button actions -- end
 

@@ -63,7 +63,7 @@ function postMessage(){
     var user_name = $("input[name='username']").val()
 
 
-    enterLogIntoDatabase('click', 'activity-feed message input' , message, global_current_pagenumber)
+    enterLogIntoDatabase('Chat Tool Input Msg Button Enter', 'activity-feed message input' , message, global_current_pagenumber)
     //triggers the event in views.py
     $.post({
         url: '/ajax/chat/',

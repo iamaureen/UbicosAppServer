@@ -5,7 +5,7 @@ $(function(){
         $("#file-upload").change(function(event){
 
 
-                enterLogIntoDatabase('upload image', 'Attemped gallery image upload' , '', global_current_pagenumber)
+
 
                 console.log("file changed");
 
@@ -33,10 +33,10 @@ $(function(){
                         $('.upload-success-msg').show();
 
 
-
+                        enterLogIntoDatabase('upload image', 'Attemped gallery image upload' , 'Uploading Image was successful', global_current_pagenumber)
 
                     }, error: function(response){
-                           enterLogIntoDatabase('upload image', 'Something went wrong while gallery image upload' , '', global_current_pagenumber);
+                           enterLogIntoDatabase('upload image', 'Attemped gallery image upload' , 'Something went wrong while gallery image upload', global_current_pagenumber);
                            $( ".upload-success-msg-p" ).text( "Something went wrong, try again" );
                     }
 

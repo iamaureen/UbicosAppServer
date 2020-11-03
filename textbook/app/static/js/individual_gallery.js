@@ -137,13 +137,13 @@ var postIndMessage = function (){
     if(!message){
         //message is empty;
         //entry into user log -- TODO fix the language
-        enterLogIntoDatabase('input button click', 'image-feed empty message input' , message, global_current_pagenumber);
+        enterLogIntoDatabase('Individual Commenting Tool Input Msg Button Enter', 'individual-commenting-feed empty message input' , message, global_current_pagenumber);
         return;
     }
 
     //get the user name who posted
     var user_name = $("input[name='username']").val()
-    enterLogIntoDatabase('click', 'activity-feed message input' , message, global_current_pagenumber);
+    enterLogIntoDatabase('Individual Commenting Tool Input Msg Button Enter', 'ndividual-commenting-feed non-empty message input' , message, global_current_pagenumber);
 
     //check which image is open, extract that image data attribute (image PK) and pass that with the data to the server
     var imagePk = $('.slider a.slider-image-selected').attr('data-imgID');
