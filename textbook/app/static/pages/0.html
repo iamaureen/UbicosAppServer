@@ -1,9 +1,8 @@
 
-<h1>Persona Profile Page</h1>
+<h1>Profile Page</h1>
 
 <div>
-    <p>Remember you answered some questions about yourselves when we started? We looked at it, and found that you have
-        a close match with one of our fictional students!</p>
+    <p>Remember you answered some questions about yourselves when we started? We looked at it, and matched you with one of our fictional students!</p>
 <!--    this button call is declared in digTextbook.js and defined in personality.js-->
     <button  id="getInitPersonality"> See who you match with! </button>
 </div>
@@ -11,9 +10,13 @@
 
 <div class="initPersonality" style="display: none">
     <p>
-        Based on your answers, your profile closely matched with <span class="namePersonality" id="namePersonality"><strong><i>Ekans</i></strong></span>. Would you like to change anything?
+        Based on your answers, your profile closely matched with <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span>. Would you like to change anything?
     </p>
-     <img src="/blank.png">
+    <div class="personaImgDiv">
+         <img src="/blank.png">
+         <span class="namePersonality">Name</span>
+    </div>
+
      <!--    #defined in digTextBook.js-->
     <!--    this button call is declared and defined in digTextbook.js-->
     <button  id="editPersonalityOptionBtn"> Yes, Edit </button>
@@ -21,33 +24,33 @@
 
 <div class="personalityProfiles" style="display: none">
     <p id="matchedPersonality">
-    <span class="namePersonality"><strong><i>Ekans</i></strong></span> is a student in 8th Grade math class. She considers that she is 1. <span class="personality-msc">pretty great at math</span>.
-    Of course, she works with other people on math in a lot of different settings 2. <span class="personality-hsc">but she doesn’t feel like she is very good at giving help to others </span>.
-    When it comes to working on activities for class and other things, 3. <span class="personality-con"> she doesn’t always participate</span>. Sometimes, that depends on who she is working with.
-    However, honestly 4. <span class="personality-fam"> she doesn’t mind working with anybody </span>. But, overall that’s her math life!
+    <span class="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. She thinks that she is <span class="personality-msc">msc text</span>.
+    Of course, she works with other people on math in a lot of different settings, <span class="personality-hsc">hsc text </span>.
+    When it comes to working on activities for class and other things, <span class="personality-con"> con text</span>. Sometimes, that depends on who she is working with.
+    However, honestly <span class="personality-fam"> fam text </span>. But, overall that’s her math life!
     </p>
 
     <p id="editPersonality" style="display:none">
         Eevee is a student in 8th Grade math class. She considers that she is 1.
         <select id="dropdown-msc">
-          <option value="0">not that great at math</option>
-          <option value="1">pretty great at math</option>
+          <option value="">not that great at math</option>
+          <option value="">pretty great at math</option>
         </select>.
 
         Of course, she works with other people on math in a lot of different settings 2.
         <select id="dropdown-hsc">
-          <option value="0">but she doesn’t feel like she is very good at giving help to others</option>
-          <option value="1">she thinks she is pretty good at giving help to others</option>
+          <option value="">but she doesn’t feel like she is very good at giving help to others</option>
+          <option value="">and she thinks she is pretty good at giving help to others</option>
         </select>.
         When it comes to working on activities for class and other things, 3.
          <select id="dropdown-con">
-          <option value="0">she doesn’t always participate</option>
-          <option value="1">she usually does what she is supposed to do</option>
+          <option value="">she doesn’t always participate</option>
+          <option value="">she usually does what she is supposed to do</option>
         </select>
         Sometimes, that depends on who she is working with. However, honestly 4.
           <select id="dropdown-fam">
-          <option value="0">she prefers only working with people she knows</option>
-          <option value="1">she doesn’t mind working with anybody</option>
+          <option value="">she prefers only working with people she knows</option>
+          <option value="">she doesn’t mind working with anybody</option>
         </select>
         But, overall that’s her math life!
 

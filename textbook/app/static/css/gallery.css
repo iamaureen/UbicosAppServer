@@ -328,13 +328,27 @@ input[type="file"] {
 
 }
 
-.initPersonality img{
-    width: 130px;
-    position: absolute;
-    top: 0%;
-    left: 10%;
-    margin-left: 25rem;
 
+
+.personaImgDiv {
+        position: absolute;
+        top: 0%;
+        left: 10%;
+
+
+
+}
+
+.personaImgDiv img{
+        height: 100px;
+        width: 130px;
+        margin-left: 23rem;
+    }
+
+.personaImgDiv span{
+    height: 100px;
+    width: 130px;
+    margin-left: 25rem;
 }
 
 .personalityProfiles{
@@ -343,6 +357,13 @@ input[type="file"] {
     margin-top: 10%;
 }
 
+#editPersonalityBtn{
+    border: none;
+}
+
+#matchedPersonality span{
+    color: blue;
+}
 
 /* personality page 0.html css - end */
 

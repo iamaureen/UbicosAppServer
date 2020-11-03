@@ -7,6 +7,7 @@ $(function(){
         //$('#right-side-menu').click(function(e){
         $('#study-menu').click(function(e){
             $("#mySidenav").css("width", "350px");
+            enterLogIntoDatabase('Activity Index Button Click', 'Button Click' , logged_in, global_current_pagenumber);
         });
 
         //close the right-side-menu

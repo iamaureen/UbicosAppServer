@@ -437,11 +437,15 @@ var bindActivityButtons = function(){
         $('#editPersonalityOptionBtn').off().on('click', function(event){
                 $("#matchedPersonality").toggle();
                 $("#editPersonality").toggle();
+                enterLogIntoDatabase('Personality Profile Page Button Click', 'Edit Personality Button Click' , logged_in, global_current_pagenumber);
+
 
         });
 
         $('#getInitPersonality').off().on('click', function(event){
+                //load event matches with the characteristic table
                 setupPersonality();
+                enterLogIntoDatabase('Personality Profile Page Button Click', 'See who you match with Btn' , logged_in, global_current_pagenumber);
 
         });
 
@@ -455,10 +459,10 @@ var bindActivityButtons = function(){
                 personality_fam = $('#dropdown-fam :selected').text();
 
 
-//                console.log(personality_msc);
-//                console.log(personality_hsc);
-//                console.log(personality_con);
-//                console.log(personality_fam);
+                console.log(personality_msc);
+                console.log(personality_hsc);
+                console.log(personality_con);
+                console.log(personality_fam);
 
                 //update the p-tag (id=matchedPersonality) based on the responses
                 $('span.personality-msc').text(personality_msc);
@@ -489,7 +493,7 @@ var bindActivityButtons = function(){
                 $("#matchedPersonality").toggle();
                 $("#editPersonality").toggle();
 
-
+                enterLogIntoDatabase('Personality Profile Page Button Click', 'Changed Personality options' , logged_in, global_current_pagenumber);
 
 
            });
