@@ -15,6 +15,8 @@ var load_ka_card = function(act_id, video_url) {
     //this method is defined in utility.js
     computationalModelMethod(logged_in, 'KA', act_id);
 
+    enterLogIntoDatabase('Khan Academy Card Click', 'Khan Academy Card Load' , '', global_current_pagenumber);
+
 }
 
 var ka_badge_form_Btn = function(){
@@ -40,7 +42,7 @@ var ka_badge_form_Btn = function(){
         displayNotifier("#ka-notifier", message);
 
         //get the selected badge
-        console.log('kaform.js (line 32):: ', global_badge_selected);
+        console.log('kaform.js (line 43):: ', global_badge_selected);
 
         //save selected badge info to the database
         $.ajax({
@@ -52,6 +54,8 @@ var ka_badge_form_Btn = function(){
                 console.log(response);
              }
         });
+
+        enterLogIntoDatabase('KA Bagde Copy Button Click', 'Button Click' , global_badge_selected, global_current_pagenumber);
 
     });
  }

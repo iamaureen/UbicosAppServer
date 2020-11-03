@@ -447,21 +447,22 @@ def getBadgeOptions(request, username, platform, badgeKey,activity_id):
                                                        value=charac[elem], index=con1_random).values(
                 'badgeName', 'prompt', 'sentence_opener' + randomNO));
 
-            badgeOfferedList.append(badge_item[0]['badgeName'])
-
-
+            badgeOfferedList.append(badge_item[0]['badgeName']);
+            badgeOfferedList.append(badge_item[0]['sentence_opener'+ randomNO]);
         elif(elem == 'con2'):
             elem = elem.replace(elem, "con");
             badge_item = list(badgeInfo.objects.filter(charac=elem, platform=platform,
                                                        value=charac[elem], index=random.choice(con2_list)).values(
                 'badgeName', 'prompt', 'sentence_opener' + randomNO));
-            badgeOfferedList.append(badge_item[0]['badgeName'])
+            badgeOfferedList.append(badge_item[0]['badgeName']);
+            badgeOfferedList.append(badge_item[0]['sentence_opener' + randomNO]);
         else:
             #handle randomization using index key
             badge_item = list(badgeInfo.objects.filter(charac=elem,platform=platform,
                                                   value=charac[elem],index=random.choice(index_list)).values('badgeName','prompt','sentence_opener'+randomNO));
 
-            badgeOfferedList.append(badge_item[0]['badgeName'])
+            badgeOfferedList.append(badge_item[0]['badgeName']);
+            badgeOfferedList.append(badge_item[0]['sentence_opener' + randomNO]);
 
         #little adjustment made based on the front-end; front-end uses 'sentence_opener1' since we are picking randomly and it
         #can be 1,2,or3; so after picking randomly, changed the dict key to sentence_opener1
@@ -472,7 +473,7 @@ def getBadgeOptions(request, username, platform, badgeKey,activity_id):
 
 
 
-    #print('line 467 :: ', badgeOfferedList);
+    print('line 476 :: ', badgeOfferedList);
 
     #log this into the table
     entry = badgeOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
@@ -679,9 +680,11 @@ def getWhiteboardURl(request, board_id):
     whiteboard = whiteboardInfoTable.objects.filter(whiteboard_activityID = board_id, userid_id = request.user).values('whiteboard_link');
     #print(whiteboard[0]['whiteboard_link']);
 
-    url = whiteboard[0]['whiteboard_link'];
+    if whiteboard:
+        url = whiteboard[0]['whiteboard_link'];
+        return JsonResponse({'url':url});
 
-    return JsonResponse({'url':url});
+    return HttpResponse('');
 
 #updates the chat feed
 def updateFeed(request, id):
@@ -1003,7 +1006,8 @@ def matchPersonalityProfile(request):
     #print('debug matchPersonalityProfile', diff_list);
 
     #select the personality that has the lowest diff; if more than one, select the first one
-    matchedprofile = min(diff_list, key=diff_list.get)
+    matchedprofile = min(diff_list, key=diff_list.get);
+    print('matched profile :: ', matchedprofile);
 
     #print('line 986 debug matchPersonalityProfile', matchedprofile);
     msc_statements = {
@@ -1022,8 +1026,8 @@ def matchPersonalityProfile(request):
     }
 
     con_statements = {
-        'True': 'she doesn’t always participate',
-        'False': 'she usually does what she is supposed to do'
+        'False': 'she doesn’t always participate',
+        'True': 'she usually does what she is supposed to do'
     }
 
     selected_profile = ''
@@ -1037,25 +1041,25 @@ def matchPersonalityProfile(request):
 
     personality_dict = {}
     #msc is true;
-    if selected_profile[0]:
+    if selected_profile[0]: #selected_profile[0] = msc
         personality_dict['msc'] = msc_statements['True'];
     else:
         personality_dict['msc'] = msc_statements['False'];
 
     # msc is true;
-    if selected_profile[1]:
+    if selected_profile[1]: #selected_profile[1] = hsc
         personality_dict['hsc'] = hsc_statements['True'];
     else:
         personality_dict['hsc'] = hsc_statements['False'];
 
     # msc is true;
-    if selected_profile[2]:
+    if selected_profile[2]: #selected_profile[2] = fam
         personality_dict['fam'] = fam_statements['True'];
     else:
         personality_dict['fam'] = fam_statements['False'];
 
     # msc is true;
-    if selected_profile[3]:
+    if selected_profile[3]: #selected_profile[3] = con
         personality_dict['con'] = con_statements['True'];
     else:
         personality_dict['con'] = con_statements['False'];

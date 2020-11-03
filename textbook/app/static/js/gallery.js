@@ -106,7 +106,7 @@ var loadGalleryFeed = function(act_id){
     // make the badge-option-div draggable
     $('#badge-option').draggable(draggableConfig);
 
-
+    enterLogIntoDatabase('Gallery Card Icon Click', 'Gallery Card Load' , '', global_current_pagenumber);
 } //end of loadGalleryFeed method
 
 
@@ -141,6 +141,7 @@ var galleryMsgBtnAction = function(){
       });
 
       $('.badgeRequest img').on('click', function(e){
+
             computationalModelMethod(logged_in, 'MB', gallery_act_id);
             //if the badge-option div is visible do nothing, else toggle
             if($('#badge-option').is(":visible")){
@@ -149,6 +150,7 @@ var galleryMsgBtnAction = function(){
                 //alert("not visible");
                 $("#badge-option").css("display", "block");
             }
+            enterLogIntoDatabase('Badge Request Button Click', 'Badge Request Button Click' , '', global_current_pagenumber);
       });
 
         //this works both in khan academy and gallery divs
@@ -167,7 +169,7 @@ var galleryMsgBtnAction = function(){
         var prompt;
         var sentence_opener;
         if(char === 'other'){
-            prompt = "You can proceed without selecting any of the three options. Hit the close button and continue.";
+            prompt = "You selected None so you will not be get any badges for your participation. To earn a badge, select one from the given options.";
             sentence_opener = "";
         }else{
             prompt = global_badgeList[char][0]['prompt'];
@@ -187,10 +189,16 @@ var galleryMsgBtnAction = function(){
 
         //copy button
       $('#gallery-copy-button').off().on('click', function(e){
-            //if not badge is selected, and still clicks the <copy to the textbox> button
+            //if the badge is not selected || 'none' badge is selected and still clicks the <copy to the textbox> button
+            //console.log(global_badge_selected);
             if(global_badge_selected == '') {
                 //no badge is selected
                 message = 'Select a badge option first to copy a sentence starter.';
+                displayNotifier("#gallery-notifier", message);
+                return false;
+            }else if(global_badge_selected === 'None'){
+
+                message = 'You selected None, nothing to be copied.';
                 displayNotifier("#gallery-notifier", message);
                 return false;
             }
@@ -207,6 +215,8 @@ var galleryMsgBtnAction = function(){
 
             //$("div#badge-option").css("display", "none");
             $(this).closest('div#badge-option').fadeOut();
+
+            enterLogIntoDatabase('Gallery Bagde Copy Button Click', 'Button Click' , global_badge_selected, global_current_pagenumber);
 
       });
 
