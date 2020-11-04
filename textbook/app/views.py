@@ -708,6 +708,7 @@ def getUsername(request):
         print('def GetUsername method -- username :: ', request.user.get_username())
         username = request.user.get_username();
         return JsonResponse({'name': username, 'errorMsg': None})
+    return HttpResponse('');
 
 # input: activity ID
 # output: the group ID of the current user for the given activity ID
@@ -1004,7 +1005,7 @@ def matchPersonalityProfile(request):
 
         else:
             #multiple changed entries, picked the last one
-            entry = studentPersonalityChangeTable.objects.filter(posted_by_id=request.user, event="load event").values('id','char_msc','char_hsc','char_fam','char_con',
+            entry = studentPersonalityChangeTable.objects.filter(posted_by_id=request.user, event="load match event").values('id','char_msc','char_hsc','char_fam','char_con',
                                                                                                                  'char_name').order_by('-id')
 
             entry_personality_dict = {}
