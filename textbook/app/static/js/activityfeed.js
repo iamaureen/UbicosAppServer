@@ -104,7 +104,7 @@ function loadFeed(id){
                 msg_data = response.success
                 var obj = jQuery.parseJSON(msg_data);
 
-                console.log(obj)
+                //console.log(obj)
 
                 $.each(obj, function(key, value){
                     //method defined in individual_gallery.js

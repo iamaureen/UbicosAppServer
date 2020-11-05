@@ -69,6 +69,8 @@ $(function(){
             //close the side navigation bar once a module is selected
             $("#mySidenav").css("width", "0px");
 
+            enterLogIntoDatabase('activity index opened', 'activity page click', $(this).text() , global_current_pagenumber);
+
         });
 
         //side navigation bar click events -- end

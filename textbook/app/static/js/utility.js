@@ -87,8 +87,9 @@ var buildFeedwithMsgs = function(message, container, username, time){
     var span_timestap = $('<span/>', {
               text: time}).appendTo(div_msg);
 
-    //TODO change this into a dynamic if else
-    $(container).animate({ scrollTop: $(container).height() }, 400);
+    //TODO fix; whenever a msg posts, scroll to the bottom of this div
+    //console.log('debugging :: ', $(container).height());
+    $(container).stop().animate({ scrollTop: $(container)[0].scrollHeight }, 1000);
     //$(container).scrollTop($(container)[0].scrollHeight);
 
 }// end of buildFeedwithMsgs method
@@ -105,7 +106,7 @@ var getCurrentTime = function(){
     + currentdate.getMinutes() + ":"
     + currentdate.getSeconds();
 
-    console.log(datetime);
+    //console.log(datetime);
 
     return datetime;
 

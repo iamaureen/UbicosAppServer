@@ -20,8 +20,9 @@ var NUM_PAGES = 35;
 //load all init function required for the digital textbook to load here
 $(function(){
 
-
-
+    //disable browser cache //https://stackoverflow.com/questions/14068572/how-to-disable-browser-cache
+    //added the following line to ensure the receiving end sees the change w/o manually clearing the cache.
+    jQuery.ajaxSetup({ cache: false });
     // Load first pages
     // TODO the URL should indicate which page to be loaded instead of always loading pages 1 and 2
     loadPage(1, $('.page:not(.previous):not(.next)'));
