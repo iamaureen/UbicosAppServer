@@ -217,7 +217,7 @@ def uploadImage(request):
 
         #get the latest inserted entry from the database for this particular group
         #https://stackoverflow.com/questions/2191010/get-last-record-in-a-queryset/21247350
-        images = imageModel.objects.filter(group_id=group_id).last()
+        images = imageModel.objects.filter(posted_by=request.user, gallery_id=gallery_id).last()
 
         print('image url :: ',images.image.url)
 
@@ -292,15 +292,15 @@ def getGalleryImage(request, act_id):
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 295 :: ', member_image_id_list);
+    print('line 295 current user member image Id list:: ', member_image_id_list);
 
     all_image_id_query = imageModel.objects.filter(gallery_id=act_id).values('id');
     all_image_id_list = [item['id'] for item in all_image_id_query];
-    print('line 299 :: ', all_image_id_list);
+    print('line 299 all students image Id list:: ', all_image_id_list);
 
     outside_group_image = list(set(all_image_id_list) - set(member_image_id_list))
     #outside_group_image can be empty if no image is uploaded in this gallery activity
-    print('line 303 :: ', outside_group_image);
+    print('line 303 outside digital discussion group image:: ', outside_group_image);
     if(len(outside_group_image) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
         return HttpResponse('');
@@ -718,6 +718,7 @@ def getGroupID(request, act_id):
 
     return groupID[0].group;
 
+
 def getCurrentUserGroupID(request, act_id):
 
     return JsonResponse({'groupID': getGroupID(request, act_id)});
@@ -862,11 +863,15 @@ def groupAdd(request):
     users_list = [str(user) for user in User.objects.all()]
     print(len(users_list))
 
-    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Gengar", "Tangela", "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Horsea",
-                       "Psyduck", "Mew", "Dragonite", "Charizard", "Charmander",  "Ekans", "AW", "user1", "user2"];
+    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Gengar", "Tangela", "AW1",
+                       "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Horsea", "AW2",
+                       "Psyduck", "Mew", "Dragonite", "Charizard", "Charmander",  "Ekans", "AW3",
+                       "AW", "user1", "user2"];
 
-    username_groupID = ['1', '1', '1', '1', '1', '1',  '2', '2', '2', '2', '2', '2',
-                        '3','3', '3','3','3','3', '4', '4', '4']
+    username_groupID = ['1', '1', '1', '1', '1', '1', '1',
+                        '2', '2', '2', '2', '2', '2', '2',
+                        '3', '3', '3', '3', '3', '3', '3',
+                        '4', '4', '4']
 
 
     # for i in range(len(usernames_array)):
@@ -952,6 +957,13 @@ def createBulkUser(request):
     user = User.objects.create_user('user1', '', 'user1');
     user.save();
     user = User.objects.create_user('user2', '', 'user2');
+    user.save();
+
+    user = User.objects.create_user('AW1', '', 'AW1');
+    user.save();
+    user = User.objects.create_user('AW2', '', 'AW2');
+    user.save();
+    user = User.objects.create_user('AW3', '', 'AW3');
     user.save();
 
 

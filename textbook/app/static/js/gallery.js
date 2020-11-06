@@ -236,8 +236,8 @@ var postImageMessage = function () {
         var message = inputEl.val();
 
         if(!message){
-            message = 'Your answer is too brief. Try writing a more specific answer.';
-            displayNotifier("#gallery-notifier", message);
+            //message = 'Your answer is too brief. Try writing a more specific answer.';
+            //displayNotifier("#gallery-notifier", message);
             enterLogIntoDatabase('Gallery Input Button Click', 'Gallery feed empty message input' , '', global_current_pagenumber);
             return false;
 
@@ -246,24 +246,25 @@ var postImageMessage = function () {
         //if we come until here, there is a message
         //console.log('user message :: '+message)
         //check for the message length and get the length of the message
+        /*
         var msg = message.split(" ");
         var lengthOfMsg = msg.length;
-        //cif it is less than 7 words
+        //if it is less than 7 words
         if(lengthOfMsg < 7){
-            message = 'Your answer is too brief. Try writing a more specific answer.';
+            //message = 'Your answer is too brief. Try writing a more specific answer.';
             displayNotifier("#gallery-notifier", message);
             enterLogIntoDatabase('Gallery Input Button Click', 'Gallery feed less than seven words message input' , '', global_current_pagenumber);
             return false;
-        }
+        } */
 
 
         //1. if the user has selected any of the three badge, we want to pass it to the server; else we want to skip checking
         if(global_badge_selected != 'None' && global_badge_selected != ''){
-               if(global_badgeList[global_char][0]['sentence_opener1'] === message) {
-                    message = 'Your message exactly matches with suggestion. Try adding your thoughts.';
-                    displayNotifier("#gallery-notifier", message);
-                    return false;
-                }
+//               if(global_badgeList[global_char][0]['sentence_opener1'] === message) {
+//                    message = 'Your message exactly matches with suggestion. Try adding your thoughts.';
+//                    displayNotifier("#gallery-notifier", message);
+//                    return false;
+//                }
                 //user selected any of the three badges
                 //2. save the selected badge in the database
                 //save selected badge info to the database
