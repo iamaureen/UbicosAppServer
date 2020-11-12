@@ -570,7 +570,7 @@ def computationalModel(request):
                 # check if participated in the previous activity if a given platform
                 # the following table should have one entry [per activity id] at any moment of time
                 #todo: check the 'did participate' table for the correct entry logics
-                didParticipate = participationHistory.objects.filter(posted_by=request.user,
+                didParticipate = participationHistory.objects.filter(posted_by=User.objects.get(username=username),
                                                                      activity_id=prev_actID,
                                                                      platform=platform).values('didParticipate');
 
@@ -588,13 +588,13 @@ def computationalModel(request):
             #call the CP model equation here to check the likelihood of participation and log it
             #first, get students characteristic
             #todo: write this as documentation so we know what to do/how to format the data
-            charac = studentCharacteristicModel.objects.filter(user = request.user).values('has_msc', 'has_hsc', 'has_fam');
+            charac = studentCharacteristicModel.objects.filter(user = User.objects.get(username=username)).values('has_msc', 'has_hsc', 'has_fam');
             charac_dict = [dict(item) for item in charac];
             #print('link 510 :: ', charac_dict);
             likelihood = binaryLogisticModel.model(None, charac_dict, platform);
             print('from the view class, likelihood score', likelihood);
 
-            entry = computationalModelLog(likelihood = likelihood, student = request.user, platform = platform,
+            entry = computationalModelLog(likelihood = likelihood, student = User.objects.get(username=username), platform = platform,
                                           activity_id=activity_id);
             entry.save();
             # later from the data will verify whether students participated or not
@@ -630,7 +630,8 @@ def matchKeywords(request):
          'assess': 'Evaluating others work is a skill!',
          'participate': 'Participation is a great collaborative technique!',
          'appreciate': 'Appreciating others encourages collaboration.',
-         'encourage': 'Encouraging others helps in a collaboration.'
+         'encourage': 'Encouraging others helps in a collaboration.',
+         'other': 'You are doing a great job!'
          }
 
     if request.method == 'POST':

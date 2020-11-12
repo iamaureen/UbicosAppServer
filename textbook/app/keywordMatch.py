@@ -42,6 +42,8 @@ class keywordMatch():
         #TODO: pre-process messages
         # remove punctuation
         # print(message.translate(str.maketrans('', '', string.punctuation)));
+        print('message :: ', message);
+        print('selected badge :: ', selected_badge);
 
         if(selected_badge == 'question'):
             # todo use the rule-based classifier that I have
@@ -52,9 +54,14 @@ class keywordMatch():
             #check for the length
             print()
 
+        #TA api sends 'other' when the student selects 'other' option from the badge div
+        # if (selected_badge == 'other'):
+        #     # check for the length
+        #     return False;
+
         # for each keywords in the selected list, check if the keyword is present in the user message
         for elem in keywords_dict[selected_badge]:
-            if elem in message.lower():
+            if elem.lower() in message.lower():
                 print("for debug purpose")
                 print('elem :: ', elem)
                 print('message :: ', message)
