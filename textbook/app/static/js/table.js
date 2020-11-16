@@ -294,7 +294,7 @@ function handleDrawEquation(){
 
         //enter log
         var inputEquationLine = 'y = ' + m + ' x + ' + b;
-        enterLogIntoDatabase('plot equation pressed', 'table plot equation' , inputEquationLine, current_pagenumber)
+        enterLogIntoDatabase('plot equation pressed', 'table plot equation' , inputEquationLine, global_current_pagenumber)
 
     });
 }
