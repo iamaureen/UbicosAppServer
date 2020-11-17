@@ -251,7 +251,7 @@ def getIndividualImages(request, act_id):
     image_list = [];
     for user_id in member_list:
         #get the LAST image uploaded by the user_id
-        images = imageModel.objects.filter(posted_by_id = user_id).last();
+        images = imageModel.objects.filter(posted_by_id = user_id, gallery_id=act_id).last();
         dict = {};
         if images:
             dict['posted_by'] = images.posted_by.get_username();
