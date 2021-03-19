@@ -63,3 +63,49 @@
 .activity-button.upload:hover .hover-text {
     visibility: visible;
 }
+
+
+/* video button hover */
+
+.activity-button.video .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 30px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.video:hover .hover-text {
+    visibility: visible;
+}
+
+
+/* Khan Academy - badge options hover */
+
+.activity-button.khanacademy .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.khanacademy:hover .hover-text {
+    visibility: visible;
+}
