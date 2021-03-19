@@ -1,0 +1,19 @@
+.activity-button.table .hover-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 30px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.table:hover .hover-text {
+    visibility: visible;
+}
