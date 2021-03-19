@@ -1,6 +1,7 @@
 var POINTS = [];
 var EQUATION_POINTS = [];
 var isTableLineVisible = false;
+let PREVIOUS_POINTS=[];
 
 $(function(){
     fixVerticalTabindex('#TimeDistance', 2);
@@ -408,11 +409,31 @@ function drawLine(draw){
     // Show lines
     var visibility = draw ? 'visible' : 'hidden';
     $('path').css('visibility', visibility);
+    
+    let current_table_id=$( "input[name='table-id']" ).val();
+    PREVIOUS_POINTS=localStorage.getItem( 'table'+current_table_id );
+
     //save the data points in database
 
     localStorage.setItem('table'+$("input[name='table-id']").val(), JSON.stringify(POINTS))
     enterLogIntoDatabase('plot line pressed', 'table plot line' , JSON.stringify(POINTS), global_current_pagenumber)
-    tableDataInsert('table', POINTS);
+    // tableDataInsert('table', POINTS);
+    checkData( current_table_id );
+}
+
+function checkData( current_table_id ) {
+    // console.log(current_table_id)
+    // console.log("convert" + typeof(JSON.stringify(PREVIOUS_POINTS)) + typeof(JSON.stringify(POINTS)));
+    // console.log("get pre" + JSON.stringify(JSON.parse(PREVIOUS_POINTS)));
+
+    if ( PREVIOUS_POINTS!=null&&POINTS!=null ) {
+        if ( JSON.stringify( PREVIOUS_POINTS )==JSON.stringify( POINTS ) ) {
+            console.log( 'points are the same' );
+        } else {
+            console.log( "previous points and current points are not the same" );
+            tableDataInsert( 'table', POINTS );
+        }
+    }
 }
 
  var tableDataInsert = function(type, points){
