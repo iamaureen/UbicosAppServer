@@ -43,3 +43,23 @@
 
 
 /* upload image */
+
+.activity-button.upload .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 33px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.upload:hover .hover-text {
+    visibility: visible;
+}
