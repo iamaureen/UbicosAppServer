@@ -109,3 +109,72 @@
 .activity-button.khanacademy:hover .hover-text {
     visibility: visible;
 }
+
+
+/* Buggy Lab hover */
+
+.activity-button.individual .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 30px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.individual:hover .hover-text {
+    visibility: visible;
+}
+
+
+/* Buggy Gallery hover */
+
+.activity-button.gallery .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 30px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.gallery:hover .hover-text {
+    visibility: visible;
+}
+
+
+/* self-gallery hover - review your comments */
+
+.activity-button.self-gallery .hover-text {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+.activity-button.self-gallery:hover .hover-text {
+    visibility: visible;
+}
