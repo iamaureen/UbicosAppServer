@@ -418,25 +418,29 @@ function drawLine(draw){
     localStorage.setItem('table'+$("input[name='table-id']").val(), JSON.stringify(POINTS))
     enterLogIntoDatabase('plot line pressed', 'table plot line' , JSON.stringify(POINTS), global_current_pagenumber)
     // tableDataInsert('table', POINTS);
-    checkData( current_table_id );
+    checkData();
 }
 
-function checkData( current_table_id ) {
-    // console.log(current_table_id)
-    // console.log("convert" + typeof(JSON.stringify(PREVIOUS_POINTS)) + typeof(JSON.stringify(POINTS)));
-    // console.log("get pre" + JSON.stringify(JSON.parse(PREVIOUS_POINTS)));
+function checkData() {
 
+    let string_POINTS=JSON.stringify( POINTS.slice( 0, POINTS.length ) );
+    console.log( "get current points: ", string_POINTS );
+    
     if ( PREVIOUS_POINTS!=null&&POINTS!=null ) {
-        if ( JSON.stringify( PREVIOUS_POINTS )==JSON.stringify( POINTS ) ) {
-            console.log( 'points are the same' );
-        } else {
-            console.log( "previous points and current points are not the same" );
+        if ( PREVIOUS_POINTS.slice( 0, PREVIOUS_POINTS.length )==string_POINTS.slice( 0, PREVIOUS_POINTS.length ) ) {
+            console.log( 'previous points and current points are the same' );
+        }
+        else {
+            console.log( `previous points : ${ PREVIOUS_POINTS } and current points: ${ string_POINTS } NOT the same!` );
+            //then save to database - call the post request
             tableDataInsert( 'table', POINTS );
         }
     }
+    
 }
 
- var tableDataInsert = function(type, points){
+var tableDataInsert=function ( type, points ) {
+     console.log("call post ")
         //log
 
          var pointsAsJSON = JSON.stringify(points);
