@@ -164,6 +164,7 @@ var loadPage = function(pageNum, pageContainer, successFn, notFoundFn) {
             }
 
             bindActivityButtons();
+            hoverButtonMessage();
         },
         function(xhr, ajaxOptions, thrownError) {
             if (xhr.status == 404) {
@@ -185,15 +186,16 @@ var loadHTML = function(url, successFn, errorFn) {
     });
 };
 
-
 //button actions for the left hand side curriculum pages and right hand side card buttons
 var bindActivityButtons = function() {
+
+    hoverButtonMessage();
 
     //left hand side curriculum button actions -- start
     $('.page a').off().on('touch click', function() {
         // Get button type to open appropriate view
         //console.log('this', this)
-        //console.log('$(this)', $(this))
+        console.log('$(this)', $(this))
 
         var activityButton = $(this);
 

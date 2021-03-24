@@ -1,41 +1,45 @@
-function hover_text() {
-    const new_element = document.createElement("SPAN");
-    const message = document.createTextNode("this sis a span");
-    new_element.appendChild(message);
-    document.body.appendChild(new_element);
-    console.log("hi", new_element)
-}
+const hoverButtonMessage = function() {
+    const className = "hover-text";
+    $(".page a").hover(
+        //if mouse is hovering the button
+        function() {
+            // console.log("mouse over")
+            const activityButton = $(this);
+            let type = activityButton.attr('class').replace('activity-button', '').trim();
+            console.log(type)
 
-const activity_button = document.getElementsByClassName('activity-button');
-activity_button.addEventListener("click", hover_text());
+            if (type == 'video') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Watch Video </span>`);
+            }
+            if (type == 'whiteboard') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Go To White Board </span>`);
+            }
+            if (type == 'chatCard') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Chat With Others </span>`);
+            }
+            if (type == 'upload') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Upload Your Image </span>`);
+            }
+            if (type == 'individual') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Leave Comments On Images </span>`);
+            }
+            if (type == 'gallery') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Buggy Gallery </span>`);
+            }
+            if (type == 'self-gallery') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Review Comments </span>`);
+            }
+            if (type == 'khanacademy') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Badge Options </span>`);
+            }
+            if (type == 'table') {
+                $('.activity-button.' + type).append(`<span class=${ className }> Buggy Lab Table </span>`);
+            }
 
-$('.activity-button').on('click', function(e) {
-    alert("click");
-    $('.activity-button').append('<span>' + 'this is a message' + '</span>');
-});
-
-$('page.p.a.activity-button').on('click', function(e) {
-    alert("click");
-});
-
-$(document).ready(function() {
-    $(".page a").hover(function() {
-        alert("hello");
-        console.log("hhh")
-    }, function() {
-        alert("hello");
-    });
-});
-
-
-var bindActivityButtons = function() {
-    $('.page a').off().on('click', function() {
-        $(this).css("background-color", "yellow");
-        alert("hoving");
-        // console.log('this', this)
-        // console.log('$(this)', $(this))
-        // var activityButton = $(this);
-        // console.log(activityButton);
-        // activityButton.append('<span>' + 'hello' + '</span>');
-    });
-}
+        },
+        // if mouse leave the button
+        function() {
+            // console.log("mouse leave");
+        }
+    );
+};
