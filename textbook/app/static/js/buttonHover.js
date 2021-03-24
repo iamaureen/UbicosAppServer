@@ -6,7 +6,7 @@ const hoverButtonMessage = function() {
             // console.log("mouse over")
             const activityButton = $(this);
             let type = activityButton.attr('class').replace('activity-button', '').trim();
-            console.log(type)
+            // console.log(type)
 
             if (type == 'video') {
                 $('.activity-button.' + type).append(`<span class=${ className }> Watch Video </span>`);

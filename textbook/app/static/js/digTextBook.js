@@ -189,7 +189,6 @@ var loadHTML = function(url, successFn, errorFn) {
 //button actions for the left hand side curriculum pages and right hand side card buttons
 var bindActivityButtons = function() {
 
-    hoverButtonMessage();
 
     //left hand side curriculum button actions -- start
     $('.page a').off().on('touch click', function() {
