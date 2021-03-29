@@ -1,0 +1,65 @@
+.personalityProfiles {
+    box-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.profile_btn {
+    transition-duration: 0.3s;
+    background-color: rgb(94, 218, 240);
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+#getInitPersonality:hover {
+    background-color: #add8e6;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    border: 5px solid white;
+}
+
+
+/* editPersonalityOptionBtn */
+
+#editPersonalityOptionBtn:hover {
+    background-color: #add8e6;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    border: 5px solid white;
+}
+
+
+/* changePersonalityBtn */
+
+#changePersonalityBtn:hover {
+    background-color: #88f1d7;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    border: 5px solid rgb(212, 236, 214);
+}
+
+.profile.container {
+    background-color: #3aaed4;
+    border-radius: 20px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 22px;
+    color: white;
+}
+
+.dropdown_btn {
+    background-color: #6bcae2;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.dropdown_btn:hover,
+.dropdown_btn:focus {
+    background-color: #a1ddec;
+}

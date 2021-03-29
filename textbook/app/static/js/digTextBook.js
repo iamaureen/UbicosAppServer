@@ -145,6 +145,7 @@ var loadPage = function(pageNum, pageContainer, successFn, notFoundFn) {
 
 
     loadHTML(
+
         API_URL.pagesBase + '/' + pageNum + '.html',
         function(data) {
 
@@ -162,6 +163,18 @@ var loadPage = function(pageNum, pageContainer, successFn, notFoundFn) {
             if (successFn) {
                 successFn();
             }
+
+            //update previous responses user saved
+            personality_msc = localStorage.getItem("personality_msc");
+            personality_hsc = localStorage.getItem("personality_hsc");
+            personality_con = localStorage.getItem("personality_con");
+            personality_fam = localStorage.getItem("personality_fam")
+                // personality_hsc
+            $('span.personality-msc').text(personality_msc);
+            $('span.personality-hsc').text(personality_hsc);
+            $('span.personality-con').text(personality_con);
+            $('span.personality-fam').text(personality_fam);
+
 
             bindActivityButtons();
             hoverButtonMessage();
@@ -441,6 +454,32 @@ var bindActivityButtons = function() {
         $("#editPersonality").toggle();
         enterLogIntoDatabase('Personality Profile Page Button Click', 'Edit Personality Button Click', logged_in, global_current_pagenumber);
 
+        let user_inputed_personality_msc = localStorage.getItem("personality_msc");
+        let user_inputed_personality_hsc = localStorage.getItem("personality_hsc");
+        let user_inputed_personality_con = localStorage.getItem("personality_con");
+        let user_inputed_personality_fam = localStorage.getItem("personality_fam");
+
+        if (user_inputed_personality_msc && user_inputed_personality_hsc &&
+            user_inputed_personality_con && user_inputed_personality_fam) {
+
+            $(`#dropdown-msc option:contains(${ user_inputed_personality_msc })`).attr('selected', true);
+            $(`#dropdown-hsc option:contains(${ user_inputed_personality_hsc })`).attr('selected', true);
+            $(`#dropdown-con option:contains(${ user_inputed_personality_con })`).attr('selected', true);
+            $(`#dropdown-fam option:contains(${ user_inputed_personality_fam })`).attr('selected', true);
+            // $('#dropdown-msc :selected').text(user_inputed_personality_msc);
+            // $('#dropdown-hsc :selected').text(user_inputed_personality_hsc);
+
+            // $('#dropdown-con :sel ected').text(user_inputed_personality_con);
+            // $('#dropdown-fam :selected').text(user_inputed_personality_fam);
+
+        }
+
+        console.log($(`#dropdown-msc option:contains(${ user_inputed_personality_msc })`).text());
+        console.log($('#dropdown-msc[value=1]').text());
+
+
+
+
 
     });
 
@@ -465,6 +504,12 @@ var bindActivityButtons = function() {
         console.log(personality_hsc);
         console.log(personality_con);
         console.log(personality_fam);
+
+        //save into localstorage
+        localStorage.setItem("personality_msc", personality_msc);
+        localStorage.setItem("personality_hsc", personality_hsc);
+        localStorage.setItem("personality_con", personality_con);
+        localStorage.setItem("personality_fam", personality_fam);
 
         //update the p-tag (id=matchedPersonality) based on the responses
         $('span.personality-msc').text(personality_msc);
