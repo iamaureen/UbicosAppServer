@@ -1,9 +1,4 @@
-// $(document).ready(function() {
-
 function zoomIn() {
-    $("#gallery_image").click(function() {
-        alert("The paragraph was clicked.");
-    });
+    var myImg = document.getElementById("#gallery_image");
+    console.log(myImg)
 }
-
-// });

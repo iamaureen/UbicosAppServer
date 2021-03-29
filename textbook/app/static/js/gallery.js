@@ -12,7 +12,10 @@ $(function(){
 
 //this method is used to load digital discussion gallery feed
 //called from digTextBook.js
-var loadGalleryFeed = function(act_id){
+var loadGalleryFeed=function ( act_id ) {
+    
+    console.log( "call gallert function" )
+    zoomIn()
     //clear the feed each time
 
 
@@ -43,7 +46,8 @@ var loadGalleryFeed = function(act_id){
      });
 
     //get the image primary key which is set above
-    var imagePk = $('input[name="image-db-pk"]').val();
+    var imagePk=$( 'input[name="image-db-pk"]' ).val();
+    console.log( "imagePk", imagePk)
 
     //todo if imagePk is null i.e., no image is uploaded for this activity id, then it generates an error, handle it
     //3. make an ajax call to get the comments and update discussion feed with each image
