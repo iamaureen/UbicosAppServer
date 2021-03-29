@@ -30,10 +30,14 @@
 
 <!--                    <a href="" class="previous-image"></a>-->
 <!--                    <a href="" class="next-image"></a>-->
-                    <div>
+                    <div class = "container">
                         <!-- <img id = "gallery_image" src="{% static 'pics/default.png' %}" alt=""> -->
-
+                        
+                        <div class="dragscroll">
                         <img id = "gallery_image" src="https://www.sciencemag.org/sites/default/files/styles/inline__450w__no_aspect/public/dogs_1280p_0.jpg?itok=4t_1_fSJ" alt="">
+                        </div>
+                        <button id="zoom_in_image_button" onclick="zoomInImage()"> + </button>
+                        <button class="zoomout_button" onclick="zoomout()"> -</button>
                         
 <!--                        <span> Image upload by </span>-->
                     </div>

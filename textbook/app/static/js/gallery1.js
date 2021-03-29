@@ -519,7 +519,7 @@ var openImageView = function(galleryView, image){
     image.css({"margin-top":"15px"})
 
     //hovering effect-start
-    image.hover(function(){
+    image.hover( function () {
     $(this).css({ "-webkit-transform": "scale(1.5)",
            "transform":"scale(1.5) " ,
            "transition":"transform 0.25s ease"

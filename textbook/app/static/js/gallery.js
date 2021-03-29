@@ -14,8 +14,8 @@ $(function(){
 //called from digTextBook.js
 var loadGalleryFeed=function ( act_id ) {
     
-    console.log( "call gallert function" )
-    zoomIn()
+    
+
     //clear the feed each time
 
 
@@ -43,8 +43,9 @@ var loadGalleryFeed=function ( act_id ) {
             }
 
         }
-     });
-
+     } );
+    
+    zoomInImage()
     //get the image primary key which is set above
     var imagePk=$( 'input[name="image-db-pk"]' ).val();
     console.log( "imagePk", imagePk)

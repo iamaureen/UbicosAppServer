@@ -1,0 +1,39 @@
+#zoom_in_image_button {
+    position: absolute;
+    width: 20px;
+    left: 30px;
+    top: 180px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+.container:hover #zoom_in_image_button {
+    opacity: 1;
+}
+
+.zoomout_button {
+    position: absolute;
+    width: 20px;
+    left: 30;
+    top: 210px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+.container:hover .zoomout_button {
+    opacity: 1;
+}
+
+.dragscroll {
+    padding: 16px;
+    margin-top: 30px;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    cursor: grab;
+    cursor: -o-grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
