@@ -20,11 +20,46 @@
     visibility: visible;
 }
 
-.activity-button:hover .hover-text {
+
+/* for button home page */
+
+.hover-text-pre-btn {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: 60px;
+    top: 10px;
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+#page-control-previous:hover .hover-text-pre-btn {
     visibility: visible;
 }
 
-
-/* .activity-button.gallery:hover .hover-text {
+.hover-text-next-btn {
     visibility: hidden;
-} */
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    left: 15px;
+    bottom: 50px;
+    /* top: 10px; */
+    z-index: 1;
+    font-style: italic;
+    font-size: smaller;
+    text-align: center;
+}
+
+#page-control-next:hover .hover-text-next-btn {
+    visibility: visible;
+}

@@ -44,11 +44,6 @@ const hoverButtonMessage = function() {
     );
 };
 
-// $('a.nav').hover(
-//     function() {
-//         $('#test').fadeIn('slow');
-//     },
-//     function() {
-//         $('#test').fadeOut('slow');
-//     }
-// );
+module.exports = {
+    hoverButtonMessage: hoverButtonMessage
+};
