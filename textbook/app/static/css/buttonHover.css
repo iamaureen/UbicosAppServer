@@ -20,8 +20,13 @@
     visibility: visible;
 }
 
+.activity-button:hover {
+    background-size: 55px 55px;
+    border-radius: 50px;
+}
 
-/* for button home page */
+
+/* for button home page- for go to next/previous page button */
 
 .hover-text-pre-btn {
     visibility: hidden;

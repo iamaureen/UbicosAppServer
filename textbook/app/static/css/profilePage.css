@@ -45,8 +45,9 @@
     background-color: white;
     border-radius: 20px;
     font-family: "Times New Roman", Times, serif;
-    font-size: 19px;
+    font-size: 20px;
     color: black;
+    text-align: center;
 }
 
 .dropdown_btn {
@@ -59,7 +60,24 @@
     border-radius: 10px;
 }
 
+#dropdown-con {
+    width: 40%;
+}
+
+#dropdown-hsc {
+    width: min-content;
+}
+
 .dropdown_btn:hover,
 .dropdown_btn:focus {
     background-color: #a1ddec;
+}
+
+
+/* //image */
+
+.person_img {
+    position: relative;
+    top: 70%;
+    left: 20%;
 }
