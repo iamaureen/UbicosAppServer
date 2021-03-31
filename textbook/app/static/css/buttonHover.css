@@ -26,45 +26,11 @@
 }
 
 
-/* for button home page- for go to next/previous page button */
+/* page-control-previous */
 
-.hover-text-pre-btn {
-    visibility: hidden;
-    width: 100px;
-    background-color: black;
-    color: #fff;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    right: 60px;
-    top: 10px;
-    z-index: 1;
-    font-style: italic;
-    font-size: smaller;
-    text-align: center;
-}
-
-#page-control-previous:hover .hover-text-pre-btn {
-    visibility: visible;
-}
-
-.hover-text-next-btn {
-    visibility: hidden;
-    width: 100px;
-    background-color: black;
-    color: #fff;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    left: 15px;
-    bottom: 50px;
-    /* top: 10px; */
-    z-index: 1;
-    font-style: italic;
-    font-size: smaller;
-    text-align: center;
-}
-
-#page-control-next:hover .hover-text-next-btn {
-    visibility: visible;
+#page-control-previous:hover,
+#page-control-next:hover {
+    box-shadow: 0px 2px 10px 5px;
+    font-size: larger;
+    color: #118adb;
 }
