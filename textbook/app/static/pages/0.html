@@ -4,7 +4,7 @@
 <div>
     <p>Remember you answered some questions about yourselves when we started? We looked at it, and matched you with one of our fictional students!</p>
 <!--    this button call is declared in digTextbook.js and defined in personality.js-->
-    <button  id="getInitPersonality"> See who you match with! </button>
+    <button  id="getInitPersonality" class="profile_btn"> See who you match with! </button>
 </div>
 
 
@@ -13,16 +13,19 @@
         Based on your answers, your profile closely matched with <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span>. Would you like to change anything?
     </p>
     <div class="personaImgDiv">
-         <img src="/blank.png">
+         <img src="/blank.png" class="person_img">
          <span class="namePersonality">Name</span>
     </div>
 
      <!--    #defined in digTextBook.js-->
     <!--    this button call is declared and defined in digTextbook.js-->
-    <button  id="editPersonalityOptionBtn"> Yes, Edit </button>
+    <button  id="editPersonalityOptionBtn" class="profile_btn"> Yes, Edit </button>
 </div>
 
+
 <div class="personalityProfiles" style="display: none">
+
+  <div class="profile container">
     <p id="matchedPersonality">
     <span class="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. She thinks that she is <span class="personality-msc">msc text</span>.
     Of course, she works with other people on math in a lot of different settings, <span class="personality-hsc">hsc text </span>.
@@ -31,24 +34,24 @@
     </p>
 
     <p id="editPersonality" style="display:none">
-        Eevee is a student in 8th Grade math class. She considers that she is 1.
-        <select id="dropdown-msc">
-          <option value="">not that great at math</option>
+        is a student in 8th Grade math class. She considers that she is 1.
+        <select id="dropdown-msc" class="dropdown_btn">
+          <option value="">that great at math </option>
           <option value="">pretty great at math</option>
         </select>.
 
         Of course, she works with other people on math in a lot of different settings 2.
-        <select id="dropdown-hsc">
+        <select id="dropdown-hsc" class="dropdown_btn">
           <option value="">but she doesn’t feel like she is very good at giving help to others</option>
           <option value="">and she thinks she is pretty good at giving help to others</option>
         </select>.
         When it comes to working on activities for class and other things, 3.
-         <select id="dropdown-con">
+         <select id="dropdown-con" class="dropdown_btn">
           <option value="">she doesn’t always participate</option>
           <option value="">she usually does what she is supposed to do</option>
         </select>
         Sometimes, that depends on who she is working with. However, honestly 4.
-          <select id="dropdown-fam">
+          <select id="dropdown-fam" class="dropdown_btn">
           <option value="">she prefers only working with people she knows</option>
           <option value="">she doesn’t mind working with anybody</option>
         </select>
@@ -57,8 +60,9 @@
         </br></br>
 
         <!--    #defined in digTextBook.js-->
-        <button id="changePersonalityBtn"> Ok, Change </button>
+        <button id="changePersonalityBtn" class="profile_btn"> Ok, Change </button>
     </p>
+    </div>
 
 </div>
 
