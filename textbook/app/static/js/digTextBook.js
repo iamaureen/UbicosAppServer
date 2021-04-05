@@ -51,8 +51,7 @@ $(function() {
 var reloadPage = function(pageToLoad) {
     global_current_pagenumber = pageToLoad;
     var gotoPage = pageToLoad;
-    var container = $('#textbook-content');
-
+    var container=$( '#textbook-content' );
     // Update the current page
     loadPage(
         gotoPage,

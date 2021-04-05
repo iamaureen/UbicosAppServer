@@ -45,7 +45,7 @@ var loadGalleryFeed=function ( act_id ) {
         }
      } );
     
-    zoomInImage()
+    // zoomInImage()
     //get the image primary key which is set above
     var imagePk=$( 'input[name="image-db-pk"]' ).val();
     console.log( "imagePk", imagePk)
