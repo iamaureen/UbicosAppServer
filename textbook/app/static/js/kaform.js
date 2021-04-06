@@ -3,7 +3,11 @@ var ka_act_id;
 
 $(function(){
 
-    ka_badge_form_Btn();
+    ka_img_upload_display();
+
+    ka_img_uplaod();
+
+    ka_response_save();
 
  });
 
@@ -19,37 +23,35 @@ var load_ka_card = function(act_id, video_url) {
 
 }
 
-var ka_badge_form_Btn = function(){
+// display img upload option if a student selects 'answer' from the radio button
+var ka_img_upload_display = function () {
+    //capture the radio button response
 
-    $('#ka-copy-button').off().on('click', function(event){
+    //if it is 'answer' display the image upload
+}
 
+//capture whether a student uploaded an image, and complete
+//this will be similar to the method in upload.js
+//make an ajax call to uploadKAImage
+var ka_img_uplaod = function(){
 
-        var $temp = $("<input>");
-        $("body").append($temp);
-        text = $('.badge-option-textarea textarea').val();
-        //todo not working, check later
-        if (text === 'Select an option to get the sentence starter'){
-            console.log('here');
-            message = 'Select a badge option first to copy a sentence starter.';
-            displayNotifier("#ka-notifier", message);
-            return false; //we don't copy
-        }
-        $temp.val(text).select();
-        document.execCommand("copy");
-        $temp.remove();
+}
 
-        message = 'Your selected sentence starter is copied to the clipboard. Paste it Khan Academy and modify as needed.';
-        displayNotifier("#ka-notifier", message);
+// capture students' response and save it in the database when pressed submit
+var ka_response_save = function(){
 
-        //get the selected badge
-        console.log('kaform.js (line 43):: ', global_badge_selected);
+    //detect when submit button is pressed, check for conditions, and then save
+    $('#ka-submit').off().on('click', function(event){
+
+        //get the response from the text area
+        var ka_response = $('#KAAnswer').val();
 
         //save selected badge info to the database
         $.ajax({
          type: 'POST',
-         url: '/saveBadgeSelection/',
+         url: '/saveKApost',
          data: {'username': logged_in, 'platform': 'KA', 'activity_id': ka_act_id, 'title': global_ka_url,
-            'selected_badge' : global_badge_selected},
+            'response' : ka_response},
          success: function(response){
                 console.log(response);
              }

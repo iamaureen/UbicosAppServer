@@ -1,141 +1,41 @@
 {% load static %}
-<body >
+<body>
+
+<h1> Khan Academy Discussion </h1>
 
     <div id="ka-container">
-        <h1></h1>
-        <div id="ka-left">
-             <p id="ka-left-description">
-                Visit (<a id="ka-form-url" href="" target="_blank" style="color:white;"></a> <a id="ka-form-url2" href="" target="_blank" style="color:white;"></a>) take a screenshot of the thread
-                 you would like to respond to and upload it.
-             </p>
+
+        <div id="ka-header-description">
+            <p>
+                Visit (<a id="ka-form-url" href="" target="_blank" style="color:white;"></a>), and make a post.
+            </p>
+        </div>
+
+        <div id="ka-user-options">
+            <p>Are you answering a question or posting a question on the Khan Academy page? </p>
+            <form class="ka-form">
+                <input class="ka-radio" type="radio" name="ka-response-type" value="answer"> Answer a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="question"> Post a Question<br>
+            </form>
+        </div>
+
+<!--        if a student selects answer, display this div-->
+        <div id="ka-img-upload">
             <form id="ka-upload-img-form" enctype="multipart/form-data" method="post" action="">
                 <label for="ka_img_upload" class="btn">Choose Screenshot</label>
                 <input type="file" id="ka_img_upload" name="ka_img_name" class="btn"/>
                 <input type="hidden" name="ka-act-id" value=""/>
             </form>
-            <img id="ka-image" src="#" />
-
-             <ul id="ka-gallery">
-
-             </ul>
         </div>
 
-        <!--background-color: #b366ff;-->
-        <div id="ka-right">
-            <div class="award-holder"   style="margin-left:0px;top:7%;">
-                 <div class = "badge-description"></div>
-            </div>
-            <div id="ka-form-containter">
-                <p>Are you answering a question or posting a question?
-                </p>
-                <form class="ka-form">
-                    <input class="ka-radio" type="radio" name="ka-response-type" value="answer"> Answer a Question<br>
-                    <input class="ka-radio" type="radio" name="ka-response-type" value="question"> Post a Question<br>
-                    <p> Write your response below. Once you have completed, click the copy button to
-                    copy the answer in the clipboard and go paste it in Khan Academy.</p>
-                    <textarea id="KAAnswer" class="user-answer-input" name="KAAnswer" placeholder="Write something.." style="height:180px"></textarea>
-
-                </form>
-                <div style="width: 100%;">
-                     <div id="ka-form-submit-button-div" style="float: left; margin-left:100px;">
-                        <input id="ka-submit" type="button" value="Submit" class="ka-user-input-submit-button" >
-                    </div>
-                    <div id="ka-showAnsweredQues">
-
-                        <div class="ka-row">
-                            <!--<button class="user-input-submit-button" id="ka-row-copy-button">copy answer</button>-->
-                            <input id="ka-row-copy-button" type="button" value="Copy" class="ka-user-input-submit-button">
-                        </div>
-                        <p class="ka-answer-p" style="visibility: hidden;float: left;"></p>
-                    </div>
-
-                </div>
-
-
-
-                 <div class="prompt-card prompt-ka">
-                    <a class="prompt-close-card"></a>
-                    <!--<span id="prompt-p"></span>-->
-                    <!--<img id="badge-default" src="{% static 'pics/default.png' %}" alt="">-->
-                    <img id="prompt-badge-img-ka" src="{% static 'pics/default.png' %}" alt="" >
-                    <p id="prompt-p-ka" ></p>
-                 </div>
-
-                <div id="award-holder"   style="margin-left:0px;padding-top:3px;">
-                     <span></span>
-                     <div id = "badge-description"></div>
-                </div>
-               <!--<ul class="teacher-view">-->
-
-               <!--</ul>-->
-
-
-            </div>
-
-
-            <!--<div id="add-new-ka-post">-->
-                <!--<a class="moreinfobtn"></a>-->
-            <!--</div>-->
-
-
-
+        <div id="ka-user-response-div">
+                <p> Write your response below. Once you have completed, click the copy button to
+                copy the answer in the clipboard and go paste it in Khan Academy.</p>
+                <textarea id="KAAnswer" class="user-answer-input" name="KAAnswer" placeholder="Write something.." style="height:180px"></textarea>
+                <input id="ka-submit" type="button" value="Submit" class="ka-user-input-submit-button" >
         </div>
 
-         <!-- The Modal -->
-            <!--<div id="moreInfoModal" class="talkmodal">-->
-                 <!--<span class="modal-close">&times;</span>-->
-                    <!--<h2>Talk Moves</h2>-->
-                      <!--<h4>Ask a Question</h4>-->
-                      <!--<ul style="margin-top:-20px">-->
-                        <!--<li>I’m confused about... </li>-->
-                        <!--<li>What do you mean by...?</li>-->
-                        <!--<li>Why did you...instead of...?</li>-->
-                      <!--</ul>-->
-
-                      <!--<h4>Give some Feedback</h4>-->
-                      <!--<ul style="margin-top:-20px">-->
-                        <!--<li>I think your answer is right/wrong, because... </li>-->
-                        <!--<li>I agree/disagree with your idea of ..., and I think .. </li>-->
-                        <!--<li>You mentioned..., I think that this point is important, because…</li>-->
-                      <!--</ul>-->
-
-                      <!--<h4>Explain your thinking</h4>-->
-                      <!--<ul style="margin-top:-20px">-->
-                        <!--<li>If I compare your answer to my answer, I think... </li>-->
-                        <!--<li>I think...because... </li>-->
-                        <!--<li>To explain what I mean, this is an example,...</li>-->
-                        <!--<li>You did… but another way to do it is...</li>-->
-                      <!--</ul>-->
-
-
-              <!--&lt;!&ndash; Modal content &ndash;&gt;-->
-              <!--&lt;!&ndash;<div class="modal-content">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="modal-header">&ndash;&gt;-->
-
-                  <!--&lt;!&ndash;<h2 style="text-align: center"></h2>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-              <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-            <!--</div>-->
-
-            <div id="ka-confirm-modal" class="ka-modal">
-
-              <!-- Modal content -->
-              <div class="modal-content">
-                <div class="ka-modal-header">
-                  <span class="modal-close">&times;</span>
-                  <h2 style="text-align: center"></h2>
-                </div>
-
-              </div>
-
-            </div>
 
     </div>
 
-
-
-
 </body>
-</html>

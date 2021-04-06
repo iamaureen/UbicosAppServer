@@ -4,7 +4,7 @@ import jsonfield
 
 # Create your models here.
 
-# saves students personality
+# the following model is contains students static survey responses, it is filled manually after the students complete the survey
 class studentCharacteristicModel (models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     has_msc = models.BooleanField(default=False)
@@ -13,6 +13,7 @@ class studentCharacteristicModel (models.Model):
     has_con = models.BooleanField(default=False)
     has_social = models.BooleanField(default=False)
 
+# the following model contains students motivational changes based on the persona tool
 class studentPersonalityChangeTable (models.Model):
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     char_msc = models.CharField(max_length=200)
@@ -21,17 +22,19 @@ class studentPersonalityChangeTable (models.Model):
     char_con = models.CharField(max_length=200)
     char_name = models.CharField(max_length=100)
     event = models.CharField(max_length=50)
+    posted_at = models.DateTimeField(auto_now_add=True)
 
     def natural_key(self):
         return (self.posted_by.username)
 
 
-#saves students participation history
+# the following model saves students participation history across the platforms
 class participationHistory (models.Model):
     platform = models.CharField(max_length=20)
     activity_id = models.IntegerField()
     didParticipate = models.CharField(max_length=20)
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    posted_at = models.DateTimeField(auto_now_add=True)
 
     def natural_key(self):
         return (self.posted_by.username)
@@ -41,6 +44,7 @@ class computationalModelLog(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     activity_id = models.IntegerField()
     platform = models.CharField(max_length=20)
+    posted_at = models.DateTimeField(auto_now_add=True)
 
     def natural_key(self):
         return (self.student.username)
@@ -82,6 +86,18 @@ class individualMsgComment(models.Model):
     content = models.CharField(max_length=400)
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     posted_at = models.DateTimeField(auto_now_add=True)
+
+    def natural_key(self):
+        return (self.posted_by.username)
+
+
+class khanAcademyAnswer(models.Model):
+    ka_id = models.IntegerField()
+    ka_image = models.ImageField(upload_to='ka_images')
+    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    posted_at = models.DateTimeField(auto_now_add=True)
+    response_type = models.CharField(max_length=20)
+    response = models.CharField(max_length=2000)
 
     def natural_key(self):
         return (self.posted_by.username)
