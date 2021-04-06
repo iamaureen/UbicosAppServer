@@ -20,17 +20,11 @@
     visibility: visible;
 }
 
-.activity-button:hover {
-    background-size: 55px 55px;
-    border-radius: 50px;
-}
-
 
 /* page-control-previous */
 
 #page-control-previous:hover,
 #page-control-next:hover {
     box-shadow: 0px 2px 10px 5px;
-    font-size: larger;
     color: #118adb;
 }

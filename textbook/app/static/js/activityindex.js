@@ -51,19 +51,20 @@ $(function() {
         });
 
     });
-
     let visitedLinks = [];
+
     //event handler for each modules within each higher levels
     $('#mySidenav a.nav').off().on('touch click', function() {
-        console.log("current link", $(this)[0].innerText);
-        window.localStorage.setItem( "Visited Link", $( this )[ 0 ].innerText );
-        
+        let visitedLinkText = $(this)[0].innerText;
 
-        visitedLinks.push(($(this)[0].innerText));
-        console.log( visitedLinks );
-        $(this).css("color", "#6483b3");
-        alert("i am here")
-            //highlight one module one at a time within respective <ul> tag
+        if (!visitedLinks.includes(visitedLinkText)) {
+            visitedLinks.push(visitedLinkText);
+        }
+
+        window.localStorage.setItem("Visited Link Array", visitedLinks);
+
+        $(this).css("color", "#8a32db");
+        //highlight one module one at a time within respective <ul> tag
         $("#mySidenav a.nav").removeClass('active'); //remove all the active class so far
         //console.log('activityindex.js line 60', $(this));
         $(this).toggleClass('active'); //then add active class in the current selected <a> tag

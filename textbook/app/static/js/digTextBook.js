@@ -51,7 +51,7 @@ $(function() {
 var reloadPage = function(pageToLoad) {
     global_current_pagenumber = pageToLoad;
     var gotoPage = pageToLoad;
-    var container=$( '#textbook-content' );
+    var container = $('#textbook-content');
     // Update the current page
     loadPage(
         gotoPage,
@@ -179,6 +179,7 @@ var loadPage = function(pageNum, pageContainer, successFn, notFoundFn) {
             hoverButtonMessage();
         },
         function(xhr, ajaxOptions, thrownError) {
+
             if (xhr.status == 404) {
                 console.dir('Page not found');
                 if (notFoundFn) {
@@ -465,20 +466,19 @@ var bindActivityButtons = function() {
             $(`#dropdown-hsc option:contains(${ user_inputed_personality_hsc })`).attr('selected', true);
             $(`#dropdown-con option:contains(${ user_inputed_personality_con })`).attr('selected', true);
             $(`#dropdown-fam option:contains(${ user_inputed_personality_fam })`).attr('selected', true);
-            // $('#dropdown-msc :selected').text(user_inputed_personality_msc);
-            // $('#dropdown-hsc :selected').text(user_inputed_personality_hsc);
-
-            // $('#dropdown-con :sel ected').text(user_inputed_personality_con);
-            // $('#dropdown-fam :selected').text(user_inputed_personality_fam);
-
         }
 
-        console.log($(`#dropdown-msc option:contains(${ user_inputed_personality_msc })`).text());
-        console.log($('#dropdown-msc[value=1]').text());
+        // console.log($(`#dropdown-msc option:contains(${ user_inputed_personality_msc })`).text());
 
 
-
-
+        $('.dropdown_btn').on('change', function(e) {
+            console.log($(`#${ e.currentTarget.id } :selected`).text());
+            console.log($(`#${ e.currentTarget.id } :selected`).text().length);
+            // $("#select_tmp_option").html($(`#${ e.currentTarget.id } :selected`).text());
+            // console.log('width', $("#select_tmp").width());
+            $($(this)).width($(`#${ e.currentTarget.id }`).width());
+            // console.log($(this))
+        });
 
     });
 

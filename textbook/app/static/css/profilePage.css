@@ -5,10 +5,10 @@
 }
 
 .profile_btn {
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
     background-color: white;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 #getInitPersonality:hover {
@@ -47,7 +47,7 @@
     font-family: "Times New Roman", Times, serif;
     font-size: 20px;
     color: black;
-    text-align: center;
+    text-align: justify;
 }
 
 .dropdown_btn {
@@ -60,13 +60,15 @@
     border-radius: 10px;
 }
 
-#dropdown-con {
-    width: 40%;
-}
 
-#dropdown-hsc {
-    width: min-content;
-}
+/* #dropdown-con {
+    width: 40%;
+} */
+
+
+/* #dropdown-hsc {
+    width: 40%;
+} */
 
 .dropdown_btn:hover,
 .dropdown_btn:focus {
@@ -80,4 +82,87 @@
     position: relative;
     top: 70%;
     left: 20%;
+}
+
+
+/* for device >= 600px */
+
+@media only screen and (max-width: 600px) {
+    #page-controls #page-control-previous {
+        left: 150px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 195px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    #page-controls #page-control-previous {
+        left: 250px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 295px;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    #page-controls #page-control-previous {
+        left: 350px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 395px;
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    #page-controls #page-control-previous {
+        left: 450px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 495px;
+    }
+}
+
+@media only screen and (min-width: 1300px) {
+    #page-controls #page-control-previous {
+        left: 510px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 555px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    #page-controls #page-control-previous {
+        left: 600px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 645px;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    #page-controls #page-control-previous {
+        left: 650px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 695px;
+    }
+}
+
+@media only screen and (min-width: 1700px) {
+    #page-controls #page-control-previous {
+        left: 800px;
+    }
+    /* //add 45px */
+    #page-controls #page-control-next {
+        left: 845px;
+    }
 }
