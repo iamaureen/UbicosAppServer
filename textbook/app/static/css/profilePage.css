@@ -5,10 +5,10 @@
 }
 
 .profile_btn {
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
     background-color: white;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 #getInitPersonality:hover {
@@ -47,7 +47,7 @@
     font-family: "Times New Roman", Times, serif;
     font-size: 20px;
     color: black;
-    text-align: center;
+    text-align: justify;
 }
 
 .dropdown_btn {
@@ -58,14 +58,6 @@
     border: none;
     cursor: pointer;
     border-radius: 10px;
-}
-
-#dropdown-con {
-    width: 40%;
-}
-
-#dropdown-hsc {
-    width: min-content;
 }
 
 .dropdown_btn:hover,

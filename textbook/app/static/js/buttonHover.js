@@ -5,6 +5,8 @@ const hoverButtonMessage = function() {
         function() {
             // console.log("mouse over")
             const activityButton = $(this);
+
+            console.log("button", activityButton);
             let type = activityButton.attr('class').replace('activity-button', '').trim();
 
             if ($(this).find("span").length == 0) {
@@ -47,3 +49,15 @@ const hoverButtonMessage = function() {
         }
     );
 };
+
+
+// const leftSideMenuBtnHover = function() {
+
+
+//     $("#mySidenav a.nav").hover(
+//         console.log("go to here")
+//     );
+//     // $('#mySidenav a.nav').off().on('touch click', function() {
+//     //     alert("go to here")
+//     // });
+// };
