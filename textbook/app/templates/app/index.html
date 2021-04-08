@@ -17,6 +17,10 @@
     <link rel="stylesheet/less" type="text/css" href="{% static 'js/jqPlot/jquery.jqplot.css' %}">
     <link rel="stylesheet/less" type="text/css" href="{% static 'js/jqPlot/jquery.jqplot.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/buttonHover.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/zoomImage.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/profilePage.css' %}"/>
+    
 
 
     <!-- Fonts -->
@@ -28,6 +32,8 @@
 
     <!--script for pusher - message communication-->
     <script src="//js.pusher.com/4.0/pusher.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
 
 
     <!--script for jquery ui - brainstorm-->
@@ -68,12 +74,16 @@
             <div id="page-controls">
                 <span id="page-control-number">Page 1/35</span>
                 <a id="study-menu">Menu</a> <!-- this is defined in sidenavigation.html and activityindex.js -->
-                <a id="page-control-previous" onclick="movePage(false);">Previous page</a>
+                <a id="page-control-previous" onclick="movePage(false);">
+                    <span class="hover-text-pre-btn"> Previous Page </span>
+                </a>
 
 <!--                <a id="tab-week1" data-id="2">Week 1</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
 <!--                <a id="tab-week2" data-id="12">Week 2</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
 <!--                <a id="tab-week3" data-id="25">Week 3</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
-                <a id="page-control-next" onclick="movePage(true);">Next page</a>
+                <a id="page-control-next" onclick="movePage(true);">
+                    <span class="hover-text-next-btn"> Next Page </span>
+                </a>
             </div>
             <!-- necessary classes for page navigation end -->
 
@@ -88,6 +98,14 @@
                     <a href="/">Login</a>
                 {% endif %}
             </div>
+
+<!--            display teacherdashboard if logged in as teacher-->
+            {% ifequal user.get_username 'AW' %}
+                <a class="teacher-view-toggle"></a>
+                <div id="teacher-index-view" class="" style="display: none;">
+                    {% include 'app/login.html' %}
+                </div>
+            {%  endifequal %}
 
 
             <div id="activity-feed-view" >
@@ -158,7 +176,7 @@
 
             <div class="card khanacademy">
                 <a class="close-card"></a>
-                {% include 'app/khanacademy_table.html' %}
+                {% include 'app/kaform.html' %}
             </div>
 
             <div class="card chatCard">
@@ -190,6 +208,9 @@
     <script src="{% static 'js/activityindex.js' %}"></script>
     <script src="{% static 'js/multQues.js' %}"></script>
     <script src="{% static 'js/personality.js' %}"></script>
+    <script src="{% static 'js/buttonHover.js' %}"></script>
+    <script src="{% static 'js/zoomImage.js' %}"></script>
+    <script src="{% static 'js/responsiveDesign.js' %}"></script>
 <!--    <script src="{% static 'js/jqPlot/jquery.jqplot.js' %}"></script>-->
 <!--    <script src="{% static 'js/jqPlot/jquery.jqplot.min.js' %}"></script>-->
 <!--    <script src="{% static 'js/jqPlot/plugins/jqplot.barRenderer.js' %}"></script>-->

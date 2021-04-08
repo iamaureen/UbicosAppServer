@@ -15,6 +15,7 @@ urlpatterns = [
     url('getGroupID/(?P<act_id>\d+)', views.getGroupID),
     #urls for upload image tool
     url('uploadImage', views.uploadImage, name='uploadImage'),
+    url('uploadKAImage', views.uploadKAImage, name='uploadKAImage'),
     #urls for individual image tool
     url('getIndividualImages/(?P<act_id>\d+)', views.getIndividualImages),
     url('saveIndividualCommentMsgs', views.saveIndividualCommentMsgs),
@@ -68,7 +69,7 @@ urlpatterns = [
     url('brainstorm/update/(?P<note_id>\d+)/', views.brainstormUpdate),
     url('brainstorm/del/(?P<note_id>\d+)', views.brainstormDelete),
     url('tableData/save/',views.tableEntriesSave),
-    # url('submitAnswer',views.submitAnswer),
+
 
 
 
