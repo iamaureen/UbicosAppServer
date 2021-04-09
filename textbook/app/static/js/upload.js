@@ -24,7 +24,8 @@ $(function(){
                       async: false,
                       cache: false,
                       data : form_data,
-                      success: function(response){
+                    success: function ( response ) {
+                          console.log("call sucess")
 
                          //adjust the height and width of the image
                         $("#gallery-upload-div img").width('100%').height('auto');
