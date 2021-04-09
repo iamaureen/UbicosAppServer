@@ -315,6 +315,9 @@ var bindActivityButtons=function () {
             //if the card is already extended, put it back to normal
             card_extension_close();
             var video_url=activityButton.attr( 'data-video-url' );
+
+            $( '#ka-upload-img-form input[name="ka-act-id"]' ).attr( 'value', id );
+
             load_ka_card( id, video_url ); //defined in kaform.js
             console.log( 'card opened' );
         }

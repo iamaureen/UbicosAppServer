@@ -1168,6 +1168,7 @@ def uploadKAImage(request):
 
         #get the KA ID
         ka_id = request.POST.get('ka-act-id');
+        print("ka_id: ", ka_id)
 
         #get the logged in username
         username = ''
