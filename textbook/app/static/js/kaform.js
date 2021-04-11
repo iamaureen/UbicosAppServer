@@ -96,7 +96,7 @@ var ka_response_save = function(){
         var ka_response_type=$( 'input:radio[name="ka-response-type"]' ).val();
         console.log(ka_response_type)
 
-        //save selected badge info to the database
+        //save the KA response to the database
         $.ajax({
          type: 'POST',
          url: '/saveKApost',
@@ -107,7 +107,7 @@ var ka_response_save = function(){
              }
         });
 
-        enterLogIntoDatabase('KA Bagde Copy Button Click', 'Button Click' , global_badge_selected, global_current_pagenumber);
+        enterLogIntoDatabase('KA response input', 'Button Click' , global_badge_selected, global_current_pagenumber);
 
     });
  }

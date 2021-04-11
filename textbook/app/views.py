@@ -487,9 +487,9 @@ def getBadgeOptions(request, username, platform, badgeKey,activity_id):
 
 # this comes from the extension
 def saveKApost(request):
-    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).exists():
+    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user,response_type=request.POST.get('response_type')).exists():
         khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user). \
-            update(response_type=request.POST.get('response_type'), response=request.POST.get('answer'))
+            update(response=request.POST.get('answer'))
 
     return HttpResponse('');
 
@@ -947,6 +947,7 @@ def createBulkUser(request):
 #very poor code, rewrite
 def matchPersonalityProfile(request):
 
+
     #if the current student already 'loaded' then pull from there else load from the init
 
 
@@ -1010,7 +1011,7 @@ def matchPersonalityProfile(request):
         #print('debug matchPersonalityProfile', charac);
         #print('debug matchPersonalityProfile', charac_list[0]);
 
-        personality_dict = handlerMatchProfile(request, charac_list, 'load match event')
+        personality_dict = handlerMatchProfile(request, charac_list, 'based on survey response')
         #print('line 1021', personality_dict);
 
         return JsonResponse({'profile': personality_dict});
@@ -1067,9 +1068,10 @@ def handlerMatchProfile(request, charac_list, event):
         'True': 'and she thinks she is pretty good at giving help to others'
     }
 
+    #true/false reversed in april 2021 implementation
     fam_statements = {
-        'False': 'she prefers only working with people she knows',
-        'True': 'she doesn’t mind working with anybody'
+        'True': 'she prefers only working with people she knows',
+        'False': 'she doesn’t mind working with anybody'
     }
 
     con_statements = {
@@ -1179,7 +1181,7 @@ def uploadKAImage(request):
             print('user not signed in') #add in log
 
         #insert values in the database
-        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user);
+        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user, response_type='answer');
         ka_image_upload.save();
 
         latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id).last()
