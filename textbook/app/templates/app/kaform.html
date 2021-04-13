@@ -1,13 +1,15 @@
 {% load static %}
+
 <body>
 
-<h1> Khan Academy Discussion </h1>
+    <h1> Khan Academy Discussion </h1>
 
     <div id="ka-container">
 
         <div id="ka-header-description">
             <p>
-                Visit (<a id="ka-form-url" href="" target="_blank" style="color:white;"></a>), and make a post.
+                Visit (
+                <a id="ka-form-url" href="" target="_blank" style="color:white;"></a>), and make a post.
             </p>
         </div>
 
@@ -19,30 +21,43 @@
             </form>
         </div>
 
-<!--        if a student selects answer, display this div-->
+        <!--        if a student selects answer, display this div-->
         <div id="ka-img-upload">
+
+            <div>
+                <img id="default_ka_img" src="{% static 'pics/default.png' %}" alt="" style="height:300px;width:450px">
+            </div>
+
             <form id="ka-upload-img-form" enctype="multipart/form-data" method="post" action="">
                 <label for="ka_img_upload" class="btn">Choose Screenshot</label>
-                <input type="file" id="ka_img_upload" name="ka_img_name" class="btn"/>
-                <input type="hidden" name="ka-act-id" value=""/>
+                <input type="file" id="ka_img_upload" name="ka_img_name" class="btn" />
+                <input type="hidden" name="ka-act-id" value="" />
             </form>
         </div>
 
         <div id="ka-user-response-div">
-                <p> Write your response below. Once you have completed, click the copy button to
-                copy the answer in the clipboard and go paste it in Khan Academy.</p>
-                <textarea id="KAAnswer" class="user-answer-input" name="KAAnswer" placeholder="Write something.." style="height:180px"></textarea>
-                <input id="ka-submit" type="button" value="Submit" class="ka-user-input-submit-button" >
+            <p> Write your response below. Once you have completed, click the copy button to copy the answer in the clipboard and go paste it in Khan Academy.</p>
+            <textarea id="KAAnswer" class="user-answer-input" name="KAAnswer" placeholder="Write something.." style="height:180px"></textarea>
+            <input id="ka-submit" type="button" value="Submit" class="ka-user-input-submit-button">
         </div>
+
+        
 
 
         <div class="upload-success-msg" style="display:none">
-          <span class="upload-success-msg-closebtn">&times;</span>
-          <p id="upload-success-msg-p">
-              <strong>Your selected image was successfully uploaded !</strong>
-          </p>
+            <span class="upload-success-msg-closebtn">&times;</span>
+            <p id="upload-success-msg-p">
+                <strong>Your selected image was successfully uploaded !</strong>
+            </p>
         </div>
 
+
+        <div class="upload-failure-msg" style="display:none">
+            <span class="upload-failure-msg-closebtn">&times;</span>
+            <p id="upload-failure-msg-p">
+                <strong id = "failure_text">failure uploaded !</strong>
+            </p>
+        </div>
 
     </div>
 

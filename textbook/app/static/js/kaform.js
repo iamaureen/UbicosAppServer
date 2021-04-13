@@ -42,6 +42,8 @@ var ka_img_upload_display = function () {
     } );
 
     
+
+    
 }
 
 //capture whether a student uploaded an image, and complete
@@ -56,7 +58,7 @@ var ka_img_upload=function () {
         console.log( "file changed" );
         console.log( event )
         var form_data=new FormData( $( '#ka-upload-img-form' )[ 0 ] );
-        console.log( form_data );
+        console.log( "form_data", form_data );
 
         $.ajax( {
             type: 'POST',
@@ -67,7 +69,7 @@ var ka_img_upload=function () {
             cache: false,
             data: form_data,
             success: function ( response ) {
-                console.log( response )
+                console.log( response );
                 //success message
                 $( '.upload-success-msg' ).show();
 
@@ -80,8 +82,33 @@ var ka_img_upload=function () {
     } );
 
 
+    // //update preview image
+    $( "#ka_img_upload" ).change( function () {
+        console.log( this )
+        ka_img_readURL(this);
+    } );
 
 }
+
+
+
+function ka_img_readURL( input) {
+    console.log( "this" )
+
+    console.log( input.files )
+    
+    console.log( input.files[ 0 ] )
+    
+    if ( input.files&&input.files[ 0 ] ) {
+        var reader=new FileReader();
+        reader.onload=function ( e ) {
+            $( '#default_ka_img' ).attr( 'src', e.target.result );
+        }
+        reader.readAsDataURL( input.files[ 0 ] );
+    }
+}
+
+
 
 // capture students' response and save it in the database when pressed submit
 var ka_response_save = function(){
@@ -94,21 +121,41 @@ var ka_response_save = function(){
         console.log( "ka_response", ka_response );
 
         var ka_response_type=$( 'input:radio[name="ka-response-type"]' ).val();
-        console.log(ka_response_type)
+        console.log( ka_response_type )
 
-        //save the KA response to the database
-        $.ajax({
-         type: 'POST',
-         url: '/saveKApost',
-         data: {'username': logged_in, 'platform': 'KA', 'activity_id': ka_act_id, 'title': global_ka_url,
-             'response': ka_response, 'response_type': ka_response_type},
-         success: function(response){
-                console.log(response);
-             }
-        });
+        var wasChecked=$( this ).data( 'checked' )
 
-        enterLogIntoDatabase('KA response input', 'Button Click' , global_badge_selected, global_current_pagenumber);
+        if ( !$( '.ka-radio' ).is( ':checked' ) ) {
+            $( "#failure_text" ).text( "Please select radio !" )
+            $( '.upload-failure-msg' ).show();
+            
+        } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()===undefined ) {
+            $( "#failure_text" ).text( "Please enter text into response box!" )
+            $( '.upload-failure-msg' ).show();
+        }
+        else {
+
+            $( '.upload-failure-msg' ).hide();
+        }
+        //get text area value
+        console.log( $( "#KAAnswer" ).val() );
+
+
+        //event for failure message close button
+        $( ".upload-failure-msg-closebtn" ).on( 'click', function () {
+            var div=this.parentElement;
+            div.style.opacity="0";
+            setTimeout( function () {div.style.display="none";}, 300 );
+
+        } );
+
+
+        enterLogIntoDatabase( 'KA Bagde Copy Button Click', 'Button Click', global_badge_selected, global_current_pagenumber );
+
 
     });
- }
+}
+ 
+
+
 
