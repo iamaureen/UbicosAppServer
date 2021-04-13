@@ -1,0 +1,38 @@
+.upload-failure-msg {
+    padding: 5px 20px 0px;
+    text-align: center;
+    color: rgb(235, 220, 220);
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #db2c0d;
+    opacity: 1;
+    transition: opacity 0.6s;
+    width: 400px;
+    position: absolute;
+    top: 25rem;
+    left: 18%;
+}
+
+.upload-failure-msg-closebtn {
+    margin-left: 15px;
+    color: rgb(228, 210, 210);
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-failure-msg-closebtn:hover {
+    color: white;
+}
+
+strong {
+    color: white
+}
+
+#ka-submit {
+    color: red;
+    text-align: center;
+}
