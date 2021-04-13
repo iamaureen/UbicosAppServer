@@ -1,9 +1,14 @@
 var global_ka_url;
 var ka_act_id;
+var host_url=window.location.host;
 
 $(function(){
 
-    ka_badge_form_Btn();
+    ka_img_upload_display();
+
+    ka_img_upload();
+
+    ka_response_save();
 
  });
 
@@ -19,37 +24,84 @@ var load_ka_card = function(act_id, video_url) {
 
 }
 
-var ka_badge_form_Btn = function(){
+$( "#ka-upload-img-form" ).hide();
 
-    $('#ka-copy-button').off().on('click', function(event){
+// display img upload option if a student selects 'answer' from the radio button
+var ka_img_upload_display = function () {
+    //capture the radio button response
+    $( function () {
+        $( 'input:radio[name="ka-response-type"]' ).change( function () {
+            if ( $( this ).val()=="answer" ) {
+                //if it is 'answer' display the image upload
+                $( "#ka-upload-img-form" ).show();
+            } else {
+                //if it is 'question' do NOT display the image upload
+                $( "#ka-upload-img-form" ).hide();
+            }
+        } );
+    } );
+
+    
+}
+
+//capture whether a student uploaded an image, and complete
+//this will be similar to the method in upload.js
+//make an ajax call to uploadKAImage
+var ka_img_upload=function () {
+
+    //get file information
+
+    
+    $( "#ka_img_upload" ).change( function ( event ) {
+        console.log( "file changed" );
+        console.log( event )
+        var form_data=new FormData( $( '#ka-upload-img-form' )[ 0 ] );
+        console.log( form_data );
+
+        $.ajax( {
+            type: 'POST',
+            url: 'http://'+host_url+'/uploadKAImage/',
+            processData: false,
+            contentType: false,
+            async: false,
+            cache: false,
+            data: form_data,
+            success: function ( response ) {
+                console.log( response )
+                //success message
+                $( '.upload-success-msg' ).show();
+
+            }, error: function ( response ) {
+                console.log("fail to upload")
+            }
+
+        } );
+
+    } );
 
 
-        var $temp = $("<input>");
-        $("body").append($temp);
-        text = $('.badge-option-textarea textarea').val();
-        //todo not working, check later
-        if (text === 'Select an option to get the sentence starter'){
-            console.log('here');
-            message = 'Select a badge option first to copy a sentence starter.';
-            displayNotifier("#ka-notifier", message);
-            return false; //we don't copy
-        }
-        $temp.val(text).select();
-        document.execCommand("copy");
-        $temp.remove();
 
-        message = 'Your selected sentence starter is copied to the clipboard. Paste it Khan Academy and modify as needed.';
-        displayNotifier("#ka-notifier", message);
+}
 
-        //get the selected badge
-        console.log('kaform.js (line 43):: ', global_badge_selected);
+// capture students' response and save it in the database when pressed submit
+var ka_response_save = function(){
+
+    //detect when submit button is pressed, check for conditions, and then save
+    $('#ka-submit').off().on('click', function(event){
+
+        //get the response from the text area
+        var ka_response=$( '#KAAnswer' ).val();
+        console.log( "ka_response", ka_response );
+
+        var ka_response_type=$( 'input:radio[name="ka-response-type"]' ).val();
+        console.log(ka_response_type)
 
         //save selected badge info to the database
         $.ajax({
          type: 'POST',
-         url: '/saveBadgeSelection/',
+         url: '/saveKApost',
          data: {'username': logged_in, 'platform': 'KA', 'activity_id': ka_act_id, 'title': global_ka_url,
-            'selected_badge' : global_badge_selected},
+             'response': ka_response, 'response_type': ka_response_type},
          success: function(response){
                 console.log(response);
              }

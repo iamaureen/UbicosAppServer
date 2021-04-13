@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
     userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, badgeSelected, studentCharacteristicModel, badgeInfo, KAPostModel,\
-    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog
+    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -487,39 +487,9 @@ def getBadgeOptions(request, username, platform, badgeKey,activity_id):
 
 # this comes from the extension
 def saveKApost(request):
-    # get the data
-    if request.method == 'POST':
-        username = request.POST.get('username').split(" ")[0];
-        pagetitle = request.POST.get('pageURL');
-        textareaId = request.POST.get('textareaId');
-        content = request.POST.get('content');
-
-        print('line 430 :: ', username);
-
-        # check if an answer is already present for this textarea, then update else enter
-        if KAPostModel.objects.filter(title = pagetitle).filter(textareaID = textareaId).filter(posted_by=User.objects.get(username=username)).exists():
-            KAPostModel.objects.filter(title = pagetitle).filter(textareaID = textareaId).filter(posted_by=User.objects.get(username=username)). \
-                update(content=content);
-        else:
-            ka_answer = KAPostModel(title = pagetitle, textareaID = textareaId, content=content, posted_by=User.objects.get(username=username));
-            ka_answer.save();
-
-            #insert an entry into the participation history for this activity id
-            #get the KAid from the khanAcademyInfoTable table
-            KA_id = list(khanAcademyInfoTable.objects.filter(url=pagetitle).values('KA_id'));
-            KA_id = KA_id[0]['KA_id'];
-            print('debug purpose, user participated in khan academy id :: ', KA_id);
-
-            # save into the history table once
-            if participationHistory.objects.filter(platform="KA", activity_id=KA_id,posted_by=User.objects.get(username=username)).exists():
-                # do nothing
-                print();
-            else:
-                entry = participationHistory(platform="KA", activity_id=KA_id,
-                                             didParticipate='yes', posted_by=User.objects.get(username=username));
-                entry.save();
-
-        return HttpResponse('successfully inserted');
+    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).exists():
+        khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user). \
+            update(response_type=request.POST.get('response_type'), response=request.POST.get('answer'))
 
     return HttpResponse('');
 
@@ -1191,33 +1161,33 @@ def saveEditedPersonality(request):
 #
 #     return HttpResponse('deleted?')
 
-# delete the following method
-# def uploadKAImage(request):
-#     #get image from html and save it in the database
-#     if request.method == "POST":
-#         # print (request.Files) #gives the name of the <input type='file' name...>
-#
-#         #get the KA ID
-#         ka_id = request.POST.get('ka-act-id');
-#
-#         #get the logged in username
-#         username = ''
-#         if request.user.is_authenticated:
-#             print('username :: ', request.user.get_username())
-#             username = request.user.get_username();
-#         else:
-#             print('user not signed in') #add in log
-#
-#         #insert values in the database
-#         ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user);
-#         ka_image_upload.save();
-#
-#         latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id).last()
-#         #https://stackoverflow.com/questions/16640021/django-object-is-not-iterable-using-serializers-serialize
-#         ka_img = serializers.serialize('json', [latest_upload], use_natural_foreign_keys=True)
-#         #print(latest_upload.pk)
-#
-#         return JsonResponse({'ka_imgID': latest_upload.pk, 'ka_img':ka_img})
+def uploadKAImage(request):
+    #get image from html and save it in the database
+    if request.method == "POST":
+        # print (request.Files) #gives the name of the <input type='file' name...>
+
+        #get the KA ID
+        ka_id = request.POST.get('ka-act-id');
+        print("ka_id: ", ka_id)
+
+        #get the logged in username
+        username = ''
+        if request.user.is_authenticated:
+            print('username :: ', request.user.get_username())
+            username = request.user.get_username();
+        else:
+            print('user not signed in') #add in log
+
+        #insert values in the database
+        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user);
+        ka_image_upload.save();
+
+        latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id).last()
+        #https://stackoverflow.com/questions/16640021/django-object-is-not-iterable-using-serializers-serialize
+        ka_img = serializers.serialize('json', [latest_upload], use_natural_foreign_keys=True)
+        #print(latest_upload.pk)
+
+        return JsonResponse({'ka_imgID': latest_upload.pk, 'ka_img':ka_img})
 
 # def submitAnswer(request):
 #
@@ -1227,20 +1197,6 @@ def saveEditedPersonality(request):
 #
 #     return HttpResponse('')
 
-# def submitKAAnswer(request):
-#     #check if any query present for that KA
-
-#     if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).exists():
-#
-#         khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).\
-#             update(response_type=request.POST.get('response_type'),response=request.POST.get('answer'))
-#
-#     #     khanAcademyAnswer.objects.filter(ka_id=request.POST.get('id')).filter(response_type=request.POST.get('response_type')).update(response=request.POST.get('answer'))
-#     # else:
-#     #     ka_answer = khanAcademyAnswer(ka_id=request.POST.get('id'), response_type=request.POST.get('response_type'), response=request.POST.get('answer'), posted_by = request.user)
-#     #     ka_answer.save()
-#
-#     return HttpResponse('from server')
 #
 
 # def checkKAAnswer(request, ka_id):
