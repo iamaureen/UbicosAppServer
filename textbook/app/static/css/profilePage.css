@@ -11,13 +11,7 @@
     font-size: 16px;
 }
 
-#getInitPersonality:hover {
-    background-color: #add8e6;
-    color: white;
-    cursor: pointer;
-    font-size: 17px;
-    border: 5px solid white;
-}
+
 
 
 /* editPersonalityOptionBtn */
@@ -65,11 +59,42 @@
     background-color: #a1ddec;
 }
 
-
-/* //image */
-
-.person_img {
-    position: relative;
-    top: 70%;
-    left: 20%;
+#matchedPersonality_div{
+    display: inline-block;
 }
+
+/* persona image */
+
+.persona_img {
+    width: 100%;
+    margin-left: 15%
+}
+
+
+.persona_name {
+    margin-left: 17%
+}
+
+
+
+#matchedPersonality_wrapper{
+    width: 100%;
+}
+
+.persona-narrative{
+    width: 80%;
+    display: inline-block;
+
+
+}
+
+.persona-image{
+    width: 19%;
+    display: inline-block;
+
+}
+
+#editPersonality_div{
+   display: inline-block;
+}
+

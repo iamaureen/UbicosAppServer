@@ -15,7 +15,7 @@ from django.core import serializers
 from .parser import parser
 from .randomGroupGenerator import randomGroupGenerator
 from .badgeInfoFileRead import badgeInfoFileRead
-from .keywordMatch import keywordMatch
+from .utteranceClassifier import utteranceClassifier
 from .binaryLogisticModel import binaryLogisticModel
 import json, random
 from datetime import datetime, timedelta
@@ -68,15 +68,20 @@ def broadcastImageComment(request):
     comment = imageComment(content=request.POST['message'], posted_by = request.user, imageId = img, activityID=request.POST['activityID'])
     comment.save()
 
-    #save into the history table once
-    if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
-        #do nothing
-        print();
-    else:
-        entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
-        entry.save()
+    #pass through dialogtag to get the tag
 
-    return JsonResponse({'success': '', 'errorMsg': True})
+    rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST['message']);
+
+    # #save into the history table once
+    # if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
+    #     #do nothing
+    #     print();
+    # else:
+    #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
+    #     entry.save()
+
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText})
+
 
 @csrf_exempt
 def broadcastBrainstormNote(request):
@@ -487,9 +492,9 @@ def getBadgeOptions(request, username, platform, badgeKey,activity_id):
 
 # this comes from the extension
 def saveKApost(request):
-    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).exists():
+    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user,response_type=request.POST.get('response_type')).exists():
         khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user). \
-            update(response_type=request.POST.get('response_type'), response=request.POST.get('answer'))
+            update(response=request.POST.get('answer'))
 
     return HttpResponse('');
 
@@ -580,70 +585,76 @@ def computationalModel(request):
 
     return HttpResponse('');
 
-def matchKeywords(request):
-    praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
-    praise_messages_part1 = random.choice(praise_messages_part1_list);
+def matchKeywords (request, message):
 
-    # the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
-    praise_message_part2_dict = \
-        {'brainstorm': 'This will help you to understand better.',
-         'question': 'Asking questions helps you to understand better.',
-         'critique': 'This will help you to understand better.',
-         'elaborate': 'This will benefit your help-giving skills.',
-         'share': 'Sharing thoughts helps you to put them into words.',
-         'challenge': 'This will benefit your help-giving skills.',
-         'feedback': 'Your feedback to others is highly appreciated!',
-         'addon': 'Adding to an existing conversation is useful.',
-         'summarize': 'Summarizing is a great skill.',
-         'answer': 'Responding to others is a great way of learning.',
-         'reflect': 'Reflecting on others work is good.',
-         'assess': 'Evaluating others work is a skill!',
-         'participate': 'Participation is a great collaborative technique!',
-         'appreciate': 'Appreciating others encourages collaboration.',
-         'encourage': 'Encouraging others helps in a collaboration.',
-         'other': 'You are doing a great job!'
-         }
-
-    if request.method == 'POST':
-        username = request.POST.get('username').split(" ")[0];
-        print('line 601 from KA', username);
-        activity_id = request.POST.get('activity_id');
-        platform = request.POST.get('platform');
-        message = request.POST.get('message');
-        selected_badge = request.POST.get('selected_badge');
-
-        if(platform == 'KA'):
-            #get the selected badge using the URL sent
-            ka_url = request.POST.get('ka_url');
-
-            #get the id using the URL
-            KA_id = list(khanAcademyInfoTable.objects.filter(url=ka_url).values('KA_id'));
-            activity_id = KA_id = KA_id[0]['KA_id'];
-            print('line 614 from matchkeywords, KAid', KA_id);
-
-            entry = badgeSelected.objects.filter(userid_id=User.objects.get(username=username)).filter(platform=platform, activity_id=KA_id).\
-                values('badgeTypeSelected').last();
-            print('line 463 badge selected for khan academy :: ', entry);
-            if entry:
-                selected_badge = entry['badgeTypeSelected'];
-
-        selected_badge = selected_badge.lower();
-        isMatch = keywordMatch.matchingMethod(None, message, selected_badge);
-        if(isMatch):
-            print('line 635 keyword matched; user is rewarded a badge :: ', selected_badge);
-            #if there is a match, make an entry into the badgeReceived table
-            entry = badgeReceived(userid_id=User.objects.get(username=username).pk, platform=platform,
-                                  activity_id = activity_id, message = message, badgeTypeReceived = selected_badge);
-            entry.save();
-        else:
-            print('line 635 keyword did not matched; user was not rewarded a badge.');
-
-        #praised text generated randomly
-        praiseText = praise_messages_part1 +' '+praise_message_part2_dict[selected_badge];
-
-        return JsonResponse({'isMatch': isMatch, 'praiseText': praiseText, 'selected_badge': selected_badge});
+    matchType = keywordMatch.matchingMethod(None, message);
+    print ('views.py line 591', matchType)
 
     return HttpResponse('');
+# def matchKeywords(request):
+#     praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
+#     praise_messages_part1 = random.choice(praise_messages_part1_list);
+#
+#     # the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
+#     praise_message_part2_dict = \
+#         {'brainstorm': 'This will help you to understand better.',
+#          'question': 'Asking questions helps you to understand better.',
+#          'critique': 'This will help you to understand better.',
+#          'elaborate': 'This will benefit your help-giving skills.',
+#          'share': 'Sharing thoughts helps you to put them into words.',
+#          'challenge': 'This will benefit your help-giving skills.',
+#          'feedback': 'Your feedback to others is highly appreciated!',
+#          'addon': 'Adding to an existing conversation is useful.',
+#          'summarize': 'Summarizing is a great skill.',
+#          'answer': 'Responding to others is a great way of learning.',
+#          'reflect': 'Reflecting on others work is good.',
+#          'assess': 'Evaluating others work is a skill!',
+#          'participate': 'Participation is a great collaborative technique!',
+#          'appreciate': 'Appreciating others encourages collaboration.',
+#          'encourage': 'Encouraging others helps in a collaboration.',
+#          'other': 'You are doing a great job!'
+#          }
+#
+#     if request.method == 'POST':
+#         username = request.POST.get('username').split(" ")[0];
+#         print('line 601 from KA', username);
+#         activity_id = request.POST.get('activity_id');
+#         platform = request.POST.get('platform');
+#         message = request.POST.get('message');
+#         selected_badge = request.POST.get('selected_badge');
+#
+#         if(platform == 'KA'):
+#             #get the selected badge using the URL sent
+#             ka_url = request.POST.get('ka_url');
+#
+#             #get the id using the URL
+#             KA_id = list(khanAcademyInfoTable.objects.filter(url=ka_url).values('KA_id'));
+#             activity_id = KA_id = KA_id[0]['KA_id'];
+#             print('line 614 from matchkeywords, KAid', KA_id);
+#
+#             entry = badgeSelected.objects.filter(userid_id=User.objects.get(username=username)).filter(platform=platform, activity_id=KA_id).\
+#                 values('badgeTypeSelected').last();
+#             print('line 463 badge selected for khan academy :: ', entry);
+#             if entry:
+#                 selected_badge = entry['badgeTypeSelected'];
+#
+#         selected_badge = selected_badge.lower();
+#         isMatch = keywordMatch.matchingMethod(None, message, selected_badge);
+#         if(isMatch):
+#             print('line 635 keyword matched; user is rewarded a badge :: ', selected_badge);
+#             #if there is a match, make an entry into the badgeReceived table
+#             entry = badgeReceived(userid_id=User.objects.get(username=username).pk, platform=platform,
+#                                   activity_id = activity_id, message = message, badgeTypeReceived = selected_badge);
+#             entry.save();
+#         else:
+#             print('line 635 keyword did not matched; user was not rewarded a badge.');
+#
+#         #praised text generated randomly
+#         praiseText = praise_messages_part1 +' '+praise_message_part2_dict[selected_badge];
+#
+#         return JsonResponse({'isMatch': isMatch, 'praiseText': praiseText, 'selected_badge': selected_badge});
+#
+#     return HttpResponse('');
 
 def getWhiteboardURl(request, board_id):
 
@@ -947,6 +958,7 @@ def createBulkUser(request):
 #very poor code, rewrite
 def matchPersonalityProfile(request):
 
+
     #if the current student already 'loaded' then pull from there else load from the init
 
 
@@ -1010,7 +1022,7 @@ def matchPersonalityProfile(request):
         #print('debug matchPersonalityProfile', charac);
         #print('debug matchPersonalityProfile', charac_list[0]);
 
-        personality_dict = handlerMatchProfile(request, charac_list, 'load match event')
+        personality_dict = handlerMatchProfile(request, charac_list, 'based on survey response')
         #print('line 1021', personality_dict);
 
         return JsonResponse({'profile': personality_dict});
@@ -1067,9 +1079,10 @@ def handlerMatchProfile(request, charac_list, event):
         'True': 'and she thinks she is pretty good at giving help to others'
     }
 
+    #true/false reversed in april 2021 implementation
     fam_statements = {
-        'False': 'she prefers only working with people she knows',
-        'True': 'she doesn’t mind working with anybody'
+        'True': 'she prefers only working with people she knows',
+        'False': 'she doesn’t mind working with anybody'
     }
 
     con_statements = {
@@ -1179,7 +1192,7 @@ def uploadKAImage(request):
             print('user not signed in') #add in log
 
         #insert values in the database
-        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user);
+        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user, response_type='answer');
         ka_image_upload.save();
 
         latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id).last()
