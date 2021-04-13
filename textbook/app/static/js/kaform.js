@@ -58,7 +58,7 @@ var ka_img_upload=function () {
         console.log( "file changed" );
         console.log( event )
         var form_data=new FormData( $( '#ka-upload-img-form' )[ 0 ] );
-        console.log( form_data );
+        console.log( "form_data", form_data );
 
         $.ajax( {
             type: 'POST',
@@ -129,23 +129,13 @@ var ka_response_save = function(){
             $( "#failure_text" ).text( "Please select radio !" )
             $( '.upload-failure-msg' ).show();
             
-        } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()=== undefined ) {
+        } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()===undefined ) {
             $( "#failure_text" ).text( "Please enter text into response box!" )
             $( '.upload-failure-msg' ).show();
         }
         else {
-            //save selected badge info to the database
-            var xhr=$.ajax( {
-                type: 'POST',
-                url: '/saveKApost',
-                data: {
-                    'username': logged_in, 'platform': 'KA', 'activity_id': ka_act_id, 'title': global_ka_url,
-                    'response': ka_response, 'response_type': ka_response_type
-                },
-                success: function ( response ) {
-                    console.log( "successfully save into database " , response );
-                }
-            } );
+
+            $( '.upload-failure-msg' ).hide();
         }
         //get text area value
         console.log( $( "#KAAnswer" ).val() );

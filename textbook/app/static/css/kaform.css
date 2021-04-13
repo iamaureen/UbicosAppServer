@@ -31,3 +31,8 @@
 strong {
     color: white
 }
+
+#ka-submit {
+    color: red;
+    text-align: center;
+}
