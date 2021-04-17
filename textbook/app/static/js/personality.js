@@ -15,7 +15,7 @@ var setupPersonality = function(){
         url:'http://'+ host_url +'/matchPersonalityProfile/',
         async: false, //wait for ajax call to finish, else logged_in is null in the following if condition
         success: function(e){
-            console.log('personality.js', e.profile);
+            //console.log('personality.js', e.profile);
 
             //update the p-tag (id=matchedPersonality) based on the responses
             $('span.personality-msc').text(e.profile['msc']);
@@ -36,10 +36,10 @@ var setupPersonality = function(){
 }
 
 var editPersonalityOptionBtnYes_method = function(){
-        //$( "#matchedPersonality" ).toggle();
+
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
-        $( ".editPersonaBtns" ).toggle();
+        $( "#editPersonality_div" ).toggle();
 
         enterLogIntoDatabase( 'Personality Edit Button Click', 'Personality Edit Button Click', logged_in, global_current_pagenumber );
 
@@ -77,10 +77,9 @@ var editPersonalityOptionBtnNo_method = function(){
 
 var changepersonality_method = function(){
 
-
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
-        $( ".editPersonaBtns" ).toggle();
+        $( "#editPersonality_div" ).toggle();
 
         //get the value for the checkboxes
         personality_msc=$( '#dropdown-msc :selected' ).text();

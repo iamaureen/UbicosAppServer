@@ -6,7 +6,7 @@ const hoverButtonMessage = function() {
             // console.log("mouse over")
             const activityButton = $(this);
 
-            console.log("button", activityButton);
+            //console.log("button", activityButton);
             let type = activityButton.attr('class').replace('activity-button', '').trim();
 
             if ($(this).find("span").length == 0) {

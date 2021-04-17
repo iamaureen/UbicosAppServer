@@ -52,12 +52,14 @@ class utteranceClassifier():
             rewardType = 'Question'
         elif postTag == 'Action-directive':
             rewardType = 'Feedback'
-        elif postTag == 'Appreciation' or postTag == 'Conventional-closing':
+        elif postTag == 'Appreciation':
+            rewardType = 'Appreciate'
+        elif postTag == 'Conventional-closing':
             rewardType = 'Social'
         elif postTag == 'Agree/Accept':
             rewardType = 'Transactive'
 
-        print('keywordmatch.py line 60 :: ', message, rewardType)
+        print('utteranceclassifier.py line 60 :: ', message, rewardType)
 
         #TODO: add the praise
 
@@ -75,21 +77,23 @@ class utteranceClassifier():
              'feedback': 'Your feedback to others is highly appreciated!',
              'addon': 'Adding to an existing conversation is useful.',
              'summarize': 'Summarizing is a great skill.',
-             'answer': 'Responding to others is a great way of learning.',
+             'transactive': 'Responding to others is a great way of learning.',
              'reflect': 'Reflecting on others work is good.',
              'assess': 'Evaluating others work is a skill!',
              'participate': 'Participation is a great collaborative technique!',
              'appreciate': 'Appreciating others encourages collaboration.',
              'encourage': 'Encouraging others helps in a collaboration.',
-             'other': 'You are doing a great job!'
+             'social': 'You are doing a great job!'
              }
 
         # praised text generated randomly
-        praiseText = praise_messages_part1 +' '+praise_message_part2_dict[rewardType.lower()];
-
-        return rewardType, praiseText;
+        if rewardType:
+            praiseText = praise_messages_part1 +' '+praise_message_part2_dict[rewardType.lower()];
+        else:
+            praiseText = "empty"
+        return rewardType, praiseText; #returns to broadcaseImageComment
 
 
 if __name__ == "__main__":
     #keywordMatch.matchingMethod(None, "Good job", "appreciate");
-    keywordMatch.matchingMethod(None, "Yes because you have to have a formula?");
+    utteranceClassifier.matchingMethod(None, "Yes because you have to have a formula?");

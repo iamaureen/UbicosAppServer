@@ -374,11 +374,13 @@ var bindActivityButtons=function () {
             card_extension();
 
             //update the heading in the card
-            $( '#gallery-description' ).text( activityButton.attr( 'data-description' )+
-                ' Use the badge option on the top-right corner to get an idea about how to help others.' );
+            $( '#gallery-description' ).text( activityButton.attr( 'data-description' ) );
 
             $( 'ul#image-feed' ).html( '' );
+
             loadGalleryFeed( id );
+
+
 
         }
         //        ------------------------------ANSWER-----------------------

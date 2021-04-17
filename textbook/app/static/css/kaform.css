@@ -11,6 +11,11 @@
     position: absolute;
     top: 25rem;
     left: 18%;
+    color: black;
+}
+
+.upload-failure-msg p{
+    color: black;
 }
 
 .upload-failure-msg-closebtn {

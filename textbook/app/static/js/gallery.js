@@ -20,7 +20,7 @@ var loadGalleryFeed=function ( act_id ) {
     gallery_act_id = act_id;
     //steps implemented
     //1. make an ajax call to get the image
-    //2. display them
+    //2. display the image
      $.ajax({
         type:'GET',
         url:'http://'+ host_url +'/getGalleryImage/'+act_id, //this should return image outside this group randomly
@@ -43,6 +43,7 @@ var loadGalleryFeed=function ( act_id ) {
      } );
     
     // zoomInImage()
+
     //get the image primary key which is set above
     var imagePk=$( 'input[name="image-db-pk"]' ).val();
     console.log( "imagePk", imagePk)
@@ -101,7 +102,13 @@ var loadGalleryFeed=function ( act_id ) {
     //https://stackoverflow.com/questions/18045867/post-jquery-array-to-django
     //4. call the computational model method to see whether the student will participate or not; display badge based on that
     //defined in utility.js
-    computationalModelMethod(logged_in, 'MB', gallery_act_id);
+    //computationalModelMethod(logged_in, 'MB', gallery_act_id);
+
+    //defined in utility.js
+    promptText = getPrompt(logged_in, "MB", gallery_act_id);
+    $('#gallery-prompt-text').text(promptText);
+
+
 
 
     enterLogIntoDatabase('Gallery Card Icon Click', 'Gallery Card Load' , '', global_current_pagenumber);
@@ -133,6 +140,7 @@ var galleryMsgBtnAction = function(){
       //reward-close-button click event
       $('.gallery-reward-closebtn').off().on('click', function(e){
              $("#gallery-reward").css("display", "none");
+             $("#gallery-prompt").css("display", "none");
       });
 
 } //end of galleryMsgBtnAction method
@@ -171,12 +179,23 @@ var postImageMessage = function () {
                 //empty the message pane
                 $("input[name='image-msg-text']").val('');
 
+
                 //populate the reward-div
-                $("#gallery-reward").css("display", "block");
-                $('#reward-div-selection').text("You earned the " + data.rewardType + " badge!");
-                $('#reward-div-prompt').text(data.praiseText);
-                console.log(data.rewardType.toLowerCase())
-                $('#gallery-reward img').attr('src','/static/pics/'+data.rewardType.toLowerCase()+'.png');
+                if(data.praiseText != "empty"){
+                    $("#gallery-reward").css("display", "block");
+                    $('#reward-div-selection').text("You earned the " + data.rewardType + " badge!");
+                    $('#reward-div-prompt').text(data.praiseText);
+                    console.log(data.rewardType.toLowerCase())
+                    $('#gallery-reward img').attr('src','/static/pics/'+data.rewardType.toLowerCase()+'.png');
+                }
+
+                if(data.promptInMiddle){
+                    console.log("true")
+                    promptText = getPrompt(logged_in, "MB", gallery_act_id);
+                    $("#gallery-prompt").css("display", "block");
+                    $('#gallery-prompt-text').text(promptText);
+                }
+
 
 
 

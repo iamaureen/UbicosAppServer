@@ -127,17 +127,11 @@ class Message(models.Model):
 class badgeInfo(models.Model):
     charac = models.CharField(max_length=20)
     value =  models.CharField(max_length=20)
-    badgeName = models.CharField(max_length=20)
+    supportType = models.CharField(max_length=20)
     index = models.IntegerField(null=True)
     platform = models.CharField(max_length=20)
-    imgName = models.CharField(max_length=20)
-    definition = models.CharField(max_length=1000)
-    prompt = models.CharField(max_length=1000)
+    prompt = models.CharField(max_length=20)
     sentence_opener1 = models.CharField(max_length=1000);
-    sentence_opener2 = models.CharField(max_length=1000);
-    sentence_opener3 = models.CharField(max_length=1000);
-
-
 
 # logs what badge user selected
 class badgeOffered(models.Model):
@@ -149,17 +143,6 @@ class badgeOffered(models.Model):
     def natural_key(self):
         return (self.userid.username)
 
-# logs what badge user selected
-class badgeSelected(models.Model):
-    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    platform = models.CharField(max_length=10)
-    activity_id = models.IntegerField(null=True)
-    title = models.CharField(max_length=400)  # can be used for mapping; for gallery it will be the title, for KA it will be the link
-    badgeTypeSelected = models.CharField(max_length=400)
-
-
-    def natural_key(self):
-        return (self.userid.username)
 
 # logs what badge user received
 class badgeReceived(models.Model):
@@ -167,7 +150,8 @@ class badgeReceived(models.Model):
     platform = models.CharField(max_length=10)
     activity_id = models.IntegerField(null=True)
     message = models.CharField(max_length=400)
-    badgeTypeReceived = models.CharField(max_length=400)
+    badgeReceived = models.CharField(max_length=400)
+    posted_at = models.DateTimeField(auto_now_add=True)
 
     def natural_key(self):
         return (self.userid.username)
