@@ -25,6 +25,8 @@
                     </div>
                 </div>
 
+
+
                  <!--functionality defined in gallery.js; css defined in digTextBook.less-->
                 <div class="section">
 
@@ -66,11 +68,20 @@
                 <p id="reward-div-prompt"> sample praise message example, send from server </p>
              </div>
 
-            <div id="gallery-prompt" class="reward-div" >
+            <div id="gallery-prompt" class="gallery-prompt-div" >
                 <a href="javascript:void(0)" class="gallery-reward-closebtn">&times;</a>
-                <p id="gallery-prompt-text" class="gallery-text"> Example prompt text. </p>
-                <p id="gallery-prompt-so" class="gallery-text"> Here are some ways you can respond. Replace the missing information, and edit/add as needed:
-                    Do you mean ... ?  </p>
+                <div class="gallery-prompt-div-header">
+                    <img src="{% static 'pics/help.png' %}" alt="">
+                    <h2>How Can I earn a Badge?</h2>
+                </div>
+                 <div class="gallery-prompt-div-prompt">
+                     <p id="gallery-prompt-text" class="gallery-text"> Example prompt text. </p>
+                </div>
+                <div class="gallery-prompt-div-tips">
+                    <h4>Tips: Start with the following phrase, and fill in the rest.</h4>
+                    <p id="gallery-prompt-so"> What do you mean by ... ?</p>
+                    <a id="gallery-so-copy"> Copy </a>
+                </div>
              </div>
 
     </div>

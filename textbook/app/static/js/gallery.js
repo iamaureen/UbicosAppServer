@@ -143,6 +143,13 @@ var galleryMsgBtnAction = function(){
              $("#gallery-prompt").css("display", "none");
       });
 
+      $('.gallery-prompt-button').off().on('click', function(e){
+             $("#gallery-prompt").toggle();
+
+      });
+
+
+
 } //end of galleryMsgBtnAction method
 
 var postImageMessage = function () {

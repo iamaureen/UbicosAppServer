@@ -77,13 +77,13 @@ def broadcastImageComment(request):
 
     checkPrompt(request)
 
-    # #save into the history table once
-    if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
-        #do nothing
-        print();
-    else:
-        entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
-        entry.save()
+    # # #save into the history table once
+    # if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
+    #     #do nothing
+    #     print();
+    # else:
+    #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
+    #     entry.save()
 
     return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText, 'promptInMiddle': checkPrompt(request)}) #goes to
 
