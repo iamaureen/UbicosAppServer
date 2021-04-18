@@ -4,6 +4,11 @@ import jsonfield
 
 # Create your models here.
 
+class studentInfo (models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    period = models.CharField(max_length=200)
+    condition = models.IntegerField()
+
 # the following model is contains students static survey responses, it is filled manually after the students complete the survey
 class studentCharacteristicModel (models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

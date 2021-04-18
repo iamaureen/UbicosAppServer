@@ -17,22 +17,26 @@
 
         <p id="editPersonality" style="display:none">
             <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. They think that they are 1.
-            <select id="dropdown-msc" class="dropdown_btn">
-          <option value="">not that great at math</option>
-          <option value="">pretty great at math</option>
-        </select>. Of course, they work with other people on math in a lot of different settings 2.
-            <select id="dropdown-hsc" class="dropdown_btn">
-          <option value="" >but they don’t feel like they are very good at giving help to others</option>
-          <option value="" >and they think they are pretty good at giving help to others</option>
-        </select>. When it comes to working on activities for class and other things, 3.
-            <select id="dropdown-con" class="dropdown_btn">
-          <option value="">they don't always participate</option>
-          <option value="">they usually do what they are supposed to do</option>
-        </select> Sometimes, that depends on who she is working with. However, honestly 4.
-            <select id="dropdown-fam" class="dropdown_btn">
-          <option value="">they prefer only working with people they know</option>
-          <option value="">they don't mind working with anybody</option>
-        </select> But, overall that’s their math life!
+
+            <select id="dropdown-msc" class="dropdown_btn" name="dropdown-msc">
+              <option value="not that great at math">not that great at math</option>
+              <option value="pretty great at math">pretty great at math</option>
+            </select>. Of course, they work with other people on math in a lot of different settings 2.
+
+            <select id="dropdown-hsc" class="dropdown_btn" name="dropdown-hsc">
+              <option value="but they don’t feel like they are very good at giving help to others" >but they don’t feel like they are very good at giving help to others</option>
+              <option value="and they think they are pretty good at giving help to others" >and they think they are pretty good at giving help to others</option>
+            </select>. When it comes to working on activities for class and other things, 3.
+
+            <select id="dropdown-con" class="dropdown_btn" name="dropdown-con">
+                <option value="they don't always participate">they don't always participate</option>
+                <option value="they usually do what they are supposed to do">they usually do what they are supposed to do</option>
+            </select> Sometimes, that depends on who she is working with. However, honestly 4.
+
+            <select id="dropdown-fam" class="dropdown_btn" name="dropdown-fam">
+              <option value="they prefer only working with people they know">they prefer only working with people they know</option>
+              <option value="they don't mind working with anybody">they don't mind working with anybody</option>
+            </select> But, overall that’s their math life!
 
             </br>
             </br>
@@ -56,25 +60,15 @@
     <div class="personaLikertScale_div">
         <p>Let us know how much this is you!</p>
 
-        <table class="striped-columns border">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                </tr>
-            </thead>
+        <table style="border: none;margin:0 auto;">
             <tbody>
                 <tr>
                     <td>Not at all like me</td>
-                    <td><input type="radio" value="1" name="enthusiasm"/></td>
-                    <td><input type="radio" value="2" name="enthusiasm"/></td>
-                    <td><input type="radio" value="3" name="enthusiasm"/></td>
-                    <td><input type="radio" value="4" name="enthusiasm"/></td>
-                    <td><input type="radio" value="5" name="enthusiasm"/></td>
+                    <td><input type="radio" value="1" name="personality_radio"/></td>
+                    <td><input type="radio" value="2" name="personality_radio"/></td>
+                    <td><input type="radio" value="3" name="personality_radio"/></td>
+                    <td><input type="radio" value="4" name="personality_radio"/></td>
+                    <td><input type="radio" value="5" name="personality_radio"/></td>
                     <td>Very much like me</td>
                 </tr>
             </tbody>
@@ -86,6 +80,7 @@
     <div class="editPersonaBtns">
 
         <p>Based on your feelings today, would you like to edit any of the choices? </p>
+
         <button id="editPersonalityOptionBtnYes" class="profile_btn"> Yes, Edit </button>
         <button id="editPersonalityOptionBtnNo" class="profile_btn"> No, I feel the same </button>
     </div>
@@ -93,56 +88,3 @@
 
 </div>
 
-
-<!--<div class="initPersonality" style="display: none">-->
-<!--    <p>-->
-<!--        Based on your answers, your profile closely matched with <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span>. Would you like to change anything?-->
-<!--    </p>-->
-<!--    <div class="personaImgDiv">-->
-<!--        <img src="/blank.png" class="person_img">-->
-<!--        <span class="namePersonality">Name</span>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash;    #defined in digTextBook.js&ndash;&gt;-->
-<!--    &lt;!&ndash;    this button call is declared and defined in digTextbook.js&ndash;&gt;-->
-<!--    <button id="editPersonalityOptionBtn" class="profile_btn"> Yes, Edit </button>-->
-<!--</div>-->
-
-
-<!--<div class="personalityProfiles" style="display: none">-->
-
-<!--    <div class="profile container">-->
-<!--        <p id="matchedPersonality">-->
-<!--            <span class="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. She thinks that she is <span class="personality-msc">msc text</span>. Of course, she works with other people on math in a lot of different-->
-<!--            settings, <span class="personality-hsc">hsc text </span>. When it comes to working on activities for class and other things, <span class="personality-con"> con text</span>. Sometimes, that depends on who she is working with. However, honestly-->
-<!--            <span class="personality-fam"> fam text </span>. But, overall that’s her math life!-->
-<!--        </p>-->
-
-<!--        <p id="editPersonality" style="display:none">-->
-<!--            <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. She considers that she is 1.-->
-<!--            <select id="dropdown-msc" class="dropdown_btn">-->
-<!--          <option value="">that great at math </option>-->
-<!--          <option value="">pretty great at math</option>-->
-<!--        </select>. Of course, she works with other people on math in a lot of different settings 2.-->
-<!--            <select id="dropdown-hsc" class="dropdown_btn">-->
-<!--          <option value="" >but she doesn’t feel like she is very good at giving help to others</option>-->
-<!--          <option value="" >and she thinks she is pretty good at giving help to others</option>-->
-<!--        </select>. When it comes to working on activities for class and other things, 3.-->
-<!--            <select id="dropdown-con" class="dropdown_btn">-->
-<!--          <option value="">she doesn’t always participate</option>-->
-<!--          <option value="">she usually does what she is supposed to do</option>-->
-<!--        </select> Sometimes, that depends on who she is working with. However, honestly 4.-->
-<!--            <select id="dropdown-fam" class="dropdown_btn">-->
-<!--          <option value="">she prefers only working with people she knows</option>-->
-<!--          <option value="">she doesn’t mind working with anybody</option>-->
-<!--        </select> But, overall that’s her math life!-->
-
-<!--            </br>-->
-<!--            </br>-->
-
-<!--            &lt;!&ndash;    #defined in digTextBook.js&ndash;&gt;-->
-<!--            <button id="changePersonalityBtn" class="profile_btn"> Ok, Change </button>-->
-<!--        </p>-->
-<!--    </div>-->
-
-<!--</div>-->

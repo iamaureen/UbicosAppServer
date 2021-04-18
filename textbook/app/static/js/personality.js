@@ -29,6 +29,15 @@ var setupPersonality = function(){
             //set the image src here
             $('.persona-image img').attr('src', '/static/pics/'+e.profile['name']+'.png');
 
+            //load the local storage as well, so when hit change it uses the value
+            //save into localstorage
+            localStorage.setItem( "personality_msc", e.profile['msc'] );
+            localStorage.setItem( "personality_hsc", e.profile['hsc'] );
+            localStorage.setItem( "personality_fam", e.profile['fam'] );
+            localStorage.setItem( "personality_con", e.profile['con'] );
+
+
+
         }
     });
 
@@ -45,29 +54,33 @@ var editPersonalityOptionBtnYes_method = function(){
 
         let user_inputed_personality_msc=localStorage.getItem( "personality_msc" );
         let user_inputed_personality_hsc=localStorage.getItem( "personality_hsc" );
-        let user_inputed_personality_con=localStorage.getItem( "personality_con" );
         let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
+        let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-        if ( user_inputed_personality_msc&&user_inputed_personality_hsc&&
-            user_inputed_personality_con&&user_inputed_personality_fam ) {
+        console.log(user_inputed_personality_msc)
+        console.log(user_inputed_personality_hsc)
+        console.log(user_inputed_personality_fam)
+        console.log(user_inputed_personality_con)
 
-            $( `#dropdown-msc option:contains(${ user_inputed_personality_msc })` ).attr( 'selected', true );
-            $( `#dropdown-hsc option:contains(${ user_inputed_personality_hsc })` ).attr( 'selected', true );
-            $( `#dropdown-con option:contains(${ user_inputed_personality_con })` ).attr( 'selected', true );
-            $( `#dropdown-fam option:contains(${ user_inputed_personality_fam })` ).attr( 'selected', true );
-        }
+        //TODO: set the dropdown values based on the localstorage items
 
-        // console.log($(`#dropdown-msc option:contains(${ user_inputed_personality_msc })`).text());
+        $('select[name^="download-msc"] option:selected').attr("selected",null);
+        $('select[name^="download-msc"] option[value='+user_inputed_personality_msc+']').attr("selected","selected");
+
+        $('select[name^="download-hsc"] option:selected').attr("selected",null);
+        $('select[name^="download-hsc"] option[value='+user_inputed_personality_hsc+']').attr("selected","selected");
 
 
-        $( '.dropdown_btn' ).on( 'change', function ( e ) {
-            console.log( $( `#${ e.currentTarget.id } :selected` ).text() );
-            console.log( $( `#${ e.currentTarget.id } :selected` ).text().length );
-            // $("#select_tmp_option").html($(`#${ e.currentTarget.id } :selected`).text());
-            // console.log('width', $("#select_tmp").width());
-            $( $( this ) ).width( $( `#${ e.currentTarget.id }` ).width() );
-            // console.log($(this))
-        } );
+//        if ( user_inputed_personality_msc&&user_inputed_personality_hsc&&
+//                    user_inputed_personality_con&&user_inputed_personality_fam ) {
+//
+//                    $( `#dropdown-msc option:contains(${ user_inputed_personality_msc })` ).attr( 'selected', true );
+//                    $( `#dropdown-hsc option:contains(${ user_inputed_personality_hsc })` ).attr( 'selected', true );
+//                    $( `#dropdown-con option:contains(${ user_inputed_personality_con })` ).attr( 'selected', true );
+//                    $( `#dropdown-fam option:contains(${ user_inputed_personality_fam })` ).attr( 'selected', true );
+//                }
+
+
 
 }
 
@@ -84,8 +97,9 @@ var changepersonality_method = function(){
         //get the value for the checkboxes
         personality_msc=$( '#dropdown-msc :selected' ).text();
         personality_hsc=$( '#dropdown-hsc :selected' ).text();
-        personality_con=$( '#dropdown-con :selected' ).text();
         personality_fam=$( '#dropdown-fam :selected' ).text();
+        personality_con=$( '#dropdown-con :selected' ).text();
+
 
 
         console.log( personality_msc );
@@ -96,14 +110,16 @@ var changepersonality_method = function(){
         //save into localstorage
         localStorage.setItem( "personality_msc", personality_msc );
         localStorage.setItem( "personality_hsc", personality_hsc );
-        localStorage.setItem( "personality_con", personality_con );
         localStorage.setItem( "personality_fam", personality_fam );
+        localStorage.setItem( "personality_con", personality_con );
+
 
         //update the p-tag (id=matchedPersonality) based on the responses
         $( 'span.personality-msc' ).text( personality_msc );
         $( 'span.personality-hsc' ).text( personality_hsc );
-        $( 'span.personality-con' ).text( personality_con );
         $( 'span.personality-fam' ).text( personality_fam );
+        $( 'span.personality-con' ).text( personality_con );
+
 
         personality_name=$( 'span#namePersonality' ).text();
         console.log( personality_name );
@@ -121,7 +137,8 @@ var changepersonality_method = function(){
                 'hsc': personality_hsc,
                 'fam': personality_fam,
                 'con': personality_con,
-                'name': personality_name
+                'name': personality_name,
+                'event': "changed html inputs"
             },
             success: function ( e ) {
 

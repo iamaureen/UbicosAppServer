@@ -86,6 +86,35 @@ class infoFileRead():
 
         return khanacademyInfoList;
 
+    def usernamefileRead(self):
+        filename = '/Users/isa14/Downloads/studentlist.csv';
+
+        with open(filename) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',');
+            line_count = 0;
+
+            userlist = [] #will store the rows and will return this list of dictionaries to the server
+            for row in csv_reader:
+                dict = {};
+                if line_count == 0:
+                    # print(f'Column names are {", ".join(row)}');
+                    line_count += 1;
+                else:
+                    dict['username'] = row[4];
+                    dict['password'] = row[6];
+                    dict['class'] = row[7]
+                    dict['condition'] = row[9];
+
+                    userlist.append(dict);
+                    line_count += 1;
+
+            # print(whiteboardInfoList)
+            # print(len(whiteboardInfoList));
+
+            return userlist;
+
+
+
 
 
 

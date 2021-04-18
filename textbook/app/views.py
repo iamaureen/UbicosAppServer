@@ -4,7 +4,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
     userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
-    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer
+    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer, \
+    studentInfo
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -749,73 +750,20 @@ def userlog(request):
     return HttpResponse('')
 
 def createBulkUser(request):
+    User.objects.all().delete()
 
-    # 19 user for the study + 1 teacher user + 2 test user
-
-    #whiteboard-group 1
-    user = User.objects.create_user('Squirtle', '', 'study6109');
-    user.save();
-    user = User.objects.create_user('Bulbasaur', '', 'study2710');
-    user.save();
-    user = User.objects.create_user('Dragonite', '', 'study2391');
-    user.save();
-
-    #whiteboard-group 2
-    user = User.objects.create_user('Gengar', '', 'study9273');
-    user.save();
-    user = User.objects.create_user('Eevee', '', 'study3452');
-    user.save();
-    user = User.objects.create_user('Charizard', '', 'study0013');
-    user.save();
-
-    # whiteboard-group 3
-    user = User.objects.create_user('Umbreon', '', 'study3920');
-    user.save();
-    user = User.objects.create_user('Gyarados', '', 'study3525');
-    user.save();
-    user = User.objects.create_user('Charmander', '', 'study0952');
-    user.save();
-
-    #whiteboard-group 4
-    user = User.objects.create_user('Ponyta', '', 'study1259');
-    user.save();
-    user = User.objects.create_user('Lapras', '', 'study9251');
-    user.save();
-    user = User.objects.create_user('Ekans', '', 'study0922');
-    user.save();
-
-    # whiteboard-group 5
-    user = User.objects.create_user('Chansey', '', 'study0193');
-    user.save();
-    user = User.objects.create_user('Psyduck', '', 'study6123');
-    user.save();
-    user = User.objects.create_user('Horsea', '', 'study8723');
-    user.save();
-
-    #whiteboard-group 6
-    user = User.objects.create_user('Paras', '', 'study5283');
-    user.save();
-    user = User.objects.create_user('Mew', '', 'study5105');
-    user.save();
-    user = User.objects.create_user('Tangela', '', 'study6209');
-    user.save();
+    # read the excel file for reading user names
+    userlist = infoFileRead.usernamefileRead(None);
 
 
+    for userinfo in userlist:
+        # insert into the user table - used for login
+        user = User.objects.create_user(userinfo['username'], '', userinfo['password']);
+        user.save();
 
-    #group 11 - teacher/developers
-    user = User.objects.create_user('AW', '', 'AW');
-    user.save();
-    user = User.objects.create_user('user1', '', 'user1');
-    user.save();
-    user = User.objects.create_user('user2', '', 'user2');
-    user.save();
-
-    user = User.objects.create_user('AW1', '', 'AW1');
-    user.save();
-    user = User.objects.create_user('AW2', '', 'AW2');
-    user.save();
-    user = User.objects.create_user('AW3', '', 'AW3');
-    user.save();
+        # insert into student info table - used for condition checking
+        user_studentInfo = studentInfo(user=User.objects.get(username=userinfo['username']), period=userinfo['class'], condition=userinfo['condition'])
+        user_studentInfo.save()
 
 
     return render(request, 'app/login.html', {})
@@ -824,63 +772,43 @@ def createBulkUser(request):
 ##Codes used from the previous version-end##
 ##############################################
 
-#very poor code, rewrite
 def matchPersonalityProfile(request):
 
 
     #if the current student already 'loaded' then pull from there else load from the init
 
-
-    if studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="load match event"):
+    if studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="changed html inputs"):
         #print('user loaded before');
         #check if the user has changed anything
-        entry = studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="change html event").values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id')
-        if entry:
-            #print('user changed before');
-            #if changed, get the changed characteristics
-            entry_personality_dict = {}
-            entry_personality_dict['msc'] = entry[0]['char_msc'];
-            entry_personality_dict['hsc'] = entry[0]['char_hsc'];
-            entry_personality_dict['fam'] = entry[0]['char_fam'];
-            entry_personality_dict['con'] = entry[0]['char_con'];
-            #entry_personality_dict['name'] = entry[0]['char_name'];
+        entry = studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="changed html inputs").values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id')
 
-            #do the matching here
-            #print(entry_personality_dict['msc'] )
-            msc_list = ['not that great at math', 'pretty great at math']
-            hsc_list = ['but she doesn’t feel like she is very good at giving help to others', 'and she thinks she is pretty good at giving help to others']
-            fam_list = ['she prefers only working with people she knows', 'she doesn’t mind working with anybody']
-            con_list = ['she doesn’t always participate', 'she usually does what she is supposed to do']
+        #print('user changed before');
+        #if changed, get the changed characteristics
+        entry_personality_dict = {}
+        entry_personality_dict['msc'] = entry[0]['char_msc'];
+        entry_personality_dict['hsc'] = entry[0]['char_hsc'];
+        entry_personality_dict['fam'] = entry[0]['char_fam'];
+        entry_personality_dict['con'] = entry[0]['char_con'];
+        #entry_personality_dict['name'] = entry[0]['char_name'];
 
-            current_user_profile = []
-            current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
-            current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
-            current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
-            current_user_profile.append(con_list.index(entry_personality_dict['con']))
+        #do the matching here
+        #print(entry_personality_dict['msc'] )
+        msc_list = ['not that great at math', 'pretty great at math']
+        hsc_list = ['but they don’t feel like they are very good at giving help to others', 'and they think they are pretty good at giving help to others']
+        fam_list = ['they prefer only working with people they know', 'they don’t mind working with anybody']
+        con_list = ['they don\'t always participate', 'they usually do what they are supposed to do']
 
-            #print(current_user_profile)
+        current_user_profile = []
+        current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
+        current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
+        current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
+        current_user_profile.append(con_list.index(entry_personality_dict['con']))
 
-            personality_dict = handlerMatchProfile(request, current_user_profile, 'change match event')
+        #print(current_user_profile)
 
+        personality_dict = handlerMatchProfile(request, current_user_profile, 'persona match after change')
 
-
-            return JsonResponse({'profile': personality_dict});
-
-
-        else:
-            #multiple changed entries, picked the last one
-            entry = studentPersonalityChangeTable.objects.filter(posted_by_id=request.user, event="load match event").values('id','char_msc','char_hsc','char_fam','char_con',
-                                                                                                                 'char_name').order_by('-id')
-
-            entry_personality_dict = {}
-            entry_personality_dict['msc'] = entry[0]['char_msc'];
-            entry_personality_dict['hsc'] = entry[0]['char_hsc'];
-            entry_personality_dict['fam'] = entry[0]['char_fam'];
-            entry_personality_dict['con'] = entry[0]['char_con'];
-            entry_personality_dict['name'] = entry[0]['char_name'];
-
-            return JsonResponse({'profile': entry_personality_dict});
-
+        return JsonResponse({'profile': personality_dict});
 
 
     else:
@@ -897,6 +825,7 @@ def matchPersonalityProfile(request):
         return JsonResponse({'profile': personality_dict});
     return HttpResponse('');
 
+#TODO: add and compare against 16 profiles, use euclidean distance
 def handlerMatchProfile(request, charac_list, event):
     # order: msc, hsc, fam, con
     profile1 = [False, True, False, True]
@@ -944,19 +873,19 @@ def handlerMatchProfile(request, charac_list, event):
     }
 
     hsc_statements = {
-        'False': 'but she doesn’t feel like she is very good at giving help to others',
-        'True': 'and she thinks she is pretty good at giving help to others'
+        'False': 'but they don’t feel like they are very good at giving help to others',
+        'True': 'and they think they are pretty good at giving help to others'
     }
 
     #true/false reversed in april 2021 implementation
     fam_statements = {
-        'True': 'she prefers only working with people she knows',
-        'False': 'she doesn’t mind working with anybody'
+        'True': 'they prefer only working with people they know',
+        'False': 'they don\'t mind working with anybody'
     }
 
     con_statements = {
-        'False': 'she doesn’t always participate',
-        'True': 'she usually does what she is supposed to do'
+        'False': 'they don\'t always participate',
+        'True': 'they usually do what they are supposed to do'
     }
 
     selected_profile = ''
@@ -1021,7 +950,7 @@ def saveEditedPersonality(request):
                                  char_fam=request.POST.get('fam'),
                                  char_con=request.POST.get('con'),
                                  char_name=request.POST.get('name'),
-                                 event='change html event')
+                                 event=request.POST.get('event'))
         entry.save();
 
     return HttpResponse('');
