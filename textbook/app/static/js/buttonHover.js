@@ -7,7 +7,7 @@ const hoverButtonMessage=function () {
             const activityButton=$( this );
 
             //console.log("button", activityButton);
-            let type=activityButton.attr( 'class' ).replace( 'activity-button', '' ).trim();
+            let type = activityButton.attr('class').replace('activity-button', '').trim();
 
             if ( $( this ).find( "span" ).length==0 ) {
                 if ( type=='video' ) {

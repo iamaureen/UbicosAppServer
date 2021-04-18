@@ -167,16 +167,16 @@ var loadPage=function ( pageNum, pageContainer, successFn, notFoundFn ) {
             //defined in personality.js
             setupPersonality();
 
-            //            //update previous responses user saved
-            //            personality_msc=localStorage.getItem( "personality_msc" );
-            //            personality_hsc=localStorage.getItem( "personality_hsc" );
-            //            personality_con=localStorage.getItem( "personality_con" );
-            //            personality_fam=localStorage.getItem( "personality_fam" )
-            //            // personality_hsc
-            //            $( 'span.personality-msc' ).text( personality_msc );
-            //            $( 'span.personality-hsc' ).text( personality_hsc );
-            //            $( 'span.personality-con' ).text( personality_con );
-            //            $( 'span.personality-fam' ).text( personality_fam );
+//            //update previous responses user saved
+//            personality_msc=localStorage.getItem( "personality_msc" );
+//            personality_hsc=localStorage.getItem( "personality_hsc" );
+//            personality_con=localStorage.getItem( "personality_con" );
+//            personality_fam=localStorage.getItem( "personality_fam" )
+//            // personality_hsc
+//            $( 'span.personality-msc' ).text( personality_msc );
+//            $( 'span.personality-hsc' ).text( personality_hsc );
+//            $( 'span.personality-con' ).text( personality_con );
+//            $( 'span.personality-fam' ).text( personality_fam );
 
 
             bindActivityButtons();

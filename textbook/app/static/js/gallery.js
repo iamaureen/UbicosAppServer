@@ -13,17 +13,14 @@ $(function(){
 //this method is used to load digital discussion gallery feed
 //called from digTextBook.js
 var loadGalleryFeed=function ( act_id ) {
-    
-    
 
     //clear the feed each time
-
 
     //based on the activity id, load the image, group member names, and set of comment made by the members
     gallery_act_id = act_id;
     //steps implemented
     //1. make an ajax call to get the image
-    //2. display them
+    //2. display the image
      $.ajax({
         type:'GET',
         url:'http://'+ host_url +'/getGalleryImage/'+act_id, //this should return image outside this group randomly
@@ -46,6 +43,7 @@ var loadGalleryFeed=function ( act_id ) {
      } );
     
     // zoomInImage()
+
     //get the image primary key which is set above
     var imagePk=$( 'input[name="image-db-pk"]' ).val();
     console.log( "imagePk", imagePk)
@@ -67,8 +65,6 @@ var loadGalleryFeed=function ( act_id ) {
                     msg_data = response.success;
                     var obj = jQuery.parseJSON(msg_data);
                     //console.log(obj)
-
-
 
                     //iterate through the response data to display the comments in the interface
                     $.each(obj, function(key, value){
@@ -106,10 +102,14 @@ var loadGalleryFeed=function ( act_id ) {
     //https://stackoverflow.com/questions/18045867/post-jquery-array-to-django
     //4. call the computational model method to see whether the student will participate or not; display badge based on that
     //defined in utility.js
-    computationalModelMethod(logged_in, 'MB', gallery_act_id);
+    //computationalModelMethod(logged_in, 'MB', gallery_act_id);
 
-    // make the badge-option-div draggable
-    $('#badge-option').draggable(draggableConfig);
+    //defined in utility.js
+    promptText = getPrompt(logged_in, "MB", gallery_act_id);
+    $('#gallery-prompt-text').text(promptText);
+
+
+
 
     enterLogIntoDatabase('Gallery Card Icon Click', 'Gallery Card Load' , '', global_current_pagenumber);
 } //end of loadGalleryFeed method
@@ -137,100 +137,18 @@ var galleryMsgBtnAction = function(){
 
       //badge-option-div related button clicks -- start
 
-      $('.badge-option-closebtn, .gallery-reward-closebtn').off().on('click', function(e){
-             var className = $(this).attr('class');
-             var remove = className.split('-').pop(); //will return closebtn
-             var itemToClose = className.replace("-"+remove, "");
-             //console.log(itemToClose);
-             $("#"+itemToClose).css("display", "none");
-      });
-
-      $('.badgeRequest img').on('click', function(e){
-
-            computationalModelMethod(logged_in, 'MB', gallery_act_id);
-            //if the badge-option div is visible do nothing, else toggle
-            if($('#badge-option').is(":visible")){
-                //alert("visible");
-            }else{
-                //alert("not visible");
-                $("#badge-option").css("display", "block");
-            }
-            enterLogIntoDatabase('Badge Request Button Click', 'Badge Request Button Click' , '', global_current_pagenumber);
-      });
-
-        //this works both in khan academy and gallery divs
-
-      $('.badge-option-display div').off().on('click', function(e){
-        //set all background color to original
-        $(this).siblings().css({backgroundColor: '#f4f4f4'});
-        //set the selected background color to
-        $(this).css({backgroundColor: '#d9d9d9'});
-        var char = $(this).attr('data-char');
-        global_char = char;
-        //console.log(char);
-        //get the badgeName
-        global_badge_selected = $(this).children('span').text(); //gets saved into badge selected database
-        console.log('gallery.js global_badge_selected :: ', global_badge_selected);
-        var prompt;
-        var sentence_opener;
-        if(char === 'other'){
-            prompt = "You selected None so you will not be get any badges for your participation. To earn a badge, select one from the given options.";
-            sentence_opener = "";
-        }else{
-            prompt = global_badgeList[char][0]['prompt'];
-            sentence_opener = global_badgeList[char][0]['sentence_opener1'];
-        }
-
-        //set the prompt
-        //console.log(global_badgeList[char][0]['prompt']);
-        $('.badge-prompt-text p').text(''); //clear the p tag first
-        $('.badge-prompt-text p').text(prompt);
-        //set the sentence opener
-        $('.badge-option-textarea textarea').text(''); //clear the p tag first
-        $('.badge-option-textarea textarea').text(sentence_opener);
-
-
-      });
-
-        //copy button
-      $('#gallery-copy-button').off().on('click', function(e){
-            //if the badge is not selected || 'none' badge is selected and still clicks the <copy to the textbox> button
-            //console.log(global_badge_selected);
-            if(global_badge_selected == '') {
-                //no badge is selected
-                message = 'Select a badge option first to copy a sentence starter.';
-                displayNotifier("#gallery-notifier", message);
-                return false;
-            }else if(global_badge_selected === 'None'){
-
-                message = 'You selected None, nothing to be copied.';
-                displayNotifier("#gallery-notifier", message);
-                return false;
-            }
-
-            //get the sentence starter from the text area
-            var badge_textarea_value = $('.badge-option-textarea textarea').val();
-            console.log(badge_textarea_value);
-            //set it to the message textbox
-            $('#image-msg-text').val(badge_textarea_value);
-
-            //notify the user that the sentence starter is copied
-            message = 'Your selected sentence starter is copied to the input box. Modify as needed.';
-            displayNotifier("#gallery-notifier", message);
-
-            //$("div#badge-option").css("display", "none");
-            $(this).closest('div#badge-option').fadeOut();
-
-            enterLogIntoDatabase('Gallery Bagde Copy Button Click', 'Button Click' , global_badge_selected, global_current_pagenumber);
-
-      });
-
-      //badge-option-div related button clicks -- end
-
       //reward-close-button click event
-      $('.reward-div-close-btn').off().on('click', function(e){
-             $("#gallery-reward-div").css("display", "none");
+      $('.gallery-reward-closebtn').off().on('click', function(e){
+             $("#gallery-reward").css("display", "none");
+             $("#gallery-prompt").css("display", "none");
       });
+
+      $('.gallery-prompt-button').off().on('click', function(e){
+             $("#gallery-prompt").toggle();
+
+      });
+
+
 
 } //end of galleryMsgBtnAction method
 
@@ -246,65 +164,6 @@ var postImageMessage = function () {
             enterLogIntoDatabase('Gallery Input Button Click', 'Gallery feed empty message input' , '', global_current_pagenumber);
             return false;
 
-        }
-
-        //if we come until here, there is a message
-        //console.log('user message :: '+message)
-        //check for the message length and get the length of the message
-        /*
-        var msg = message.split(" ");
-        var lengthOfMsg = msg.length;
-        //if it is less than 7 words
-        if(lengthOfMsg < 7){
-            //message = 'Your answer is too brief. Try writing a more specific answer.';
-            displayNotifier("#gallery-notifier", message);
-            enterLogIntoDatabase('Gallery Input Button Click', 'Gallery feed less than seven words message input' , '', global_current_pagenumber);
-            return false;
-        } */
-
-
-        //1. if the user has selected any of the three badge, we want to pass it to the server; else we want to skip checking
-        if(global_badge_selected != 'None' && global_badge_selected != ''){
-//               if(global_badgeList[global_char][0]['sentence_opener1'] === message) {
-//                    message = 'Your message exactly matches with suggestion. Try adding your thoughts.';
-//                    displayNotifier("#gallery-notifier", message);
-//                    return false;
-//                }
-                //user selected any of the three badges
-                //2. save the selected badge in the database
-                //save selected badge info to the database
-                $.ajax({
-                 type: 'POST',
-                 url: '/saveBadgeSelection/',
-                 data: {'username': logged_in, 'platform': 'MB', 'activity_id': gallery_act_id, 'title': '',
-                    'selected_badge' : global_badge_selected},
-                 success: function(response){
-                        console.log(response);
-                     }
-                });
-                //3. make the keyword matching API call and send the user message and selected badge in the server
-                //to do make this a function in utility.js
-                console.log('selected badge for gallery.js ::', global_badge_selected);
-                $.ajax({
-                    type: 'POST',
-                    url: '/matchKeywords/',
-                    data: {'username': logged_in, 'message': message, 'selected_badge' : global_badge_selected,
-                    'platform': 'MB', 'activity_id': gallery_act_id},
-                    success: function(response){
-                        console.log(response);
-                        console.log(response.isMatch); //returns true if match found, else false
-                        if(response.isMatch){
-                            console.log('inside the if else loop');
-                            $("#gallery-reward").css("display", "block");
-                            //set up the values
-                            var imgName = global_badge_selected.toLowerCase();
-                            $('#gallery-reward img').attr('src', '/static/pics/'+imgName+'.png');
-                            $('#reward-div-selection').text('You earned the '+global_badge_selected+' badge!');
-                            $('#reward-div-prompt').text(response.praiseText);
-
-                        }
-                 }
-            });
         }
 
         //get the user name who posted
@@ -326,6 +185,27 @@ var postImageMessage = function () {
             success: function (data) {
                 //empty the message pane
                 $("input[name='image-msg-text']").val('');
+
+
+                //populate the reward-div
+                if(data.praiseText != "empty"){
+                    $("#gallery-reward").css("display", "block");
+                    $('#reward-div-selection').text("You earned the " + data.rewardType + " badge!");
+                    $('#reward-div-prompt').text(data.praiseText);
+                    console.log(data.rewardType.toLowerCase())
+                    $('#gallery-reward img').attr('src','/static/pics/'+data.rewardType.toLowerCase()+'.png');
+                }
+
+                if(data.promptInMiddle){
+                    console.log("true")
+                    promptText = getPrompt(logged_in, "MB", gallery_act_id);
+                    $("#gallery-prompt").css("display", "block");
+                    $('#gallery-prompt-text').text(promptText);
+                }
+
+
+
+
 
             },
             error: function(data){
@@ -368,9 +248,6 @@ var realTimeMsgTransfer = function(){
 
             }
         }
-
-
-
 
     });
 

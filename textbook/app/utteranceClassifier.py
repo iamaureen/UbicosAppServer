@@ -1,4 +1,4 @@
-import string
+
 
 #three ways these keywords are chosen/matched:
 #1. common known phrases
@@ -35,44 +35,65 @@ keywords_dict = \
 week1_relevance = [];
 
 import re
-#sentence_opener dict
-class keywordMatch():
-    def matchingMethod(self, message, selected_badge):
+import string
+from dialog_tag import DialogTag
+import random
 
-        #TODO: pre-process messages
-        # remove punctuation
-        # print(message.translate(str.maketrans('', '', string.punctuation)));
-        print('message :: ', message);
-        print('selected badge :: ', selected_badge);
+model = DialogTag('distilbert-base-uncased')
 
-        if(selected_badge == 'question'):
-            # todo use the rule-based classifier that I have
-            # split messages based on sentence; and see if the
-            # keywords are used in the beginning of the sentence
-            print('question');
-        if(selected_badge == 'participate'):
-            #check for the length
-            print()
+class utteranceClassifier():
+    def classifierMethod(self, message):
 
-        #TA api sends 'other' when the student selects 'other' option from the badge div
-        # if (selected_badge == 'other'):
-        #     # check for the length
-        #     return False;
-
-        # for each keywords in the selected list, check if the keyword is present in the user message
-        for elem in keywords_dict[selected_badge]:
-            if elem.lower() in message.lower():
-                print("for debug purpose")
-                print('elem :: ', elem)
-                print('message :: ', message)
-                print("matched");
-                return True;
-
-        return False;
+        rewardType = ''
+        postTag = model.predict_tag(message)
 
 
+        if postTag == 'Wh-Question' or postTag == 'Open-Question' or postTag == 'Rhetorical-Questions' or postTag == 'Yes-no-Question':
+            rewardType = 'Question'
+        elif postTag == 'Action-directive':
+            rewardType = 'Feedback'
+        elif postTag == 'Appreciation':
+            rewardType = 'Appreciate'
+        elif postTag == 'Conventional-closing':
+            rewardType = 'Social'
+        elif postTag == 'Agree/Accept':
+            rewardType = 'Transactive'
+
+        print('utteranceclassifier.py line 60 :: ', message, rewardType)
+
+        #TODO: add the praise
+
+        praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
+        praise_messages_part1 = random.choice(praise_messages_part1_list);
+
+        # the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
+        praise_message_part2_dict = \
+            {'brainstorm': 'This will help you to understand better.',
+             'question': 'Asking questions helps you to understand better.',
+             'critique': 'This will help you to understand better.',
+             'elaborate': 'This will benefit your help-giving skills.',
+             'share': 'Sharing thoughts helps you to put them into words.',
+             'challenge': 'This will benefit your help-giving skills.',
+             'feedback': 'Your feedback to others is highly appreciated!',
+             'addon': 'Adding to an existing conversation is useful.',
+             'summarize': 'Summarizing is a great skill.',
+             'transactive': 'Responding to others is a great way of learning.',
+             'reflect': 'Reflecting on others work is good.',
+             'assess': 'Evaluating others work is a skill!',
+             'participate': 'Participation is a great collaborative technique!',
+             'appreciate': 'Appreciating others encourages collaboration.',
+             'encourage': 'Encouraging others helps in a collaboration.',
+             'social': 'You are doing a great job!'
+             }
+
+        # praised text generated randomly
+        if rewardType:
+            praiseText = praise_messages_part1 +' '+praise_message_part2_dict[rewardType.lower()];
+        else:
+            praiseText = "empty"
+        return rewardType, praiseText; #returns to broadcaseImageComment
 
 
 if __name__ == "__main__":
     #keywordMatch.matchingMethod(None, "Good job", "appreciate");
-    keywordMatch.matchingMethod(None, "Yes because you have to have a formula?", "elaborate");
+    utteranceClassifier.matchingMethod(None, "Yes because you have to have a formula?");

@@ -33,17 +33,16 @@ urlpatterns = [
     url(r'^ajax/chat/$', views.broadcast),
     url('updateFeed/(?P<id>\d+)', views.updateFeed),
     #url for khan academy tool
-    url('saveKApost',views.saveKApost),
+    url('submitKAAnswer',views.submitKAAnswer),
 
     #badge related urls
-    url('insertBadgeInfo',views.insertBadgeInfo), #used by gallery.js, kaform.js
-    url('getBadgeOptions',views.getBadgeOptions), #used by gallery.js, kaform.js
+    url('insertSupportInfo',views.insertSupportInfo), #used by gallery.js, kaform.js
     url('getBadgeNames',views.getBadgeNames), #used by gallery.js, kaform.js
-    url('saveBadgeSelection', views.saveBadgeSelection), #used by gallery.js, kaform.js
+    url('getPrompt', views.getPrompt), #used by gallery.js, kaform.js
 
     #computational model urls
     url('computationalModel', views.computationalModel),
-    url('matchKeywords', views.matchKeywords),
+
 
     #computational model urls
     url('getCurrentUserGroupID/(?P<act_id>\d+)', views.getCurrentUserGroupID),
@@ -64,10 +63,10 @@ urlpatterns = [
     # url('getGalleryPerID/(?P<gid>\d+)', views.getGalleryPerID),
     # url('getRandomGroupMemberList/(?P<gallery_id>\d+)', views.getRandomGroupMemberList),
     #url('brainstorm/save/',views.brainstormSave),
-    url('brainstorm/save/',views.broadcastBrainstormNote),
-    url('brainstorm/get/(?P<brainstorm_id>\d+)',views.brainstormGet),
-    url('brainstorm/update/(?P<note_id>\d+)/', views.brainstormUpdate),
-    url('brainstorm/del/(?P<note_id>\d+)', views.brainstormDelete),
+    # url('brainstorm/save/',views.broadcastBrainstormNote),
+    # url('brainstorm/get/(?P<brainstorm_id>\d+)',views.brainstormGet),
+    # url('brainstorm/update/(?P<note_id>\d+)/', views.brainstormUpdate),
+    # url('brainstorm/del/(?P<note_id>\d+)', views.brainstormDelete),
     url('tableData/save/',views.tableEntriesSave),
 
 
@@ -103,6 +102,7 @@ urlpatterns = [
     # url('getGeneralChatMsg',views.getGeneralChatMsg),
     # url('getkhanAcademyCount',views.getkhanAcademyCount),
     # url('getKhanAcademyDetails',views.getKhanAcademyDetails),
+
     #teacherdashboard
     # url('getGalleryTableTD/(?P<act_id>\d+)',views.getGalleryTableTD),
     # url('dashboardGalleryInfo/(?P<act_id>\d+)',views.dashboardGalleryInfo),

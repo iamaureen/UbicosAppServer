@@ -16,15 +16,15 @@
         <div id="ka-user-options">
             <p>Are you answering a question or posting a question on the Khan Academy page? </p>
             <form class="ka-form">
-                <input class="ka-radio" type="radio" name="ka-response-type" value="answer"> Answer a Question<br>
-                <input class="ka-radio" type="radio" name="ka-response-type" value="question"> Post a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="answer a question"> Answer a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="post a question"> Post a Question<br>
             </form>
         </div>
 
         <!--        if a student selects answer, display this div-->
         <div id="ka-img-upload">
 
-            <div>
+            <div id="default_ka_img_div" style="display:none">
                 <img id="default_ka_img" src="{% static 'pics/default.png' %}" alt="" style="height:300px;width:450px">
             </div>
 

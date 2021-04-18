@@ -157,6 +157,7 @@ a {
     transition: all 0.5s;
     transform: translateX(0);
     opacity: 1;
+
 }
 
 .page a {
@@ -734,7 +735,8 @@ p.cardDescription{
         height: 70%;
         width: 98%;
         padding: 15px 15px 15px 15px;
-        overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
         //border-style: dotted;
         position: absolute;
         top: 3rem;
@@ -1194,7 +1196,8 @@ p.cardDescription{
 
         height: 75%;
         padding: 15px 15px 15px 15px;
-        overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 
     .section {
@@ -1669,7 +1672,7 @@ p.cardDescription{
 
     background: linear-gradient(@khanacademy1, @khanacademy2);
     position: fixed;
-    overflow: hidden;
+    overflow-y: scroll;
     p {
         color: black;
     }
@@ -1891,13 +1894,15 @@ p.cardDescription{
     margin-left: 20px;
 }
 
-.badge-option-closebtn, .gallery-reward-closebtn {
+.gallery-reward-closebtn {
   position: absolute;
   top: 0;
   right: 10px;
   font-size: 36px;
   margin-left: 50px;
   text-decoration: none;
+  color: black;
+  z-index: 2;
 }
 
 .badge-option-display {
@@ -2094,6 +2099,13 @@ p.cardDescription{
 #reward-div-ins {
     margin-top: 10%;
     margin-left: 20%;
+}
+
+.gallery-text{
+    width: fit-content;
+    margin-top: 12%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 

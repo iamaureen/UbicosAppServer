@@ -3,8 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
-    userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, badgeSelected, studentCharacteristicModel, badgeInfo, KAPostModel,\
-    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer
+    userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
+    participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer, \
+    studentInfo
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -14,8 +15,8 @@ from django.db.models import Count
 from django.core import serializers
 from .parser import parser
 from .randomGroupGenerator import randomGroupGenerator
-from .badgeInfoFileRead import badgeInfoFileRead
-from .keywordMatch import keywordMatch
+from .infoFileRead import infoFileRead
+from .utteranceClassifier import utteranceClassifier
 from .binaryLogisticModel import binaryLogisticModel
 import json, random
 from datetime import datetime, timedelta
@@ -68,34 +69,36 @@ def broadcastImageComment(request):
     comment = imageComment(content=request.POST['message'], posted_by = request.user, imageId = img, activityID=request.POST['activityID'])
     comment.save()
 
-    #save into the history table once
-    if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
-        #do nothing
-        print();
+    #pass through dialogtag to get the tag
+    rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST['message']);
+
+    #save the badge info as history
+    #TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
+    saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
+
+    checkPrompt(request)
+
+    # # #save into the history table once
+    # if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
+    #     #do nothing
+    #     print();
+    # else:
+    #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
+    #     entry.save()
+
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText, 'promptInMiddle': checkPrompt(request)}) #goes to
+
+
+def checkPrompt(request):
+    data = badgeReceived.objects.filter(userid=request.user).order_by('-id')[:3].values('badgeReceived')
+    data_list = [k['badgeReceived'] for k in data]
+    print('line 93 :: ', any(data_list))
+    if any(data_list):
+        print("prompt pathabona")
+        return False;
     else:
-        entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
-        entry.save()
-
-    return JsonResponse({'success': '', 'errorMsg': True})
-
-@csrf_exempt
-def broadcastBrainstormNote(request):
-
-    #pusher2.trigger(u'c_channel', u'cn_event', {u'name': request.POST['username'], u'message': request.POST['message']})
-    pusher2.trigger(u'c_channel', u'cn_event', {u'noteID': request.POST.get('brainstormID'), u'idea': request.POST.get('idea'),
-                          u'color': request.POST.get('color'), u'posTop': request.POST.get('posTop'), u'posLeft': request.POST.get('posLeft'),
-                          u'posted_by':request.POST['username'],
-                          u'update': 'false'})
-
-    note = brainstormNote(brainstormID=request.POST.get('brainstormID'), ideaText=request.POST.get('idea'),
-                          color=request.POST.get('color'),
-                          position_top=request.POST.get('posTop'), position_left=request.POST.get('posLeft'),
-                          posted_by=request.user)
-    note.save()
-
-    note = brainstormNote.objects.last()
-    print(note.id)
-    return JsonResponse({'id': note.id, 'errorMsg': True})
+        print("prompt pathabo")
+        return True;
 
 
 #in the browser: http://127.0.0.1:8000/app/
@@ -162,6 +165,8 @@ def saveCharacteristic(request):
 # called from utility.js and will save it into local storage
 def getCharacteristic(request, username):
 
+    #TODO: add conditional checking here.
+    #determine the condition of the current user, and get the info from two different tables.
 
     info = studentCharacteristicModel.objects.get(user=User.objects.get(username=username));
     info = info.__dict__; #returns a dict
@@ -173,7 +178,6 @@ def getCharacteristic(request, username):
     dict['social'] = info['has_social'];
 
     return dict;
-    #return JsonResponse({'info': dict});
 
 
 def uploadImage(request):
@@ -202,9 +206,7 @@ def uploadImage(request):
 
 
         #insert values in the database
-        #TODO: restrict insertion if user is not signed in
         img = imageModel(gallery_id=gallery_id, group_id = group_id , posted_by = request.user, image=request.FILES['gallery_img']);
-        # TODO: check whether the insertion was successful or not, else wrong image will be shown using the last() query
         img.save()
 
         # using data NOT from database
@@ -274,14 +276,13 @@ def saveIndividualCommentMsgs(request):
 
 # input: image id
 # output: get comments for the current user for a given image id
-
 def getIndividualCommentMsgs(request,imageId):
     imageCommments = individualMsgComment.objects.filter(imageId=imageId, posted_by=request.user);
     imageCommments = serializers.serialize('json', imageCommments, use_natural_foreign_keys=True);
     return JsonResponse({'imageCommments': imageCommments});
 
-#used in gallery.js
-#display a random image outside the group
+# used in gallery.js
+# display a random image outside the group
 def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id, ', act_id);
@@ -320,7 +321,7 @@ def getGalleryImage(request, act_id):
         else:
             return HttpResponse('');
 
-#used in gallery.js
+# used in gallery.js
 def updateImageFeed(request):
 
 
@@ -395,7 +396,7 @@ def getBadgeNames(request):
                 #print(i);
                 #get the badgecount for each platform
                 count['platform'] = i;
-                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeTypeReceived = dict['badgeName'].lower(), platform=i).values('platform')\
+                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeReceived = dict['badgeName'].lower(), platform=i).values('platform')\
                     .annotate(Count('platform'));
                 #print(badge_count);
                 if badge_count:
@@ -417,103 +418,35 @@ def getBadgeNames(request):
     return HttpResponse('');
 
 
-#this method is called from gallery.js/khan academy content.js, and teachable agent <fileName>
-#https://stackoverflow.com/questions/18045867/post-jquery-array-to-django
-def getBadgeOptions(request, username, platform, badgeKey,activity_id):
+# this comes from the KA tool
+#TODO: connect with KAform.js
+def submitKAAnswer(request):
 
-    print('line 393 /getBadgeOptions :: ', badgeKey);
-
-    #get the students characteristic VALUES from the database
-    charac = getCharacteristic(request, username); #this is a dict
-    #print('line 309 accessing charac list :: ', charac);
-    #print('line 310 accessing charac value :: ', type(charac['social']));
-
-    #separatae no participation badge vs constructive badge -- through badgeKey List
-    dict = {};
-    index_list = [1, 2, 3]; #initial list
-    con2_list = []; #for con2
-    badgeOfferedList = []
-    for elem in badgeKey:
-        randomNO = str(random.choice(index_list))
-        original_elem = elem; #msc, hsc, fam, con1, con2, social
-
-        #little adjustment made to display all the three badges un the interface
-        if(elem == 'con1' or elem == 'con2'):
-            elem = elem.replace(elem,"con");
-            con1_random = random.choice(index_list);
-            con2_list = index_list
-            con2_list.remove(con1_random)
-            badge_item = list(badgeInfo.objects.filter(charac=elem, platform=platform,
-                                                       value=charac[elem], index=con1_random).values(
-                'badgeName', 'prompt', 'sentence_opener' + randomNO));
-
-            badgeOfferedList.append(badge_item[0]['badgeName']);
-            badgeOfferedList.append(badge_item[0]['sentence_opener'+ randomNO]);
-        elif(elem == 'con2'):
-            elem = elem.replace(elem, "con");
-            badge_item = list(badgeInfo.objects.filter(charac=elem, platform=platform,
-                                                       value=charac[elem], index=random.choice(con2_list)).values(
-                'badgeName', 'prompt', 'sentence_opener' + randomNO));
-            badgeOfferedList.append(badge_item[0]['badgeName']);
-            badgeOfferedList.append(badge_item[0]['sentence_opener' + randomNO]);
-        else:
-            #handle randomization using index key
-            badge_item = list(badgeInfo.objects.filter(charac=elem,platform=platform,
-                                                  value=charac[elem],index=random.choice(index_list)).values('badgeName','prompt','sentence_opener'+randomNO));
-
-            badgeOfferedList.append(badge_item[0]['badgeName']);
-            badgeOfferedList.append(badge_item[0]['sentence_opener' + randomNO]);
-
-        #little adjustment made based on the front-end; front-end uses 'sentence_opener1' since we are picking randomly and it
-        #can be 1,2,or3; so after picking randomly, changed the dict key to sentence_opener1
-        #https://stackoverflow.com/questions/4406501/change-the-name-of-a-key-in-dictionary
-        badge_item[0]['sentence_opener1'] = badge_item[0].pop('sentence_opener'+randomNO)
-
-        dict[original_elem] = badge_item;
-
-
-
-    print('line 476 :: ', badgeOfferedList);
-
-    #log this into the table
-    entry = badgeOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
-                         badgeTypeOffered=json.dumps(badgeOfferedList));
-    entry.save();
-
-    #print('line 418 /getbadgeOptions', dict);
-
-    return dict; #goes back to computationalModel method
-
-
-# this comes from the extension
-def saveKApost(request):
-    if khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).exists():
-        khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(posted_by=request.user). \
-            update(response_type=request.POST.get('response_type'), response=request.POST.get('answer'))
+    if khanAcademyAnswer.objects.filter(pk=request.POST.get('imgID')).filter(posted_by=request.user).filter(response_type=request.POST.get('response_type')).exists():
+        khanAcademyAnswer.objects.filter(ka_id=request.POST.get('activity_id')).filter(pk=request.POST.get('imgID')).filter(response_type=request.POST.get('response_type')). \
+            update(response=request.POST.get('answer'))
+    else:
+        khanAcademy_answer = khanAcademyAnswer(ka_id=request.POST.get('activity_id'), posted_by=request.user, response_type=request.POST.get('response_type'),
+                                               response=request.POST.get('answer'));
+        khanAcademy_answer.save();
 
     return HttpResponse('');
 
-def saveBadgeSelection(request):
-    # get the data
-    if request.method == 'POST':
-        username = request.POST.get('username');
-        platform = request.POST.get('platform');
-        activity_id = request.POST.get('activity_id');
-        title = request.POST.get('title');
-        selected_badge = request.POST.get('selected_badge');
+# save the badges that students received.
+def saveBadgeHistory(username, platform, activity_id, message, received_badge):
 
-        #save users' selected badge
-        badge_Selected = badgeSelected(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id, title=title,
-                                badgeTypeSelected=selected_badge);
-        badge_Selected.save();
 
-        return HttpResponse('');
+    #save users' selected badge
+    badge_Received = badgeReceived(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id, message=message,
+                            badgeReceived=received_badge);
+    badge_Received.save();
 
     return HttpResponse('');
 
 
-#modelbook: gallery ID
-#khanacademy: khan academy
+# modelbook: gallery ID
+# khanacademy: khan academy
+# TODO: test for april2021 study
 def computationalModel(request):
     if request.method == 'POST':
         username = request.POST.get('username');
@@ -580,68 +513,64 @@ def computationalModel(request):
 
     return HttpResponse('');
 
-def matchKeywords(request):
-    praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
-    praise_messages_part1 = random.choice(praise_messages_part1_list);
+def getPrompt(request):
 
-    # the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
-    praise_message_part2_dict = \
-        {'brainstorm': 'This will help you to understand better.',
-         'question': 'Asking questions helps you to understand better.',
-         'critique': 'This will help you to understand better.',
-         'elaborate': 'This will benefit your help-giving skills.',
-         'share': 'Sharing thoughts helps you to put them into words.',
-         'challenge': 'This will benefit your help-giving skills.',
-         'feedback': 'Your feedback to others is highly appreciated!',
-         'addon': 'Adding to an existing conversation is useful.',
-         'summarize': 'Summarizing is a great skill.',
-         'answer': 'Responding to others is a great way of learning.',
-         'reflect': 'Reflecting on others work is good.',
-         'assess': 'Evaluating others work is a skill!',
-         'participate': 'Participation is a great collaborative technique!',
-         'appreciate': 'Appreciating others encourages collaboration.',
-         'encourage': 'Encouraging others helps in a collaboration.',
-         'other': 'You are doing a great job!'
-         }
+    #get student characteristic
+    charac = getCharacteristic(request, request.GET['username']) #this method will check the condition and return charac based on this
+    charac_list = list(charac.values())[0:4]
 
-    if request.method == 'POST':
-        username = request.POST.get('username').split(" ")[0];
-        print('line 601 from KA', username);
-        activity_id = request.POST.get('activity_id');
-        platform = request.POST.get('platform');
-        message = request.POST.get('message');
-        selected_badge = request.POST.get('selected_badge');
+    #order: msc, hsc, fam, con, social
+    print('views.py getCharac ::', charac);
 
-        if(platform == 'KA'):
-            #get the selected badge using the URL sent
-            ka_url = request.POST.get('ka_url');
+    supportType = ''
+    supportText = ''
 
-            #get the id using the URL
-            KA_id = list(khanAcademyInfoTable.objects.filter(url=ka_url).values('KA_id'));
-            activity_id = KA_id = KA_id[0]['KA_id'];
-            print('line 614 from matchkeywords, KAid', KA_id);
-
-            entry = badgeSelected.objects.filter(userid_id=User.objects.get(username=username)).filter(platform=platform, activity_id=KA_id).\
-                values('badgeTypeSelected').last();
-            print('line 463 badge selected for khan academy :: ', entry);
-            if entry:
-                selected_badge = entry['badgeTypeSelected'];
-
-        selected_badge = selected_badge.lower();
-        isMatch = keywordMatch.matchingMethod(None, message, selected_badge);
-        if(isMatch):
-            print('line 635 keyword matched; user is rewarded a badge :: ', selected_badge);
-            #if there is a match, make an entry into the badgeReceived table
-            entry = badgeReceived(userid_id=User.objects.get(username=username).pk, platform=platform,
-                                  activity_id = activity_id, message = message, badgeTypeReceived = selected_badge);
-            entry.save();
+    if request.GET['platform'] == 'MB':
+        print('from Modelbook');
+        if charac_list[0]:
+            print('MSC high');
+            supportType = 'transactive'
+            #TODO: randomize index value
+            supportText = badgeInfo.objects.filter(charac="MSC", value="high", index=1, supportType=supportType).values(
+                'prompt','sentence_opener1');
         else:
-            print('line 635 keyword did not matched; user was not rewarded a badge.');
+            print('MSC low');
+            supportType = 'question'
+            supportText = badgeInfo.objects.filter(charac="MSC", value="low", index=1, supportType=supportType).values(
+                'prompt','sentence_opener1');
 
-        #praised text generated randomly
-        praiseText = praise_messages_part1 +' '+praise_message_part2_dict[selected_badge];
+        print('line 521 ::', supportText[0]['prompt']) #sentence opener supportText[1]['sentopener']
+        return  JsonResponse({'promptText': supportText[0]['prompt']}); #goes to gallery.js
+    elif request.GET['platform'] == 'KA':
+        print('from Khan Academy');
+        if charac_list[2]:
+            print('Fam high');
+            supportType = 'participation'
+            supportText = badgeInfo.objects.filter(charac="Fam", value="high", index=1, supportType=supportType).values(
+                'prompt', 'sentence_opener1');
+        else:
+            print('Fam low');
+            supportType = 'transactive'
+            #TODO: handle this case
+            supportText = badgeInfo.objects.filter(charac="Fam", value="low", index=1, supportType=supportType).values(
+                'prompt', 'sentence_opener1');
+        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
+        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to KAform.js
+    else:
+        print('from Teachable Agent')
+        if charac_list[1]:
+            print('hsc high');
+            supportText = badgeInfo.objects.filter(charac="HSC", value="high", index=1, supportType=supportType).values(
+                'prompt', 'sentence_opener1');
+        else:
+            print('hsc low');
+            supportType = 'elaboration'
+            supportText = badgeInfo.objects.filter(charac="HSC", value="low", index=1, supportType=supportType).values(
+                'prompt', 'sentence_opener1');
+        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
+        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to teachable agent
 
-        return JsonResponse({'isMatch': isMatch, 'praiseText': praiseText, 'selected_badge': selected_badge});
+
 
     return HttpResponse('');
 
@@ -711,19 +640,17 @@ def getGroupMembers(request, act_id):
 
 #this method reads badge info from an excel and saves into the database
 #file location is hardcoded i.e., downloads folder of IA computer
-def insertBadgeInfo(request):
+def insertSupportInfo(request):
 
     #1. read the excel file (used a separate py file for this)
-    bagdeInfoList = badgeInfoFileRead.fileRead(None);
+    supportInfoList = infoFileRead.fileRead(None);
     #print(type(bagdeInfoList));
 
     # 2. insert into the table
-    for badgeElem in bagdeInfoList:
+    for supportElem in supportInfoList:
         #print(badgeElem['characteristic'])
-        entry = badgeInfo(charac = badgeElem['characteristic'], value = badgeElem['value'], badgeName = badgeElem['badge_name'], index = badgeElem['index'],
-                    platform = badgeElem['platform'], imgName = badgeElem['imgName'], definition = badgeElem['definition'],
-                          prompt = badgeElem['badge_prompt'], sentence_opener1 = badgeElem['badge_ss1'],
-                          sentence_opener2 = badgeElem['badge_ss2'], sentence_opener3 = badgeElem['badge_ss3']);
+        entry = badgeInfo(charac = supportElem['characteristic'], value = supportElem['value'], index = supportElem['index'],
+                    supportType = supportElem['supporttype'], prompt = supportElem['prompt'], sentence_opener1 = supportElem['sentopener']);
         entry.save();
 
     return HttpResponse('');
@@ -731,7 +658,7 @@ def insertBadgeInfo(request):
 def insertWhiteboardInfo(request):
 
     #1. read the excel file (used a separate py file for this)
-    whiteboardInfoList = badgeInfoFileRead.whiteboardfileRead(None);
+    whiteboardInfoList = infoFileRead.whiteboardfileRead(None);
     #print(type(bagdeInfoList));
 
     # 2. insert into the table
@@ -747,7 +674,7 @@ def insertWhiteboardInfo(request):
 def insertKhanAcademyInfo(request):
 
     #1. read the excel file (used a separate py file for this)
-    khanacademyInfoList = badgeInfoFileRead.khanAcademyfileRead(None);
+    khanacademyInfoList = infoFileRead.khanAcademyfileRead(None);
     #print(type(bagdeInfoList));
 
     # 2. insert into the table
@@ -771,52 +698,6 @@ def insertKhanAcademyInfo(request):
 ##############################################
 ##Codes used from the previous version-start##
 ##############################################
-
-
-def brainstormSave(request):
-
-    note = brainstormNote(brainstormID = request.POST.get('brainstormID'), ideaText = request.POST.get('idea'), color = request.POST.get('color'),
-                              position_top = request.POST.get('posTop'), position_left = request.POST.get('posLeft'), posted_by = request.user)
-    note.save()
-
-    note = brainstormNote.objects.last()
-    print(note.id)
-    return JsonResponse({'id': note.id,'errorMsg': True})
-
-
-def brainstormGet(request,brainstorm_id):
-
-    notes = brainstormNote.objects.filter(brainstormID=brainstorm_id)
-    notes = serializers.serialize('json', notes, use_natural_foreign_keys=True)
-
-    return JsonResponse({'success': notes})
-
-
-def brainstormUpdate(request, note_id):
-
-    note = brainstormNote.objects.filter(id=note_id)
-
-    pusher2.trigger(u'c_channel', u'cn_event',
-                    {u'noteID': note_id, u'idea': note[0].ideaText,
-                     u'color': note[0].color, u'posTop': request.POST.get('top'),
-                     u'posLeft': request.POST.get('left'),
-                     u'posted_by': request.POST.get('username'),
-                     u'update': 'true'})
-
-    brainstormNote.objects.filter(id=note_id).update(position_top=request.POST.get('top'),
-                                                     position_left=request.POST.get('left'))
-    return HttpResponse('')
-
-def brainstormDelete(request,note_id):
-
-    print('NOTEID', note_id);
-
-    b = brainstormNote.objects.get(pk=note_id)
-    # This will delete the Blog and all of its Entry objects.
-    print(b)
-    b.delete()
-
-    return HttpResponse('no delete?')
 
 def tableEntriesSave(request):
 
@@ -869,73 +750,20 @@ def userlog(request):
     return HttpResponse('')
 
 def createBulkUser(request):
+    User.objects.all().delete()
 
-    # 19 user for the study + 1 teacher user + 2 test user
-
-    #whiteboard-group 1
-    user = User.objects.create_user('Squirtle', '', 'study6109');
-    user.save();
-    user = User.objects.create_user('Bulbasaur', '', 'study2710');
-    user.save();
-    user = User.objects.create_user('Dragonite', '', 'study2391');
-    user.save();
-
-    #whiteboard-group 2
-    user = User.objects.create_user('Gengar', '', 'study9273');
-    user.save();
-    user = User.objects.create_user('Eevee', '', 'study3452');
-    user.save();
-    user = User.objects.create_user('Charizard', '', 'study0013');
-    user.save();
-
-    # whiteboard-group 3
-    user = User.objects.create_user('Umbreon', '', 'study3920');
-    user.save();
-    user = User.objects.create_user('Gyarados', '', 'study3525');
-    user.save();
-    user = User.objects.create_user('Charmander', '', 'study0952');
-    user.save();
-
-    #whiteboard-group 4
-    user = User.objects.create_user('Ponyta', '', 'study1259');
-    user.save();
-    user = User.objects.create_user('Lapras', '', 'study9251');
-    user.save();
-    user = User.objects.create_user('Ekans', '', 'study0922');
-    user.save();
-
-    # whiteboard-group 5
-    user = User.objects.create_user('Chansey', '', 'study0193');
-    user.save();
-    user = User.objects.create_user('Psyduck', '', 'study6123');
-    user.save();
-    user = User.objects.create_user('Horsea', '', 'study8723');
-    user.save();
-
-    #whiteboard-group 6
-    user = User.objects.create_user('Paras', '', 'study5283');
-    user.save();
-    user = User.objects.create_user('Mew', '', 'study5105');
-    user.save();
-    user = User.objects.create_user('Tangela', '', 'study6209');
-    user.save();
+    # read the excel file for reading user names
+    userlist = infoFileRead.usernamefileRead(None);
 
 
+    for userinfo in userlist:
+        # insert into the user table - used for login
+        user = User.objects.create_user(userinfo['username'], '', userinfo['password']);
+        user.save();
 
-    #group 11 - teacher/developers
-    user = User.objects.create_user('AW', '', 'AW');
-    user.save();
-    user = User.objects.create_user('user1', '', 'user1');
-    user.save();
-    user = User.objects.create_user('user2', '', 'user2');
-    user.save();
-
-    user = User.objects.create_user('AW1', '', 'AW1');
-    user.save();
-    user = User.objects.create_user('AW2', '', 'AW2');
-    user.save();
-    user = User.objects.create_user('AW3', '', 'AW3');
-    user.save();
+        # insert into student info table - used for condition checking
+        user_studentInfo = studentInfo(user=User.objects.get(username=userinfo['username']), period=userinfo['class'], condition=userinfo['condition'])
+        user_studentInfo.save()
 
 
     return render(request, 'app/login.html', {})
@@ -944,62 +772,43 @@ def createBulkUser(request):
 ##Codes used from the previous version-end##
 ##############################################
 
-#very poor code, rewrite
 def matchPersonalityProfile(request):
+
 
     #if the current student already 'loaded' then pull from there else load from the init
 
-
-    if studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="load match event"):
+    if studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="changed html inputs"):
         #print('user loaded before');
         #check if the user has changed anything
-        entry = studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="change html event").values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id')
-        if entry:
-            #print('user changed before');
-            #if changed, get the changed characteristics
-            entry_personality_dict = {}
-            entry_personality_dict['msc'] = entry[0]['char_msc'];
-            entry_personality_dict['hsc'] = entry[0]['char_hsc'];
-            entry_personality_dict['fam'] = entry[0]['char_fam'];
-            entry_personality_dict['con'] = entry[0]['char_con'];
-            #entry_personality_dict['name'] = entry[0]['char_name'];
+        entry = studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="changed html inputs").values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id')
 
-            #do the matching here
-            #print(entry_personality_dict['msc'] )
-            msc_list = ['not that great at math', 'pretty great at math']
-            hsc_list = ['but she doesn’t feel like she is very good at giving help to others', 'and she thinks she is pretty good at giving help to others']
-            fam_list = ['she prefers only working with people she knows', 'she doesn’t mind working with anybody']
-            con_list = ['she doesn’t always participate', 'she usually does what she is supposed to do']
+        #print('user changed before');
+        #if changed, get the changed characteristics
+        entry_personality_dict = {}
+        entry_personality_dict['msc'] = entry[0]['char_msc'];
+        entry_personality_dict['hsc'] = entry[0]['char_hsc'];
+        entry_personality_dict['fam'] = entry[0]['char_fam'];
+        entry_personality_dict['con'] = entry[0]['char_con'];
+        #entry_personality_dict['name'] = entry[0]['char_name'];
 
-            current_user_profile = []
-            current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
-            current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
-            current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
-            current_user_profile.append(con_list.index(entry_personality_dict['con']))
+        #do the matching here
+        #print(entry_personality_dict['msc'] )
+        msc_list = ['not that great at math', 'pretty great at math']
+        hsc_list = ['but they don’t feel like they are very good at giving help to others', 'and they think they are pretty good at giving help to others']
+        fam_list = ['they prefer only working with people they know', 'they don’t mind working with anybody']
+        con_list = ['they don\'t always participate', 'they usually do what they are supposed to do']
 
-            #print(current_user_profile)
+        current_user_profile = []
+        current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
+        current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
+        current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
+        current_user_profile.append(con_list.index(entry_personality_dict['con']))
 
-            personality_dict = handlerMatchProfile(request, current_user_profile, 'change match event')
+        #print(current_user_profile)
 
+        personality_dict = handlerMatchProfile(request, current_user_profile, 'persona match after change')
 
-
-            return JsonResponse({'profile': personality_dict});
-
-
-        else:
-            #multiple changed entries, picked the last one
-            entry = studentPersonalityChangeTable.objects.filter(posted_by_id=request.user, event="load match event").values('id','char_msc','char_hsc','char_fam','char_con',
-                                                                                                                 'char_name').order_by('-id')
-
-            entry_personality_dict = {}
-            entry_personality_dict['msc'] = entry[0]['char_msc'];
-            entry_personality_dict['hsc'] = entry[0]['char_hsc'];
-            entry_personality_dict['fam'] = entry[0]['char_fam'];
-            entry_personality_dict['con'] = entry[0]['char_con'];
-            entry_personality_dict['name'] = entry[0]['char_name'];
-
-            return JsonResponse({'profile': entry_personality_dict});
-
+        return JsonResponse({'profile': personality_dict});
 
 
     else:
@@ -1010,12 +819,13 @@ def matchPersonalityProfile(request):
         #print('debug matchPersonalityProfile', charac);
         #print('debug matchPersonalityProfile', charac_list[0]);
 
-        personality_dict = handlerMatchProfile(request, charac_list, 'load match event')
+        personality_dict = handlerMatchProfile(request, charac_list, 'based on survey response')
         #print('line 1021', personality_dict);
 
         return JsonResponse({'profile': personality_dict});
     return HttpResponse('');
 
+#TODO: add and compare against 16 profiles, use euclidean distance
 def handlerMatchProfile(request, charac_list, event):
     # order: msc, hsc, fam, con
     profile1 = [False, True, False, True]
@@ -1063,18 +873,19 @@ def handlerMatchProfile(request, charac_list, event):
     }
 
     hsc_statements = {
-        'False': 'but she doesn’t feel like she is very good at giving help to others',
-        'True': 'and she thinks she is pretty good at giving help to others'
+        'False': 'but they don’t feel like they are very good at giving help to others',
+        'True': 'and they think they are pretty good at giving help to others'
     }
 
+    #true/false reversed in april 2021 implementation
     fam_statements = {
-        'False': 'she prefers only working with people she knows',
-        'True': 'she doesn’t mind working with anybody'
+        'True': 'they prefer only working with people they know',
+        'False': 'they don\'t mind working with anybody'
     }
 
     con_statements = {
-        'False': 'she doesn’t always participate',
-        'True': 'she usually does what she is supposed to do'
+        'False': 'they don\'t always participate',
+        'True': 'they usually do what they are supposed to do'
     }
 
     selected_profile = ''
@@ -1139,7 +950,7 @@ def saveEditedPersonality(request):
                                  char_fam=request.POST.get('fam'),
                                  char_con=request.POST.get('con'),
                                  char_name=request.POST.get('name'),
-                                 event='change html event')
+                                 event=request.POST.get('event'))
         entry.save();
 
     return HttpResponse('');
@@ -1179,10 +990,10 @@ def uploadKAImage(request):
             print('user not signed in') #add in log
 
         #insert values in the database
-        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user);
+        ka_image_upload = khanAcademyAnswer(ka_id=ka_id, ka_image=request.FILES['ka_img_name'], posted_by=request.user, response_type='answer a question');
         ka_image_upload.save();
 
-        latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id).last()
+        latest_upload = khanAcademyAnswer.objects.filter(ka_id=ka_id, posted_by=request.user).last()
         #https://stackoverflow.com/questions/16640021/django-object-is-not-iterable-using-serializers-serialize
         ka_img = serializers.serialize('json', [latest_upload], use_natural_foreign_keys=True)
         #print(latest_upload.pk)
@@ -1915,3 +1726,67 @@ def createUser(request):
 #     users_list = [str(user) for user in User.objects.all()]
 #
 #     return users_list;
+
+# @csrf_exempt
+# def broadcastBrainstormNote(request):
+#
+#     #pusher2.trigger(u'c_channel', u'cn_event', {u'name': request.POST['username'], u'message': request.POST['message']})
+#     pusher2.trigger(u'c_channel', u'cn_event', {u'noteID': request.POST.get('brainstormID'), u'idea': request.POST.get('idea'),
+#                           u'color': request.POST.get('color'), u'posTop': request.POST.get('posTop'), u'posLeft': request.POST.get('posLeft'),
+#                           u'posted_by':request.POST['username'],
+#                           u'update': 'false'})
+#
+#     note = brainstormNote(brainstormID=request.POST.get('brainstormID'), ideaText=request.POST.get('idea'),
+#                           color=request.POST.get('color'),
+#                           position_top=request.POST.get('posTop'), position_left=request.POST.get('posLeft'),
+#                           posted_by=request.user)
+#     note.save()
+#
+#     note = brainstormNote.objects.last()
+#     print(note.id)
+#     return JsonResponse({'id': note.id})
+
+# def brainstormSave(request):
+#
+#     note = brainstormNote(brainstormID = request.POST.get('brainstormID'), ideaText = request.POST.get('idea'), color = request.POST.get('color'),
+#                               position_top = request.POST.get('posTop'), position_left = request.POST.get('posLeft'), posted_by = request.user)
+#     note.save()
+#
+#     note = brainstormNote.objects.last()
+#     print(note.id)
+#     return JsonResponse({'id': note.id,'errorMsg': True})
+#
+#
+# def brainstormGet(request,brainstorm_id):
+#
+#     notes = brainstormNote.objects.filter(brainstormID=brainstorm_id)
+#     notes = serializers.serialize('json', notes, use_natural_foreign_keys=True)
+#
+#     return JsonResponse({'success': notes})
+#
+#
+# def brainstormUpdate(request, note_id):
+#
+#     note = brainstormNote.objects.filter(id=note_id)
+#
+#     pusher2.trigger(u'c_channel', u'cn_event',
+#                     {u'noteID': note_id, u'idea': note[0].ideaText,
+#                      u'color': note[0].color, u'posTop': request.POST.get('top'),
+#                      u'posLeft': request.POST.get('left'),
+#                      u'posted_by': request.POST.get('username'),
+#                      u'update': 'true'})
+#
+#     brainstormNote.objects.filter(id=note_id).update(position_top=request.POST.get('top'),
+#                                                      position_left=request.POST.get('left'))
+#     return HttpResponse('')
+#
+# def brainstormDelete(request,note_id):
+#
+#     print('NOTEID', note_id);
+#
+#     b = brainstormNote.objects.get(pk=note_id)
+#     # This will delete the Blog and all of its Entry objects.
+#     print(b)
+#     b.delete()
+#
+#     return HttpResponse('no delete?')

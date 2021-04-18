@@ -75,11 +75,11 @@ var ka_img_upload=function () {
                 console.log( response );
                 //success message
                 $( '.upload-success-msg' ).show();
-                console.log( response.ka_imgID )
-                KA_imgID=response.ka_imgID;
+                console.log(response.ka_imgID)
+                KA_imgID = response.ka_imgID;
 
             }, error: function ( response ) {
-                console.log( "khan academy image fail to upload" )
+                console.log("khan academy image fail to upload")
             }
 
         } );
@@ -90,18 +90,18 @@ var ka_img_upload=function () {
     // update preview image
     $( "#ka_img_upload" ).change( function () {
         //console.log( this )
-        ka_img_readURL( this );
+        ka_img_readURL(this);
     } );
 
 }
 
 
 
-function ka_img_readURL( input ) {
+function ka_img_readURL( input) {
     console.log( input.files )
-
+    
     //console.log( input.files[ 0 ] )
-
+    
     if ( input.files&&input.files[ 0 ] ) {
         var reader=new FileReader();
         reader.onload=function ( e ) {
@@ -118,6 +118,10 @@ var ka_response_save=function () {
 
     //detect when submit button is pressed, check for conditions, and then save
     $( '#ka-submit' ).off().on( 'click', function ( event ) {
+
+        //get the response type
+        var ka_response_type=$( 'input:radio[name="ka-response-type"]:checked' ).val();
+        console.log( ka_response_type )
 
         //get the response type
         var ka_response_type=$( 'input:radio[name="ka-response-type"]:checked' ).val();
@@ -145,23 +149,23 @@ var ka_response_save=function () {
 
 
 
-        $.post( {
+        $.post({
 
-            url: '/submitKAAnswer',
-            async: false,
-            data: {
-                'activity_id': ka_act_id,
-                'imgID': KA_imgID,
-                'response_type': ka_response_type,
-                'answer': ka_response,
-            },
-            success: function ( response ) {
-                //showKAConfirmMsg("Your response was saved");
-                //console.log(response)
-                //enterLogIntoDatabase('khan academy after inserting into db, img id'+imgID, 'answer'+activity_id , answer_text, current_pagenumber)
+               url:'/submitKAAnswer',
+               async: false,
+               data: {
+                    'activity_id': ka_act_id,
+                    'imgID': KA_imgID,
+                    'response_type': ka_response_type,
+                    'answer': ka_response,
+                    },
+               success: function(response){
+                    //showKAConfirmMsg("Your response was saved");
+                    //console.log(response)
+                    //enterLogIntoDatabase('khan academy after inserting into db, img id'+imgID, 'answer'+activity_id , answer_text, current_pagenumber)
             }
 
-        } );
+            });
 
         //event for failure message close button
         $( ".upload-failure-msg-closebtn" ).on( 'click', function () {
