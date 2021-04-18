@@ -825,65 +825,39 @@ def matchPersonalityProfile(request):
         return JsonResponse({'profile': personality_dict});
     return HttpResponse('');
 
-#TODO: add and compare against 16 profiles, use euclidean distance
+
 def handlerMatchProfile(request, charac_list, event):
     # order: msc, hsc, fam, con
 
-    # profile = [[False, False, False, False],
-    #            [False, False, False, True],
-    #            [False, False, True, False],
-    #            [False, False, True, True],
-    #            [False, True, False, False],
-    #            [False, True, False, True],
-    #            [False, True, True, False],
-    #            [False, True, True, True],
-    #            [True, False, False, False],
-    #            [True, False, False, True],
-    #            [True, False, True, False],
-    #            [True, False, True, False],
-    #            [True, True, False, False],
-    #            [True, True, False, True],
-    #            [True, True, True, False],
-    #            [True, True, True, True]]
+    profile = [[False, False, False, False],
+               [False, False, False, True],
+               [False, False, True, False],
+               [False, False, True, True],
+               [False, True, False, False],
+               [False, True, False, True],
+               [False, True, True, False],
+               [False, True, True, True],
+               [True, False, False, False],
+               [True, False, False, True],
+               [True, False, True, False],
+               [True, False, True, False],
+               [True, True, False, False],
+               [True, True, False, True],
+               [True, True, True, False],
+               [True, True, True, True]]
 
+    #profile_names = ['Jane', 'Tommy', 'Maya', 'Arnold', 'Sam', 'Evan', 'Ronald', 'Pam', 'Lesly', 'Amber', 'Owen', 'Noah']
+    profile_names = ['jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane']
 
-    profile1 = [False, True, False, True]
-    profile2 = [False, True, True, True]
-    profile3 = [True, True, False, True]
-    profile4 = [True, False, True, False]
+    matchedprofile_index = ''
 
-    # calculate the difference
-    diff_list = {}
-    count1 = count2 = count3 = count4 = 0;
-    for j in range(0, 4):
-        if (charac_list[j] ^ profile1[j]):  # this for loop is for maintaining the elem
-            count1 = count1 + 1
-            # print(count1)
-    diff_list['profile1'] = count1;
+    for list in profile:
+        if charac_list == list:
+            print('line 851 lucky number', charac_list)
+            print('line 851 lucky number', list)
+            print('line 853 lucky number', profile.index(list))
+            matchedprofile_index = profile.index(list)
 
-    for j in range(0, 4):
-        if (charac_list[j] ^ profile2[j]):  # this for loop is for maintaining the elem
-            count2 = count2 + 1
-            # print(count2)
-    diff_list['profile2'] = count2;
-
-    for j in range(0, 4):
-        if (charac_list[j] ^ profile3[j]):  # this for loop is for maintaining the elem
-            count3 = count3 + 1
-            # print(count3)
-    diff_list['profile3'] = count3;
-
-    for j in range(0, 4):
-        if (charac_list[j] ^ profile4[j]):  # this for loop is for maintaining the elem
-            count4 = count4 + 1
-            # print(count4)
-    diff_list['profile4'] = count4;
-
-    # print('debug matchPersonalityProfile', diff_list);
-
-    # select the personality that has the lowest diff; if more than one, select the first one
-    matchedprofile = min(diff_list, key=diff_list.get);
-    print('matched profile :: ', matchedprofile);
 
     # print('line 986 debug matchPersonalityProfile', matchedprofile);
     msc_statements = {
@@ -907,48 +881,33 @@ def handlerMatchProfile(request, charac_list, event):
         'True': 'they usually do what they are supposed to do'
     }
 
-    selected_profile = ''
-    if matchedprofile == 'profile1':
-        selected_profile = profile1;
-    elif matchedprofile == 'profile2':
-        selected_profile = profile2;
-    elif matchedprofile == 'profile3':
-        selected_profile = profile3;
-    else:
-        selected_profile = profile4
-
     personality_dict = {}
     # msc is true;
-    if selected_profile[0]:  # selected_profile[0] = msc
+    if charac_list[0]:  # selected_profile[0] = msc
         personality_dict['msc'] = msc_statements['True'];
     else:
         personality_dict['msc'] = msc_statements['False'];
 
-    # msc is true;
-    if selected_profile[1]:  # selected_profile[1] = hsc
+    # hsc is true;
+    if charac_list[1]:  # selected_profile[1] = hsc
         personality_dict['hsc'] = hsc_statements['True'];
     else:
         personality_dict['hsc'] = hsc_statements['False'];
 
-    # msc is true;
-    if selected_profile[2]:  # selected_profile[2] = fam
+    # fam is true;
+    if charac_list[2]:  # selected_profile[2] = fam
         personality_dict['fam'] = fam_statements['True'];
     else:
         personality_dict['fam'] = fam_statements['False'];
 
-    # msc is true;
-    if selected_profile[3]:  # selected_profile[3] = con
+    # con is true;
+    if charac_list[3]:  # selected_profile[3] = con
         personality_dict['con'] = con_statements['True'];
     else:
         personality_dict['con'] = con_statements['False'];
 
-    name_dict = {
-        'profile1': 'Seel',
-        'profile2': 'Abra',
-        'profile3': 'Bellsprout',
-        'profile4': 'Caterpie'
-    }
-    personality_dict['name'] = name_dict[matchedprofile];
+
+    personality_dict['name'] = profile_names[matchedprofile_index];
 
     # save this into the database #the first entry shows the actual profile
     entry = studentPersonalityChangeTable(posted_by=request.user, char_msc=personality_dict['msc'],
@@ -973,6 +932,7 @@ def saveEditedPersonality(request):
         entry.save();
 
     return HttpResponse('');
+
 # def getImagePerUser(request, act_id, username):
 #     print('receiving parameter :: activity id :: username ' + act_id + '  ' + username);
 #
