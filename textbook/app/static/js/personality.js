@@ -2,8 +2,17 @@ var host_url = window.location.host
 
 $(function(){
 
+    let user_inputed_personality_msc=localStorage.getItem( "personality_msc" );
+    let user_inputed_personality_hsc=localStorage.getItem( "personality_hsc" );
+    let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
+    let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-});
+    console.log( user_inputed_personality_msc )
+    console.log( user_inputed_personality_hsc )
+    console.log( user_inputed_personality_fam )
+    console.log( user_inputed_personality_con )
+
+} );
 
 
 var setupPersonality = function(){
@@ -48,7 +57,9 @@ var editPersonalityOptionBtnYes_method = function(){
 
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
-        $( "#editPersonality_div" ).toggle();
+         $( "#editPersonality_div" ).toggle();
+    
+       console.log( $( '#dropdown-msc .selected' ).text() )
 
         enterLogIntoDatabase( 'Personality Edit Button Click', 'Personality Edit Button Click', logged_in, global_current_pagenumber );
 
@@ -57,18 +68,24 @@ var editPersonalityOptionBtnYes_method = function(){
         let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
         let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-        console.log(user_inputed_personality_msc)
+        console.log(`${user_inputed_personality_msc}`)
         console.log(user_inputed_personality_hsc)
         console.log(user_inputed_personality_fam)
         console.log(user_inputed_personality_con)
 
         //TODO: set the dropdown values based on the localstorage items
+    // $( `#dropdown-msc option[value=${ user_inputed_personality_msc }]` ).attr( "selected", true );
 
-        $('select[name^="download-msc"] option:selected').attr("selected",null);
-        $('select[name^="download-msc"] option[value='+user_inputed_personality_msc+']').attr("selected","selected");
+        $( `#dropdown-msc option:contains(${ user_inputed_personality_msc })` ).attr( 'selected', true );
+        $( `#dropdown-hsc option:contains(${ user_inputed_personality_hsc })` ).attr( 'selected', true );
+        $( `#dropdown-con option:contains(${ user_inputed_personality_con })` ).attr( 'selected', true );
+        $( `#dropdown-fam option:contains(${ user_inputed_personality_fam })` ).attr( 'selected', true );
 
-        $('select[name^="download-hsc"] option:selected').attr("selected",null);
-        $('select[name^="download-hsc"] option[value='+user_inputed_personality_hsc+']').attr("selected","selected");
+        // $('select[name^="dropdown-msc"] option:selected').attr("selected",null);
+        // $('select[name^="dropdown-msc"] option[value='+user_inputed_personality_msc+']').attr("selected","selected");
+
+        // $('select[name^="download-hsc"] option:selected').attr("selected",null);
+        // $('select[name^="download-hsc"] option[value='+user_inputed_personality_hsc+']').attr("selected","selected");
 
 
 //        if ( user_inputed_personality_msc&&user_inputed_personality_hsc&&
@@ -88,8 +105,8 @@ var editPersonalityOptionBtnNo_method = function(){
 
 }
 
-var changepersonality_method = function(){
-
+var changepersonality_method=function () {
+    
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
         $( "#editPersonality_div" ).toggle();

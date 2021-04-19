@@ -458,7 +458,7 @@ var bindActivityButtons=function () {
 
     //personality page 0.html, personality option button
     $( '#editPersonalityOptionBtnYes' ).off().on( 'click', function ( event ) {
-
+        
         //defined in personality.js
         editPersonalityOptionBtnYes_method();
 

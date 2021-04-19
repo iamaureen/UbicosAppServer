@@ -3,7 +3,7 @@ var ka_act_id;
 var host_url=window.location.host;
 var KA_imgID;
 
-$(function(){
+$( function () {
 
     ka_img_upload_display();
 
@@ -11,24 +11,24 @@ $(function(){
 
     ka_response_save();
 
- });
+} );
 
-var load_ka_card = function(act_id, video_url) {
+var load_ka_card=function ( act_id, video_url ) {
 
-    global_ka_url = video_url;
-    ka_act_id = act_id;
+    global_ka_url=video_url;
+    ka_act_id=act_id;
 
     //this method is defined in utility.js
     //computationalModelMethod(logged_in, 'KA', act_id);
 
-    enterLogIntoDatabase('Khan Academy Card Click', 'Khan Academy Card Load' , '', global_current_pagenumber);
+    enterLogIntoDatabase( 'Khan Academy Card Click', 'Khan Academy Card Load', '', global_current_pagenumber );
 
 }
 
 $( "#ka-upload-img-form" ).hide();
 
 // display img upload option if a student selects 'answer' from the radio button
-var ka_img_upload_display = function () {
+var ka_img_upload_display=function () {
     //capture the radio button response
     $( function () {
         $( 'input:radio[name="ka-response-type"]' ).change( function () {
@@ -44,9 +44,9 @@ var ka_img_upload_display = function () {
         } );
     } );
 
-    
 
-    
+
+
 }
 
 //capture whether a student uploaded an image, and complete
@@ -56,7 +56,7 @@ var ka_img_upload=function () {
 
     //get file information
 
-    
+
     $( "#ka_img_upload" ).change( function ( event ) {
         console.log( "file changed" );
         console.log( event )
@@ -114,10 +114,14 @@ function ka_img_readURL( input) {
 
 
 // capture students' response and save it in the database when pressed submit
-var ka_response_save = function(){
+var ka_response_save=function () {
 
     //detect when submit button is pressed, check for conditions, and then save
-    $('#ka-submit').off().on('click', function(event){
+    $( '#ka-submit' ).off().on( 'click', function ( event ) {
+
+        //get the response type
+        var ka_response_type=$( 'input:radio[name="ka-response-type"]:checked' ).val();
+        console.log( ka_response_type )
 
         //get the response type
         var ka_response_type=$( 'input:radio[name="ka-response-type"]:checked' ).val();
@@ -132,7 +136,7 @@ var ka_response_save = function(){
         if ( !$( '.ka-radio' ).is( ':checked' ) ) {
             $( "#failure_text" ).text( "Please select radio !" )
             $( '.upload-failure-msg' ).show();
-            
+
         } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()===undefined ) {
             $( "#failure_text" ).text( "Please enter text into response box!" )
             $( '.upload-failure-msg' ).show();
@@ -179,9 +183,9 @@ var ka_response_save = function(){
         enterLogIntoDatabase( 'KA Bagde Copy Button Click', 'Button Click', global_badge_selected, global_current_pagenumber );
 
 
-    });
+    } );
 }
- 
+
 
 
 
