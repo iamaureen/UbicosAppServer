@@ -79,7 +79,7 @@ var editPersonalityOptionBtnYes_method = function(){
         $( `#dropdown-msc option:contains(${ user_inputed_personality_msc })` ).attr( 'selected', true );
         $( `#dropdown-hsc option:contains(${ user_inputed_personality_hsc })` ).attr( 'selected', true );
         $( `#dropdown-con option:contains(${ user_inputed_personality_con })` ).attr( 'selected', true );
-        // $( `#dropdown-fam option:contains(${ user_inputed_personality_fam })` ).attr( 'selected', true );
+        $( `#dropdown-fam option:contains(${ user_inputed_personality_fam })` ).attr( 'selected', true );
 
         // $('select[name^="dropdown-msc"] option:selected').attr("selected",null);
         // $('select[name^="dropdown-msc"] option[value='+user_inputed_personality_msc+']').attr("selected","selected");

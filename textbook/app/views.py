@@ -795,7 +795,7 @@ def matchPersonalityProfile(request):
         #print(entry_personality_dict['msc'] )
         msc_list = ['not that great at math', 'pretty great at math']
         hsc_list = ['but they don’t feel like they are very good at giving help to others', 'and they think they are pretty good at giving help to others']
-        fam_list = ['they prefer only working with people they know', 'they don\’t mind working with anybody']
+        fam_list = ['they prefer only working with people they know', 'they don\'t mind working with anybody']
         con_list = ['they don\'t always participate', 'they usually do what they are supposed to do']
 
         current_user_profile = []
