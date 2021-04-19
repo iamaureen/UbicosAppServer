@@ -2,7 +2,7 @@
 
 <body>
 
-    <h1> Khan Academy Discussion </h1>
+    <h1 id="discussion-header"> Khan Academy Discussion </h1>
 
     <div id="ka-container">
 
@@ -16,20 +16,19 @@
         <div id="ka-user-options">
             <p>Are you answering a question or posting a question on the Khan Academy page? </p>
             <form class="ka-form">
-                <input class="ka-radio" type="radio" name="ka-response-type" value="answer a question"> Answer a Question<br>
-                <input class="ka-radio" type="radio" name="ka-response-type" value="post a question"> Post a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="answer a question"> <Strong>Answer</Strong> a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="post a question"> <Strong>Post</Strong> a Question<br>
             </form>
         </div>
 
         <!--        if a student selects answer, display this div-->
         <div id="ka-img-upload">
-
             <div id="default_ka_img_div" style="display:none">
                 <img id="default_ka_img" src="{% static 'pics/default.png' %}" alt="" style="height:300px;width:450px">
             </div>
 
             <form id="ka-upload-img-form" enctype="multipart/form-data" method="post" action="">
-                <label for="ka_img_upload" class="btn">Choose Screenshot</label>
+                <label for="ka_img_upload" class="btn">Upload a file</label>
                 <input type="file" id="ka_img_upload" name="ka_img_name" class="btn" />
                 <input type="hidden" name="ka-act-id" value="" />
             </form>
@@ -38,7 +37,7 @@
         <div id="ka-user-response-div">
             <p> Write your response below. Once you have completed, click the copy button to copy the answer in the clipboard and go paste it in Khan Academy.</p>
             <textarea id="KAAnswer" class="user-answer-input" name="KAAnswer" placeholder="Write something.." style="height:180px"></textarea>
-            <input id="ka-submit" type="button" value="Submit" class="ka-user-input-submit-button">
+            <input id="ka-submit" type="button" value="Submit" class="btn">
         </div>
 
         
