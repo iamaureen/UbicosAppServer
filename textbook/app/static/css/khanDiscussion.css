@@ -29,9 +29,9 @@
 
 /* add new functionality */
 
-h1 {
+/* h1 {
     text-align: center;
-}
+}*/
 
 #ka-user-options {
     background-color: #F0F0F0;
@@ -43,7 +43,7 @@ h1 {
 /* for the image upload */
 
 #ka-img-upload {
-    border: 80px solid #dae9fa;
+    border: 50px solid #dae9fa;
     width: 95%;
     border-radius: 10px;
     margin-top: 10px;

@@ -391,6 +391,14 @@ var bindActivityButtons=function () {
             //if the card is already extended, put it back to normal
             card_extension_close();
         }
+        //        ------------------------------PERSONA-----------------------
+        if ( $( '.card.personaCard' ).hasClass( 'active' ) ) {
+
+            //update this section based on curriculum
+
+            //if the card is already extended, put it back to normal
+            card_extension_close();
+        }
 
         //        ------------------------------MORE INFO (TALK MOVES)-----------------------
         if ( $( '.card.moreinfo' ).hasClass( 'active' ) ) {

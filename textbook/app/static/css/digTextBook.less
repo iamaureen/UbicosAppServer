@@ -24,6 +24,8 @@
 @chat_link: #5f90a8;
 @chatColor1: #cfebf9;
 @chatColor2: #c4e7f7;
+@persona1: #fffffc;
+@persona2: #9ad1d4;
 
 // Other colors
 @linkColor: #007BFF;
@@ -301,6 +303,22 @@ a.assignment {
 
 }
 //different card styling -- start
+
+/* persona card class color + activity button color */
+
+.personaCard {
+    color: #34a0a4;
+}
+.activity-button.personaCard {
+    background-image: url('/static/pics/chat.png');
+}
+.activity-button.personaCard:after {
+    background: linear-gradient(#99d98c, #34a0a4);
+}
+.activity-button.personaCard:hover {
+    box-shadow: 0 0 30px #34a0a4;
+    transition: all 0.4s;
+}
 
 /* chat card class color + activity button color */
 
@@ -1443,6 +1461,14 @@ p.cardDescription{
 
     /* BRAINSTORM HTML */
     #draggable { width: 150px; height: 150px; padding: 0.5em; }
+}
+
+/* persona HTML */
+.card.personaCard {
+    background: linear-gradient(@persona1, @persona2);
+    p {
+        color: black;
+    }
 }
 
 /* weekly CHAT HTML */
