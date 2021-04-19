@@ -14,7 +14,7 @@
     color: black;
 }
 
-.upload-failure-msg p{
+.upload-failure-msg p {
     color: black;
 }
 
@@ -33,11 +33,19 @@
     color: white;
 }
 
-strong {
-    color: white
-}
-
 #ka-submit {
     color: red;
     text-align: center;
+}
+
+#ka-upload-img-form label.btn {
+    background: #159be8;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 220px;
+}
+
+#ka-upload-img-form label.btn:hover {
+    background: #0570ad;
 }

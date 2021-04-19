@@ -1,4 +1,3 @@
-
 .profile_btn {
     transition-duration: 0.1s;
     background-color: white;
@@ -9,12 +8,12 @@
 
 
 /* changePersonalityBtn */
+
 #changePersonalityBtn:hover {
     background-color: #e9ecef;
     color: white;
     cursor: pointer;
 }
-
 
 .dropdown_btn {
     background-color: white;
@@ -31,43 +30,42 @@
     background-color: #e9ecef;
 }
 
-#matchedPersonality_div{
+#matchedPersonality_div {
     display: inline-block;
     margin-top: -5%;
 }
 
+
 /* persona image */
+
 .persona_img {
     width: 100%;
     margin-left: 15%
 }
 
-
 .persona_name {
     margin-left: 17%
 }
 
-
-#matchedPersonality_wrapper{
+#matchedPersonality_wrapper {
     width: 100%;
 }
 
-.persona-narrative{
+.persona-narrative {
     width: 80%;
     display: inline-block;
 }
 
-.persona-image{
+.persona-image {
     width: 19%;
     display: inline-block;
     position: fixed;
     top: 40%;
     /*border: 1px solid black;*/
-
 }
 
-#editPersonality_div{
-   display: inline-block;
+#editPersonality_div {
+    display: inline-block;
 }
 
 .personaLikertScale_div {
@@ -78,12 +76,25 @@
     background-color: #e9ecef;
 }
 
-.editPersonaBtns{
+.editPersonaBtns {
     text-align: center;
     margin: 0 auto;
 }
 
-.editPersonaBtns button:hover{
+.editPersonaBtns button:hover {
     background-color: #e9ecef;
 }
 
+
+/* for the radio button */
+
+.personality_radio {
+    width: 30px;
+    height: 30px;
+    transition: all 0.25s linear;
+    cursor: pointer;
+}
+
+.personality_radio:hover {
+    border: 2px solid #5f394d;
+}

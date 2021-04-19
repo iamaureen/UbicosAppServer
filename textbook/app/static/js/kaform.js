@@ -25,7 +25,7 @@ var load_ka_card=function ( act_id, video_url ) {
 
 }
 
-$( "#ka-upload-img-form" ).hide();
+$( "#ka-img-upload" ).hide();
 
 // display img upload option if a student selects 'answer' from the radio button
 var ka_img_upload_display=function () {
@@ -34,10 +34,11 @@ var ka_img_upload_display=function () {
         $( 'input:radio[name="ka-response-type"]' ).change( function () {
             if ( $( this ).val()=="answer a question" ) {
                 //if it is 'answer' display the image upload
-                $( "#ka-upload-img-form" ).show();
+                $( "#ka-img-upload" ).show();
                 $( "#default_ka_img_div" ).show();
             } else {
                 //if it is 'question' do NOT display the image upload
+                $( "#ka-img-upload" ).hide();
                 $( "#ka-upload-img-form" ).hide();
                 $( "#default_ka_img_div" ).hide();
             }

@@ -1,0 +1,109 @@
+/* Khan Academy Card */
+
+.card.khanacademy {
+    /* background: linear-gradient(@khanacademy1, @khanacademy2); */
+    /* background-color: white; */
+    position: fixed;
+    overflow-y: scroll;
+}
+
+.card.khanacademy p {
+    color: black;
+    /* font-family: Nunito; */
+}
+
+#ka-header-description p {
+    background-color: white;
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    /* padding: 20px; */
+    padding-left: 30px;
+    border-radius: 10px;
+}
+
+.active {
+    background-color: #55C68F;
+}
+
+
+/* add new functionality */
+
+h1 {
+    text-align: center;
+}
+
+#ka-user-options {
+    background-color: #F0F0F0;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+
+/* for the image upload */
+
+#ka-img-upload {
+    border: 80px solid #dae9fa;
+    width: 95%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#ka-img-upload h5 {
+    color: red;
+}
+
+#ka-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#default_ka_img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+    /* max-width: 100%;
+    max-height: 100%;
+    display: block; */
+}
+
+#default_ka_img_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden
+}
+
+#ka-upload-img-form {
+    background-color: #dae9fa;
+    padding-top: 20px;
+}
+
+input.ka-radio {
+    width: 19px;
+    height: 19px;
+    margin: -1px 4px 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all 0.25s linear;
+}
+
+#ka-submit {
+    background: #55C68F;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 290px;
+    border-color: #a5f0cd;
+    width: 20%;
+    font-size: 17px;
+}
+
+#ka-submit:hover {
+    background: #38a16e;
+}
+
+.user-answer-input:hover {
+    border: #009900 solid;
+}
