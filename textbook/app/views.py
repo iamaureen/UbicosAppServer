@@ -165,17 +165,53 @@ def saveCharacteristic(request):
 # called from utility.js and will save it into local storage
 def getCharacteristic(request, username):
 
-    #TODO: add conditional checking here.
     #determine the condition of the current user, and get the info from two different tables.
+    # 1-dynamic, #2-static
+    whichCondition = getCondition(request);
+    print("def getCharacteristic student condition:: ", whichCondition);
 
-    info = studentCharacteristicModel.objects.get(user=User.objects.get(username=username));
-    info = info.__dict__; #returns a dict
     dict = {}
-    dict['msc'] = info['has_msc'];
-    dict['hsc'] = info['has_hsc'];
-    dict['fam'] = info['has_fam'];
-    dict['con'] = info['has_con'];
-    dict['social'] = info['has_social'];
+
+    if whichCondition == 1:
+        print('line 177 student belongs to dynamic condition');
+
+        #if the student changed or not
+        if studentPersonalityChangeTable.objects.filter(posted_by_id=User.objects.get(username=username), event='changed html inputs').exists():
+            print('modified characteristic')
+            info = studentPersonalityChangeTable.objects.filter(posted_by_id=User.objects.get(username=username), event='changed html inputs').values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id');
+
+            current_user_profile = wordToBinaryConvertor(info);
+
+            print('line 185 :: ', current_user_profile)
+
+            dict['msc'] = current_user_profile[0];
+            dict['hsc'] = current_user_profile[1];
+            dict['fam'] = current_user_profile[2];
+            dict['con'] = current_user_profile[3];
+            dict['social'] = 1;
+
+        else:
+            print('did not change characteristic yet')
+            info = studentCharacteristicModel.objects.get(user=User.objects.get(username=username));
+            info = info.__dict__;  # returns a dict
+
+            dict['msc'] = info['has_msc'];
+            dict['hsc'] = info['has_hsc'];
+            dict['fam'] = info['has_fam'];
+            dict['con'] = info['has_con'];
+            dict['social'] = info['has_social'];
+    else:
+        print('student belongs to static condition');
+
+        info = studentCharacteristicModel.objects.get(user=User.objects.get(username=username));
+        info = info.__dict__; #returns a dict
+
+        dict['msc'] = info['has_msc'];
+        dict['hsc'] = info['has_hsc'];
+        dict['fam'] = info['has_fam'];
+        dict['con'] = info['has_con'];
+        dict['social'] = info['has_social'];
+
 
     return dict;
 
@@ -513,7 +549,17 @@ def computationalModel(request):
 
     return HttpResponse('');
 
+def getCondition(request):
+
+    #1-dynamic, #2-static
+    condition = studentInfo.objects.filter(user_id=request.user).values('condition');
+    #print('def getCondition :: ', condition[0]['condition']);
+    condition = condition[0]['condition'];
+
+    return condition;
+
 def getPrompt(request):
+
 
     #get student characteristic
     charac = getCharacteristic(request, request.GET['username']) #this method will check the condition and return charac based on this
@@ -771,6 +817,30 @@ def createBulkUser(request):
 ##############################################
 ##Codes used from the previous version-end##
 ##############################################
+def wordToBinaryConvertor(entry):
+
+    entry_personality_dict = {}
+    entry_personality_dict['msc'] = entry[0]['char_msc'];
+    entry_personality_dict['hsc'] = entry[0]['char_hsc'];
+    entry_personality_dict['fam'] = entry[0]['char_fam'];
+    entry_personality_dict['con'] = entry[0]['char_con'];
+    # entry_personality_dict['name'] = entry[0]['char_name'];
+
+    # do the matching here
+    # print(entry_personality_dict['msc'] )
+    msc_list = ["not that great at math", "pretty great at math"]
+    hsc_list = ["but they do not feel like they are very good at giving help to others",
+                "and they think they are pretty good at giving help to others"]
+    fam_list = ["they do not mind working with anybody","they prefer only working with people they know"]
+    con_list = ["they do not always participate", "they usually do what they are supposed to do"]
+
+    current_user_profile = []
+    current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
+    current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
+    current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
+    current_user_profile.append(con_list.index(entry_personality_dict['con']))
+
+    return current_user_profile;
 
 def matchPersonalityProfile(request):
 
@@ -782,29 +852,7 @@ def matchPersonalityProfile(request):
         #check if the user has changed anything
         entry = studentPersonalityChangeTable.objects.filter(posted_by_id = request.user, event="changed html inputs").values('id','char_msc','char_hsc','char_fam', 'char_con','char_name').order_by('-id')
 
-        #print('user changed before');
-        #if changed, get the changed characteristics
-        entry_personality_dict = {}
-        entry_personality_dict['msc'] = entry[0]['char_msc'];
-        entry_personality_dict['hsc'] = entry[0]['char_hsc'];
-        entry_personality_dict['fam'] = entry[0]['char_fam'];
-        entry_personality_dict['con'] = entry[0]['char_con'];
-        #entry_personality_dict['name'] = entry[0]['char_name'];
-
-        #do the matching here
-        #print(entry_personality_dict['msc'] )
-        msc_list = ['not that great at math', 'pretty great at math']
-        hsc_list = ['but they don’t feel like they are very good at giving help to others', 'and they think they are pretty good at giving help to others']
-        fam_list = ['they prefer only working with people they know', 'they don\'t mind working with anybody']
-        con_list = ['they don\'t always participate', 'they usually do what they are supposed to do']
-
-        current_user_profile = []
-        current_user_profile.append(msc_list.index(entry_personality_dict['msc']))
-        current_user_profile.append(hsc_list.index(entry_personality_dict['hsc']))
-        current_user_profile.append(fam_list.index(entry_personality_dict['fam']))
-        current_user_profile.append(con_list.index(entry_personality_dict['con']))
-
-        #print(current_user_profile)
+        current_user_profile = wordToBinaryConvertor(entry);
 
         personality_dict = handlerMatchProfile(request, current_user_profile, 'persona match after change')
 
@@ -853,9 +901,9 @@ def handlerMatchProfile(request, charac_list, event):
 
     for list in profile:
         if charac_list == list:
-            print('line 851 lucky number', charac_list)
-            print('line 851 lucky number', list)
-            print('line 853 lucky number', profile.index(list))
+            print('line 904 lucky number', charac_list)
+            print('line 905 lucky number', list)
+            print('line 906 lucky number', profile.index(list))
             matchedprofile_index = profile.index(list)
 
 

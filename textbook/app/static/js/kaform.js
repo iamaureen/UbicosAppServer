@@ -11,7 +11,10 @@ $( function () {
 
     ka_response_save();
 
+    ka_button_action();
+
 } );
+
 
 var load_ka_card=function ( act_id, video_url ) {
 
@@ -184,6 +187,19 @@ var ka_response_save=function () {
 
 
     } );
+}
+
+var ka_button_action = function(){
+
+    $('.ka-prompt-button').off().on('click', function(e){
+             $("#ka-prompt").toggle();
+      });
+
+     //reward-close-button click event
+      $('.ka-reward-closebtn').off().on('click', function(e){
+             $("#ka-reward").css("display", "none");
+             $("#ka-prompt").css("display", "none");
+      });
 }
 
 

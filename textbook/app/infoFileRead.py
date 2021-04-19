@@ -18,8 +18,9 @@ class infoFileRead():
                     dict['value'] = row[1];
                     dict['supporttype'] = row[2];
                     dict['index'] = row[3];
-                    dict['prompt'] = row[4];
-                    dict['sentopener'] = row[5];
+                    dict['platform'] = row[4];
+                    dict['prompt'] = row[5];
+                    dict['sentopener'] = row[6];
 
                     #print(dict);
 

@@ -373,7 +373,17 @@ input[type="file"] {
     height: 25em;
     width: 30em;
 
+}
 
+.gallery-reward-closebtn {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 36px;
+  margin-left: 50px;
+  text-decoration: none;
+  color: black;
+  z-index: 2;
 }
 
 .gallery-prompt-div-header{
