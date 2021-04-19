@@ -42,6 +42,7 @@ urlpatterns = [
 
     #computational model urls
     url('computationalModel', views.computationalModel),
+    url('getCondition', views.getCondition),
 
 
     #computational model urls

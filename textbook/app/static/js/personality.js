@@ -103,6 +103,26 @@ var editPersonalityOptionBtnYes_method = function(){
 
 var editPersonalityOptionBtnNo_method = function(){
 
+    //saves to the database
+        $.ajax( {
+            type: 'POST',
+            url: '/saveEditedPersonality/',
+            //async: false, //wait for ajax call to finish, else logged_in is null in the following if condition
+            data: {
+                'msc': localStorage.getItem( "personality_msc" ),
+                'hsc': localStorage.getItem( "personality_hsc" ),
+                'fam': localStorage.getItem( "personality_fam" ),
+                'con': localStorage.getItem( "personality_con" ),
+                'name': $( 'span#namePersonality' ).text(),
+                'event': "no change in html inputs"
+            },
+            success: function ( e ) {
+
+                //todo the matched personality thing
+
+            }
+        } );
+
 }
 
 var changepersonality_method=function () {
