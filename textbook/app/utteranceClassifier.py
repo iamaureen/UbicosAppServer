@@ -39,7 +39,7 @@ import string
 from dialog_tag import DialogTag
 import random
 
-model = DialogTag('distilbert-base-uncased')
+#model = DialogTag('distilbert-base-uncased')
 
 class utteranceClassifier():
     def classifierMethod(self, message):
