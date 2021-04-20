@@ -1,0 +1,30 @@
+.message p {
+    background: #1ea2c4;
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    border-color: #1ea2c4;
+    border-style: solid;
+    border-width: 0.5px;
+}
+
+.message.self p {
+    color: black;
+    background: white;
+    border-radius: 5px;
+    border-color: lightgrey;
+    border-style: solid;
+    border-width: 0.5px;
+}
+
+.card.chatCard.active h1 {
+    text-align: center;
+    background-color: #1ea2c4;
+    padding: 15px;
+    color: white;
+    border-top-left-radius: 15px;
+}
+
+.card.chatCard.active {
+    background-color: #f0f0f0;
+}

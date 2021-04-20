@@ -22,16 +22,22 @@
     border-radius: 10px;
 }
 
-.active {
+.card.khanacademy.active {
     background-color: #55C68F;
+}
+
+.card.khanacademy.active h1 {
+    text-align: center;
+    padding: 25px;
+    color: #fff;
 }
 
 
 /* add new functionality */
 
-/* h1 {
+h1 {
     text-align: center;
-}*/
+}
 
 #ka-user-options {
     background-color: #F0F0F0;
