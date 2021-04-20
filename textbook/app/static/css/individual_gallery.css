@@ -64,23 +64,19 @@
     background-color: rgb(165, 168, 166);
 }
 
-
-
 /* the following css is used both in individual.html and activityfeed.html */
 .card-message-input {
-    background: rgba(201, 221, 228, 1);
-    /* -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px); */
     overflow: hidden;
     position: absolute; /* was fixed before parent (i.e., .card element is fixed) */
-    border-radius: 30px;
+    border-radius: 15px;
     width: 95%;
-    bottom: -2%;
+    bottom: 0%;
     left: 0;
     height: 55px;
-    padding: 12px 10px 14px 9px;
-    right: 14px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-left: 10px;
+    /* padding: 12px 10px 14px 9px; */
+    /* right: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); */
 }
 
     .card-message-input input {
@@ -89,10 +85,12 @@
         height: 120%;
         border: none;
         border-radius: 20px;
-        width: calc(100% - 55px);
+        width: 100%;
         padding-left: 10px;
-        outline: none;
+        outline: none; 
         font-family: Tahoma, sans-serif;
+        padding: 15px;
+        border-radius: 10px;
 
     }
 
