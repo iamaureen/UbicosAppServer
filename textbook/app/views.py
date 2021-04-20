@@ -102,14 +102,16 @@ def checkPrompt(request):
 
 
 #in the browser: http://127.0.0.1:8000/app/
-@login_required
+
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'app/index.html')
-        #if teacher then open up teacher portal, else student portal
-        # if request.user.get_username() == 'AW':
-        #     return render(request, 'app/teacherindex.html')
-        # else: return render(request, 'app/index.html')
+    # if request.user.is_authenticated:
+    #     return render(request, 'app/index.html')
+    #     #if teacher then open up teacher portal, else student portal
+    #     # if request.user.get_username() == 'AW':
+    #     #     return render(request, 'app/teacherindex.html')
+    #     # else: return render(request, 'app/index.html')
+    return render(request, 'app/index.html')
+
 
 def login_form(request):
     return render(request, 'app/login.html',{})
