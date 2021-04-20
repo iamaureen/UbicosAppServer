@@ -396,6 +396,8 @@ input[type="file"] {
     text-align:center;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
+    color: white;
+    margin-top: -1px;
 }
 
 .gallery-prompt-div-header img{

@@ -395,6 +395,7 @@ var bindActivityButtons=function () {
         if ( $( '.card.personaCard' ).hasClass( 'active' ) ) {
 
             //update this section based on curriculum
+            $( 'span.taskttitle' ).text( activityButton.attr( 'data-activity' ) );
 
             //if the card is already extended, put it back to normal
             card_extension_close();

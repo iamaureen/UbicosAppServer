@@ -59,31 +59,34 @@ class utteranceClassifier():
         elif postTag == 'Agree/Accept':
             rewardType = 'Transactive'
 
-        print('utteranceclassifier.py line 60 :: ', message, rewardType)
+        temp = rewardType
+        reward_list = ['Question', 'Feedback', 'Appreciate', 'Social', 'Transactive']
 
-        #TODO: add the praise
+        elab_list = ['since','this reminds me', 'in my opinion', 'an example', 'explanation', 'perspective', 'because', 'because of', 'for example']
+        if temp not in reward_list:
+            #check for elaboration
+            # for each keywords in the list, check if the keyword is present in the user message
+            for elem in elab_list:
+                if elem.lower() in message.lower():
+                    rewardType = 'Elaboration'
+                    break;
+
+
+        print('utteranceclassifier.py line 74 :: ', message, rewardType)
+
 
         praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
         praise_messages_part1 = random.choice(praise_messages_part1_list);
 
         # the keywords are the badgenames (so check with the excel sheet and be consistent, else error)
         praise_message_part2_dict = \
-            {'brainstorm': 'This will help you to understand better.',
+            {
              'question': 'Asking questions helps you to understand better.',
-             'critique': 'This will help you to understand better.',
-             'elaborate': 'This will benefit your help-giving skills.',
-             'share': 'Sharing thoughts helps you to put them into words.',
-             'challenge': 'This will benefit your help-giving skills.',
              'feedback': 'Your feedback to others is highly appreciated!',
-             'addon': 'Adding to an existing conversation is useful.',
-             'summarize': 'Summarizing is a great skill.',
-             'transactive': 'Responding to others is a great way of learning.',
-             'reflect': 'Reflecting on others work is good.',
-             'assess': 'Evaluating others work is a skill!',
-             'participate': 'Participation is a great collaborative technique!',
              'appreciate': 'Appreciating others encourages collaboration.',
-             'encourage': 'Encouraging others helps in a collaboration.',
-             'social': 'You are doing a great job!'
+             'social': 'You are doing a great job!',
+             'transactive': 'Responding to others is a great way of learning.',
+             'elaboration': 'This will benefit your help-giving skills.',
              }
 
         # praised text generated randomly
@@ -96,4 +99,4 @@ class utteranceClassifier():
 
 if __name__ == "__main__":
     #keywordMatch.matchingMethod(None, "Good job", "appreciate");
-    utteranceClassifier.matchingMethod(None, "Yes because you have to have a formula?");
+    utteranceClassifier.classifierMethod(None, "Yes because you have to have a formula?");

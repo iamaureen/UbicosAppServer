@@ -894,8 +894,7 @@ def handlerMatchProfile(request, charac_list, event):
                [True, True, True, False],
                [True, True, True, True]]
 
-    #profile_names = ['Jane', 'Tommy', 'Maya', 'Arnold', 'Sam', 'Evan', 'Ronald', 'Pam', 'Lesly', 'Amber', 'Owen', 'Noah']
-    profile_names = ['jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane']
+    profile_names = ['Jane', 'Tommy', 'Maya', 'Arnold', 'Sam', 'Evan', 'Ronald', 'Pam', 'Lesly', 'Amber', 'Owen', 'Noah', 'Shelly', 'Penny', 'Harry', 'Jack']
 
     matchedprofile_index = ''
 
