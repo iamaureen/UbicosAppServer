@@ -57,8 +57,7 @@
     height: 25em;
     width: 30em;
     background-color: green;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
+    border-radius: 15px;
 }
 
 .ka-prompt-div-header img {
@@ -96,9 +95,9 @@
 
 .ka-prompt-div-prompt {
     position: fixed;
-    top: 42%;
-    left: 15%;
-    height: 5em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 135px;
     width: 30em;
     background-color: white;
     text-align: center;
@@ -110,10 +109,8 @@
 
 .ka-prompt-div-tips {
     position: absolute;
-    top: 62%;
-    left: 0%;
-    right: 22%;
-    height: 12em;
+    margin-top: 205px;
+    padding-bottom: 30px;
     width: 30em;
     text-align: center;
     color: black;
@@ -152,5 +149,3 @@
     background-size: 100%;
     z-index: 2;
 }
-
-*/
