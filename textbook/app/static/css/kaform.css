@@ -50,74 +50,79 @@
     background: #0570ad;
 }
 
-.ka-prompt-div{
-
+.ka-prompt-div {
     position: fixed;
     top: 25%;
     left: 15%;
     height: 25em;
     width: 30em;
+    background-color: green;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
 
+.ka-prompt-div-header img {
+    height: 55px;
+    width: 55px;
+    margin-top: 15px;
+}
+
+.ka-prompt-div-header h2 {
+    color: white;
 }
 
 .ka-reward-closebtn {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  font-size: 36px;
-  margin-left: 50px;
-  text-decoration: none;
-  color: black;
-  z-index: 2;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 36px;
+    margin-left: 50px;
+    text-decoration: none;
+    color: black;
+    z-index: 2;
 }
 
-.ka-prompt-div-header{
+.ka-prompt-div-header {
     position: fixed;
     top: 25%;
     left: 15%;
     height: 8em;
     width: 30em;
     background-color: green;
-    text-align:center;
+    text-align: center;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
 }
 
-.ka-prompt-div-header img{
-    height: 55px;
-    width: 55px;
-    margin-top: 15px;
-}
-
-.ka-prompt-div-prompt{
+.ka-prompt-div-prompt {
     position: fixed;
     top: 42%;
     left: 15%;
     height: 5em;
     width: 30em;
     background-color: white;
-    text-align:center;
+    text-align: center;
 }
 
-#ka-prompt-text{
+#ka-prompt-text {
     margin-top: 15px;
 }
 
-.ka-prompt-div-tips{
-    position: fixed;
-    top: 52%;
-    left: 13%;
+.ka-prompt-div-tips {
+    position: absolute;
+    top: 62%;
+    left: 0%;
+    right: 22%;
     height: 12em;
     width: 30em;
-    text-align:center;
-    margin-left: 15px;
+    text-align: center;
     color: black;
     background-color: #D7DBDD;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
 }
 
-#ka-so-copy{
+#ka-so-copy {
     display: block;
     width: 115px;
     height: 35px;
@@ -132,7 +137,11 @@
     margin-top: 3em;
 }
 
-.ka-prompt-button{
+#ka-so-copy:hover {
+    background-color: rgb(3, 77, 3);
+}
+
+.ka-prompt-button {
     display: inline-block;
     position: absolute;
     top: 0px;
@@ -142,5 +151,6 @@
     background: url(/static/pics/help.png) no-repeat;
     background-size: 100%;
     z-index: 2;
-
 }
+
+*/
