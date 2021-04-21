@@ -6,10 +6,10 @@ var dict = {'suggestion': false, 'social' : false, 'relevance' : false, 'reflect
 $(function(){
 
     //load the first set of badge and highlight it
-    updateBadgeCardBody('Understand Better!', 'msc');
+    //updateBadgeCardBody('Understand Better!', 'msc');
 
 
-    badgeCardActionItems();
+    //badgeCardActionItems();
 
 
    // displayAllBadges();

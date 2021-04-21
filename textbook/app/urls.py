@@ -39,6 +39,7 @@ urlpatterns = [
     url('insertSupportInfo',views.insertSupportInfo), #used by gallery.js, kaform.js
     url('getBadgeNames',views.getBadgeNames), #used by gallery.js, kaform.js
     url('getPrompt', views.getPrompt), #used by gallery.js, kaform.js
+    url('getBadges', views.getBadges), #used by gallery.js, teachable agent.js
 
     #computational model urls
     url('computationalModel', views.computationalModel),
