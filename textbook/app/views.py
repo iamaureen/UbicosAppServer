@@ -76,7 +76,6 @@ def broadcastImageComment(request):
     #TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
     saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
 
-    checkPrompt(request)
 
     # # #save into the history table once
     # if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
@@ -86,19 +85,25 @@ def broadcastImageComment(request):
     #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
     #     entry.save()
 
-    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText, 'promptInMiddle': checkPrompt(request)}) #goes to
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to
 
+#called from teachable agent
+def getBadges(request):
+    if request.method == 'POST':
+        username = request.POST.get('username');
+        platform = request.POST.get('platform');
+        message = request.POST['message']
+        activity_id = request.POST.get('activity_id');
 
-def checkPrompt(request):
-    data = badgeReceived.objects.filter(userid=request.user).order_by('-id')[:3].values('badgeReceived')
-    data_list = [k['badgeReceived'] for k in data]
-    print('line 93 :: ', any(data_list))
-    if any(data_list):
-        print("prompt pathabona")
-        return False;
-    else:
-        print("prompt pathabo")
-        return True;
+        # pass through dialogtag to get the tag
+        rewardType, praiseText = utteranceClassifier.classifierMethod(None, message);
+
+        # save the badge info as history
+        # TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
+        saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+
+        return JsonResponse({'rewardType': rewardType,
+                             'promptSO': praiseText})
 
 
 #in the browser: http://127.0.0.1:8000/app/
@@ -575,7 +580,7 @@ def getPrompt(request):
                     index=1
 
 
-        support = supportOffered(userid=request.user, platform=platform, activity_id=activity_id,
+        support = supportOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
                                         supportType=supportType, charac=charac_, charac_val=charac_val)
         support.save();
 
