@@ -105,8 +105,10 @@ var loadGalleryFeed=function ( act_id ) {
     //computationalModelMethod(logged_in, 'MB', gallery_act_id);
 
     //defined in utility.js
-    promptText = getPrompt(logged_in, "MB", gallery_act_id);
-    $('#gallery-prompt-text').text(promptText);
+    obj = getPrompt(logged_in, "MB", gallery_act_id);
+
+    $('#gallery-prompt-text').text(obj['promptText']);
+    $('#gallery-prompt-so').text(obj['promptSO']);
 
 
 

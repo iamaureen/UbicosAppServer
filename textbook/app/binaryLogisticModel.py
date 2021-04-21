@@ -1,5 +1,7 @@
 import csv
 import numpy as np
+from django.http import HttpResponseRedirect, HttpResponse
+import json
 
 #HSC low=0, high=1
 #St sync=0, asycn=1
@@ -34,13 +36,13 @@ def F3_submodel(MSC, Platform):
 def process_charac(charac):
     #todo: convert True False to 0 or 1
 
-    if charac[0]['has_msc']:
+    if charac['msc']:
         MSC = 1
     else: MSC = 0
-    if charac[0]['has_hsc']:
+    if charac['hsc']:
         HSC = 1
     else: HSC = 0
-    if charac[0]['has_fam']:
+    if charac['fam']:
         Fam = 1
     else: Fam = 0
 
@@ -79,6 +81,7 @@ class binaryLogisticModel():
         #turn this into probability/likelihood
         likelihood = 1 / (1 + np.exp(-model_output));
         print('from the binary logistic model class, likelihood score', likelihood);
+
 
         return likelihood
 

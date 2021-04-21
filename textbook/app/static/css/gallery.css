@@ -369,35 +369,36 @@ input[type="file"] {
 
     position: fixed;
     top: 25%;
-    left: 30%;
+    left: 35%;
     height: 25em;
     width: 30em;
+    background-color: green;
+    border-radius: 15px;
 
 }
 
 .gallery-reward-closebtn {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  font-size: 36px;
-  margin-left: 50px;
-  text-decoration: none;
-  color: black;
-  z-index: 2;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 36px;
+    margin-left: 50px;
+    text-decoration: none;
+    color: black;
+    z-index: 2;
 }
 
 .gallery-prompt-div-header{
     position: fixed;
     top: 25%;
-    left: 30%;
+    left: 35%;
     height: 8em;
     width: 30em;
+    color: white;
     background-color: green;
-    text-align:center;
+    text-align: center;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
-    color: white;
-    margin-top: -1px;
 }
 
 .gallery-prompt-div-header img{
@@ -408,12 +409,12 @@ input[type="file"] {
 
 .gallery-prompt-div-prompt{
     position: fixed;
-    top: 40%;
-    left: 30%;
-    height: 5em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 135px;
     width: 30em;
     background-color: white;
-    text-align:center;
+    text-align: center;
 }
 
 #gallery-prompt-text{
@@ -421,13 +422,11 @@ input[type="file"] {
 }
 
 .gallery-prompt-div-tips{
-    position: fixed;
-    top: 49%;
-    left: 29%;
-    height: 12em;
+    position: absolute;
+    margin-top: 205px;
+    padding-bottom: 30px;
     width: 30em;
-    text-align:center;
-    margin-left: 15px;
+    text-align: center;
     color: black;
     background-color: #D7DBDD;
     border-bottom-right-radius: 15px;
@@ -453,7 +452,7 @@ input[type="file"] {
     display: inline-block;
     position: absolute;
     top: 0px;
-    right: 120px;
+    right: 4%;
     height: 35px;
     width: 35px;
     background: url(/static/pics/help.png) no-repeat;

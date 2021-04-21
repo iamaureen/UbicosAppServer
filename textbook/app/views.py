@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
-    userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
+    userQuesAnswerTable, groupInfo, userLogTable, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
     participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer, \
-    studentInfo
+    studentInfo, supportOffered
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -167,7 +167,7 @@ def getCharacteristic(request, username):
 
     #determine the condition of the current user, and get the info from two different tables.
     # 1-dynamic, #2-static
-    whichCondition = getCondition(request);
+    whichCondition = getCondition(request, username);
     print("def getCharacteristic student condition:: ", whichCondition);
 
     dict = {}
@@ -480,79 +480,21 @@ def saveBadgeHistory(username, platform, activity_id, message, received_badge):
     return HttpResponse('');
 
 
-# modelbook: gallery ID
-# khanacademy: khan academy
-# TODO: test for april2021 study
-def computationalModel(request):
-    if request.method == 'POST':
-        username = request.POST.get('username');
-        platform = request.POST.get('platform');
-        activity_id = request.POST.get('activity_id');
+# called from def getPrompt
+def computationalModel(request, charac, platform):
 
-        # first check if this student will participate or not based on their history
-        # willParticipate = false --> when the student did not participate in the last two activities -- badgeKey = NP related key
-        # willParticipate = true --> when the student participated in the last two activities -- badgeKey = CP related key
-
-        willParticipate = False;
-        if (platform == 'TA'):
-            #for TA, willParticipate will come from the csharp server; based on utterance count
-            #True means participate; null means no participate (false)
-            willParticipate = bool(request.POST.get('willParticipate')); #this comes from TA
-
-        else:
-            #for the other two platforms, calculate will participate variable here
-            if int(activity_id) == 1:
-                willParticipate = False;
-            elif int(activity_id) >= 2:
-                prev_actID = int(activity_id)-1;
-
-                # check if participated in the previous activity if a given platform
-                # the following table should have one entry [per activity id] at any moment of time
-                #todo: check the 'did participate' table for the correct entry logics
-                didParticipate = participationHistory.objects.filter(posted_by=User.objects.get(username=username),
-                                                                     activity_id=prev_actID,
-                                                                     platform=platform).values('didParticipate');
-
-                print('line 496 did participate in the prev activity?', didParticipate);
-                # Todo check the chronological participation here -->
-                #if there is a queryset, means current user participated in the previous activity
-                if didParticipate:
-                    willParticipate = True;
-                else: #because did not participate in the previous act
-                    willParticipate = False;
-
-        #second, using the willParticipate variable, decide whether to call CPmodel or not
-        badgeKey = [];
-        if(willParticipate == True):
-            #call the CP model equation here to check the likelihood of participation and log it
-            #first, get students characteristic
-            #todo: write this as documentation so we know what to do/how to format the data
-            charac = studentCharacteristicModel.objects.filter(user = User.objects.get(username=username)).values('has_msc', 'has_hsc', 'has_fam');
-            charac_dict = [dict(item) for item in charac];
-            #print('link 510 :: ', charac_dict);
-            likelihood = binaryLogisticModel.model(None, charac_dict, platform);
-            print('from the view class, likelihood score', likelihood);
-
-            entry = computationalModelLog(likelihood = likelihood, student = User.objects.get(username=username), platform = platform,
-                                          activity_id=activity_id);
-            entry.save();
-            # later from the data will verify whether students participated or not
-            badgeKey = ['msc', 'hsc', 'fam']
-        else:
-            #based on student history, will not participate so display conscien and social badges
-            badgeKey = ['con1', 'con2', 'social']
+    data = binaryLogisticModel.model(None, charac, platform);
+    print('from the view class, likelihood score', data);
 
 
-        badgeList = getBadgeOptions(request, username, platform, badgeKey,activity_id);
+    return data;
 
-        return JsonResponse({'badgeList': badgeList}); #goes back to utility.js
-
-    return HttpResponse('');
-
-def getCondition(request):
+# called from def getCharacteristic method
+def getCondition(request, username):
 
     #1-dynamic, #2-static
-    condition = studentInfo.objects.filter(user_id=request.user).values('condition');
+    condition = studentInfo.objects.filter(user_id=User.objects.get(username=username)).values('condition');
+
     #print('def getCondition :: ', condition[0]['condition']);
     condition = condition[0]['condition'];
 
@@ -560,62 +502,88 @@ def getCondition(request):
 
 def getPrompt(request):
 
+    if request.method == 'POST':
+        username = request.POST.get('username');
+        platform = request.POST.get('platform');
+        activity_id = request.POST.get('activity_id');
 
-    #get student characteristic
-    charac = getCharacteristic(request, request.GET['username']) #this method will check the condition and return charac based on this
-    charac_list = list(charac.values())[0:4]
+        print(username)
+        print(platform)
+        print(activity_id)
+        print(username + ' joined from ' + platform + ' working on activity id ' + activity_id);
 
-    #order: msc, hsc, fam, con, social
-    print('views.py getCharac ::', charac);
+        #get student characteristic
+        charac = getCharacteristic(request, username) #this method will check the condition and return charac based on this
+        charac_list = list(charac.values())[0:4]
 
-    supportType = ''
-    supportText = ''
+        #order: msc, hsc, fam, con, social
+        print('views.py getCharac ::', charac);
 
-    if request.GET['platform'] == 'MB':
-        print('from Modelbook');
-        if charac_list[0]:
-            print('MSC high');
+        #computational model
+        likelihood = computationalModel(request, charac, platform);
+        print('views.py computational model ::', likelihood)
+
+        supportType = ''
+        supportText = ''
+
+        # start likelihood if
+        if likelihood > 0.3:
             supportType = 'transactive'
-            #TODO: randomize index value
-            supportText = badgeInfo.objects.filter(charac="MSC", value="high", index=1, supportType=supportType).values(
-                'prompt','sentence_opener1');
+            #todo
         else:
-            print('MSC low');
-            supportType = 'question'
-            supportText = badgeInfo.objects.filter(charac="MSC", value="low", index=1, supportType=supportType).values(
-                'prompt','sentence_opener1');
+            # likelihood less than 0.3, depending on platform check charac and return support
+            if platform == 'MB':
+                #TODO: make entry to support history
+                print('from Modelbook');
+                if charac_list[0]:
+                    print('MSC high');
+                    supportType = 'transactive'
+                    charac_ = "MSC"
+                    charac_val = "high"
+                    index = 1
+                else:
+                    print('MSC low');
+                    charac_ = "MSC"
+                    charac_val = "low"
+                    index = 1
+            elif platform == 'KA':
+                print('from Khan Academy');
+                if charac_list[2]:
+                    print('Fam high');
+                    supportType = 'participation'
+                    charac_ = "Fam"
+                    charac_val = "high"
+                    index = 1
+                else:
+                    print('Fam low');
+                    supportType = 'transactive'
+                    charac_ = "Fam"
+                    charac_val = "low"
+                    index = 1
+            else:
+                print('from Teachable Agent')
+                if charac_list[1]:
+                    print('hsc high');
+                    charac_="HSC"
+                    charac_val="high"
+                    index=1
+                else:
+                    print('hsc low');
+                    supportType = 'elaboration'
+                    charac_="HSC"
+                    charac_val="low"
+                    index=1
 
-        print('line 521 ::', supportText[0]['prompt']) #sentence opener supportText[1]['sentopener']
-        return  JsonResponse({'promptText': supportText[0]['prompt']}); #goes to gallery.js
-    elif request.GET['platform'] == 'KA':
-        print('from Khan Academy');
-        if charac_list[2]:
-            print('Fam high');
-            supportType = 'participation'
-            supportText = badgeInfo.objects.filter(charac="Fam", value="high", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        else:
-            print('Fam low');
-            supportType = 'transactive'
-            #TODO: handle this case
-            supportText = badgeInfo.objects.filter(charac="Fam", value="low", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
-        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to KAform.js
-    else:
-        print('from Teachable Agent')
-        if charac_list[1]:
-            print('hsc high');
-            supportText = badgeInfo.objects.filter(charac="HSC", value="high", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        else:
-            print('hsc low');
-            supportType = 'elaboration'
-            supportText = badgeInfo.objects.filter(charac="HSC", value="low", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
-        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to teachable agent
 
+        support = supportOffered(userid=request.user, platform=platform, activity_id=activity_id,
+                                        supportType=supportType, charac=charac_, charac_val=charac_val)
+        support.save();
+
+        supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=index, supportType=supportType).values(
+            'prompt', 'sentence_opener1');
+
+        return JsonResponse({'promptText': supportText[0]['prompt'],
+                             'promptSO': supportText[0]['sentence_opener1']})
 
 
     return HttpResponse('');

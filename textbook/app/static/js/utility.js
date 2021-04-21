@@ -146,17 +146,20 @@ var getWhiteboardURl = function(board_id){
 
 var getPrompt = function(username, platform, activity_id){
 
-    promptText = ''
+    obj = ''
     $.ajax({
         url: '/getPrompt',
-        type: 'GET',
+        type: 'POST',
         async: false,
-        data: {"username": username, 'platform' : platform, 'activity_id': activity_id}, //passing username so TA code can use the same API
+        data: {
+        "username": username,
+        'platform' : platform,
+        'activity_id': activity_id}, //passing username so TA code can use the same API
         success: function (data) {
-            console.log("utility.js :: ", data.promptText);
-            promptText = data.promptText
+            console.log("utility.js :: ", data);
+            obj = data;
         }
     }); //end of getPrompt ajax call
 
-    return promptText;
+    return obj;
 }

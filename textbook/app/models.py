@@ -138,12 +138,15 @@ class badgeInfo(models.Model):
     prompt = models.CharField(max_length=20)
     sentence_opener1 = models.CharField(max_length=1000);
 
-# logs what badge user selected
-class badgeOffered(models.Model):
+# logs what support user offered
+class supportOffered(models.Model):
     userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     platform = models.CharField(max_length=10)
     activity_id = models.IntegerField(null=True)
-    badgeTypeOffered = models.TextField(null=True)
+    supportType = models.TextField(null=True)
+    charac = models.TextField(null=True)
+    charac_val = models.TextField(null=True)
+    posted_at = models.DateTimeField(auto_now_add=True)
 
     def natural_key(self):
         return (self.userid.username)

@@ -21,8 +21,11 @@ var load_ka_card=function ( act_id, video_url ) {
     global_ka_url=video_url;
     ka_act_id=act_id;
 
-    //this method is defined in utility.js
-    //computationalModelMethod(logged_in, 'KA', act_id);
+     //defined in utility.js
+    obj = getPrompt(logged_in, "KA", ka_act_id);
+
+    $('#ka-prompt-text').text(obj['promptText']);
+    $('#ka-prompt-so').text(obj['promptSO']);
 
     enterLogIntoDatabase( 'Khan Academy Card Click', 'Khan Academy Card Load', '', global_current_pagenumber );
 
