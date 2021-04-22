@@ -394,7 +394,6 @@ input[type="file"] {
     left: 35%;
     height: 8em;
     width: 30em;
-    color: white;
     background-color: green;
     text-align: center;
     border-top-right-radius: 15px;
@@ -408,6 +407,7 @@ input[type="file"] {
 }
 
 .gallery-prompt-div-prompt{
+
     position: fixed;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -422,6 +422,7 @@ input[type="file"] {
 }
 
 .gallery-prompt-div-tips{
+
     position: absolute;
     margin-top: 205px;
     padding-bottom: 30px;
