@@ -10,6 +10,8 @@
 .card.khanacademy p {
     color: black;
     /* font-family: Nunito; */
+    padding-top: 30px;
+    padding-bottom: 21px;
 }
 
 #ka-header-description p {
@@ -20,16 +22,19 @@
     /* padding: 20px; */
     padding-left: 30px;
     border-radius: 10px;
+    padding-bottom: 41px;
+    padding-top: 0px;
 }
 
 .card.khanacademy.active {
-    background-color: #55C68F;
+    background-color: #1ea2c4;
 }
 
 .card.khanacademy.active h1 {
     text-align: center;
     padding: 25px;
     color: #fff;
+    margin-top: 19px;
 }
 
 
@@ -43,6 +48,10 @@ h1 {
     background-color: #F0F0F0;
     padding: 30px;
     border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 45px;
+    width: 90%;
+    margin-left: 27px;
 }
 
 
@@ -63,6 +72,7 @@ h1 {
     background-color: white;
     padding: 30px;
     border-radius: 10px;
+    box-shadow: 6px 6px #0d5466;
 }
 
 #default_ka_img {
@@ -96,20 +106,17 @@ input.ka-radio {
 }
 
 #ka-submit {
-    background: #55C68F;
+    background: #1ea2c4;
     color: white;
     border-radius: 10px;
     cursor: pointer;
     margin-left: 290px;
-    border-color: #a5f0cd;
+    border-color: #1ea2c4;
     width: 20%;
     font-size: 17px;
 }
 
 #ka-submit:hover {
-    background: #38a16e;
+    background: #13819c;
 }
 
-.user-answer-input:hover {
-    border: #009900 solid;
-}

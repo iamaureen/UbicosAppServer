@@ -82,7 +82,7 @@
     .card-message-input input {
 
         margin: 0px 0px 10px 0px;
-        height: 120%;
+        /* height: 120%; */
         border: none;
         border-radius: 20px;
         width: 100%;
