@@ -105,9 +105,9 @@ input[type="file"] {
         height: 20px;
         opacity: 0.5;
 
-        &:hover {
+        /* &:hover {
             opacity: 0.7;
-        }
+        } */
 }
 
 .user-answer-input{
@@ -116,22 +116,26 @@ input[type="file"] {
     border: none;
     outline: 0;
     padding: 12px 12px;
-    background: #edf1f2;
+    background: #F0F0F0;
     border-radius: 20px;
-    width: 95%;
-    margin: 10px;
+    width: 90%;
     font-family:verdana;
     font-size: 15px;
+    margin-left: 27px;
 
  }
 
  .user-answer-input:focus{
-    border: #009900 solid;
-    box-shadow: 0 0 5px rgba(0, 153, 0, 1);
-    width: 95%;
+    border: #1ea2c4 solid;
+    box-shadow: 0 0 5px #1ea2c4;
+    width: 90%;
     outline: 0 !important;
     font-family:verdana;
     font-size: 15px;
+}
+
+.user-answer-input:hover {
+    border: #1ea2c4 solid;
 }
 
 
@@ -394,7 +398,6 @@ input[type="file"] {
     left: 35%;
     height: 8em;
     width: 30em;
-    color: white;
     background-color: green;
     text-align: center;
     border-top-right-radius: 15px;
@@ -408,6 +411,7 @@ input[type="file"] {
 }
 
 .gallery-prompt-div-prompt{
+
     position: fixed;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -422,6 +426,7 @@ input[type="file"] {
 }
 
 .gallery-prompt-div-tips{
+
     position: absolute;
     margin-top: 205px;
     padding-bottom: 30px;
