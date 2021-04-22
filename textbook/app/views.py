@@ -837,7 +837,7 @@ def matchPersonalityProfile(request):
         charac = getCharacteristic(request, request.user);  # this is a dict
         #translate charac to a list, take the first four elem, fifth is the social
         charac_list = list(charac.values())[0:4]
-        #print('debug matchPersonalityProfile', charac);
+        print('debug matchPersonalityProfile student initial charac', charac);
         #print('debug matchPersonalityProfile', charac_list[0]);
 
         personality_dict = handlerMatchProfile(request, charac_list, 'based on survey response')
@@ -886,18 +886,18 @@ def handlerMatchProfile(request, charac_list, event):
     }
 
     hsc_statements = {
-        'False': 'but they don’t feel like they are very good at giving help to others',
+        'False': 'but they do not feel like they are very good at giving help to others',
         'True': 'and they think they are pretty good at giving help to others'
     }
 
     #true/false reversed in april 2021 implementation
     fam_statements = {
         'True': 'they prefer only working with people they know',
-        'False': 'they don\'t mind working with anybody'
+        'False': 'they do not mind working with anybody'
     }
 
     con_statements = {
-        'False': 'they don\'t always participate',
+        'False': 'they do not always participate',
         'True': 'they usually do what they are supposed to do'
     }
 

@@ -30,7 +30,7 @@ $(function(){
                         $("#gallery-upload-div img").width('100%').height('auto');
 
                         //success message upon uploading an image
-                        $('.upload-success-msg').show();
+                        $('.upload-success-msg').css("display", "block");
 
 
                         enterLogIntoDatabase('upload image', 'Attemped gallery image upload' , 'Uploading Image was successful', global_current_pagenumber)
@@ -52,9 +52,10 @@ $(function(){
 
             //event for success message close button
             $(".upload-success-msg-closebtn").on('click', function(){
-                var div = this.parentElement;
-                div.style.opacity = "0";
-                setTimeout(function(){ div.style.display = "none"; }, 600);
+//                var div = this.parentElement;
+//                div.style.opacity = "0";
+//                setTimeout(function(){ div.style.display = "none"; }, 600);
+                  $('.upload-success-msg').css("display", "none");
 
             });
 

@@ -464,6 +464,13 @@ var bindActivityButtons=function () {
     } );
     //right hand side card button actions -- end
 
+    //this is the first load
+    $( '#getInitPersonality' ).off().on( 'click', function ( event ) {
+        //load event matches with the characteristic table
+        setupPersonality();
+        enterLogIntoDatabase( 'Personality Profile Page Button Click', 'See who you match with Btn', logged_in, global_current_pagenumber );
+
+    } );
 
     //personality page 0.html, personality option button
     $( '#editPersonalityOptionBtnYes' ).off().on( 'click', function ( event ) {
@@ -480,12 +487,7 @@ var bindActivityButtons=function () {
 
     } );
 
-    $( '#getInitPersonality' ).off().on( 'click', function ( event ) {
-        //load event matches with the characteristic table
-        setupPersonality();
-        enterLogIntoDatabase( 'Personality Profile Page Button Click', 'See who you match with Btn', logged_in, global_current_pagenumber );
 
-    } );
 
     //personality page 0.html, personality edit button
     $( '#changePersonalityBtn' ).off().on( 'click', function ( event ) {

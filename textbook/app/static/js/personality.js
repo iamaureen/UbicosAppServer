@@ -184,6 +184,8 @@ var changepersonality_method=function () {
             }
         } );
 
+        setupPersonality();
+
 
 
 
