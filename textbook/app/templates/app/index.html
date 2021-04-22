@@ -102,13 +102,7 @@
                 {% endif %}
             </div>
 
-<!--            display teacherdashboard if logged in as teacher-->
-            {% ifequal user.get_username 'AW' %}
-                <a class="teacher-view-toggle"></a>
-                <div id="teacher-index-view" class="" style="display: none;">
-                    {% include 'app/login.html' %}
-                </div>
-            {%  endifequal %}
+
 
 
             <div id="activity-feed-view" >
@@ -188,7 +182,7 @@
                 {% include 'app/activityfeed.html' %}
             </div>
 
-            <div class="card personaCard active">
+            <div class="card personaCard">
                 <a class="close-card"></a>
                 {% include 'app/persona.html' %}
             </div>

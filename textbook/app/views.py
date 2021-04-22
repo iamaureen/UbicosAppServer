@@ -531,6 +531,10 @@ def getPrompt(request):
         supportType = ''
         supportText = ''
 
+        index_list = [1, 2, 3];  # initial list
+        randomNO = str(random.choice(index_list))
+        print('line 536 ::', randomNO)
+
         # start likelihood if
         if likelihood > 0.3:
             supportType = 'transactive'
@@ -545,12 +549,12 @@ def getPrompt(request):
                     supportType = 'transactive'
                     charac_ = "MSC"
                     charac_val = "high"
-                    index = 1
+
                 else:
                     print('MSC low');
                     charac_ = "MSC"
                     charac_val = "low"
-                    index = 1
+
             elif platform == 'KA':
                 print('from Khan Academy');
                 if charac_list[2]:
@@ -558,33 +562,33 @@ def getPrompt(request):
                     supportType = 'participation'
                     charac_ = "Fam"
                     charac_val = "high"
-                    index = 1
+
                 else:
                     print('Fam low');
                     supportType = 'transactive'
                     charac_ = "Fam"
                     charac_val = "low"
-                    index = 1
+
             else:
                 print('from Teachable Agent')
                 if charac_list[1]:
                     print('hsc high');
                     charac_="HSC"
                     charac_val="high"
-                    index=1
+
                 else:
                     print('hsc low');
                     supportType = 'elaboration'
                     charac_="HSC"
                     charac_val="low"
-                    index=1
+
 
 
         support = supportOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
                                         supportType=supportType, charac=charac_, charac_val=charac_val)
         support.save();
 
-        supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=index, supportType=supportType).values(
+        supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=randomNO, supportType=supportType).values(
             'prompt', 'sentence_opener1');
 
         return JsonResponse({'promptText': supportText[0]['prompt'],
