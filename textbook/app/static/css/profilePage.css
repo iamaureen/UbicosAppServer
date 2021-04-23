@@ -159,3 +159,9 @@
     transition: all 0.25s linear;
     cursor: pointer;
 }
+
+.chat_prompt_p {
+    margin-top: 1%;
+    text-align: center;
+    margin-bottom: 2%;
+}

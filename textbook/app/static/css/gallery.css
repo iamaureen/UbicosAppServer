@@ -402,6 +402,7 @@ input[type="file"] {
     text-align: center;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
+    color: white;
 }
 
 .gallery-prompt-div-header img{
@@ -451,6 +452,10 @@ input[type="file"] {
     line-height: 25px;
     margin-left: 10.5em;
     margin-top: 3em;
+}
+
+#gallery-so-copy:hover{
+    background: rgb(3, 71, 3);
 }
 
 .gallery-prompt-button{

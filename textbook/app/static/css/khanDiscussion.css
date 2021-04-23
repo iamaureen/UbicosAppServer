@@ -105,18 +105,3 @@ input.ka-radio {
     transition: all 0.25s linear;
 }
 
-#ka-submit {
-    background: #1ea2c4;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: 290px;
-    border-color: #1ea2c4;
-    width: 20%;
-    font-size: 17px;
-}
-
-#ka-submit:hover {
-    background: #13819c;
-}
-

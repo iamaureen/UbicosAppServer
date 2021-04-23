@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/kaform.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/khanDiscussion.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/chat.css' %}"/>
-
+    <link rel="stylesheet" href="{% static 'css/groupGallery.css' %}"/>
 
 
     <!-- Fonts -->
@@ -121,6 +121,9 @@
             <div class="card gallery">
                 <a class="close-card"></a>
                 <a class="gallery-prompt-button"></a>
+                <div class="group-gallery-header-card">
+                <h3>Group Chat</h3>
+                </div>
 <!--                <a class="back-to-gallery"></a>-->
                 {% include 'app/gallery.html' %}
             </div>
