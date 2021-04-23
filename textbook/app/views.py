@@ -326,36 +326,37 @@ def getIndividualCommentMsgs(request,imageId):
 # display a random image outside the group
 def getGalleryImage(request, act_id):
 
-    print('debug purpose, def updateImage, gallery id, ', act_id);
-    # first get the images from the group-members
-    # get the group members of the current users
-    member_list = getGroupMembers(request, act_id);
+    print('debug purpose, def updateImage, gallery id:: ', act_id);
+    # first get group id of the current user
+    member_id = getGroupID(request, act_id);
+    print('current user member of group :: ', member_id)
+
+    dict_group = {
+        1: 2, 2: 1, 3:2, 4:3, 5:4, 6:3, 7:2, 8:4, 9:3, 10: 4
+    }
+
+    print('image to be shown from group :: ', dict_group[member_id])
+    member_list = getGroupMembersID(request, dict_group[member_id], act_id)
+    print('member list of that group', member_list)
 
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 295 current user member image Id list:: ', member_image_id_list);
+    print('line 345 current user member image Id list:: ', member_image_id_list);
 
-    all_image_id_query = imageModel.objects.filter(gallery_id=act_id).values('id');
-    all_image_id_list = [item['id'] for item in all_image_id_query];
-    print('line 299 all students image Id list:: ', all_image_id_list);
-
-    outside_group_image = list(set(all_image_id_list) - set(member_image_id_list))
-    #outside_group_image can be empty if no image is uploaded in this gallery activity
-    print('line 303 outside digital discussion group image:: ', outside_group_image);
-    if(len(outside_group_image) == 0):
+    if(len(member_image_id_list) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
         return HttpResponse('');
     else:
         #the list is not empty
         #outside_group_image_id = random.choice(outside_group_image); #not sending random as then participants from the same group also sees different image
-        outside_group_image_id = outside_group_image[0];
-        print('debug purpose, def getGalleryImage,  outside_group_image_id :: ', outside_group_image_id);
+        imageToBeReturned_id = member_image_id_list[-1];
+        print('debug purpose, def getGalleryImage,  outside_group_image_id :: ', imageToBeReturned_id);
 
-        images = imageModel.objects.filter(id=outside_group_image_id).values('image');
+        images = imageModel.objects.filter(id=imageToBeReturned_id).values('image');
         if images:
             dict = {}
-            dict['imagePk'] = outside_group_image_id;
+            dict['imagePk'] = imageToBeReturned_id;
             dict['url'] = images[0]['image'];
 
             return JsonResponse({'imageData': dict});
@@ -512,9 +513,6 @@ def getPrompt(request):
         platform = request.POST.get('platform');
         activity_id = request.POST.get('activity_id');
 
-        print(username)
-        print(platform)
-        print(activity_id)
         print(username + ' joined from ' + platform + ' working on activity id ' + activity_id);
 
         #get student characteristic
@@ -522,7 +520,7 @@ def getPrompt(request):
         charac_list = list(charac.values())[0:4]
 
         #order: msc, hsc, fam, con, social
-        print('views.py getCharac ::', charac);
+        print('views.py def getPrompt --> getCharac ::', charac);
 
         #computational model
         likelihood = computationalModel(request, charac, platform);
@@ -552,6 +550,7 @@ def getPrompt(request):
 
                 else:
                     print('MSC low');
+                    supportType = 'question'
                     charac_ = "MSC"
                     charac_val = "low"
 
@@ -573,6 +572,7 @@ def getPrompt(request):
                 print('from Teachable Agent')
                 if charac_list[1]:
                     print('hsc high');
+                    supportType = 'elaboration'
                     charac_="HSC"
                     charac_val="high"
 
@@ -654,6 +654,19 @@ def getGroupMembers(request, act_id):
 
     # which users are are there in this group
     group_members = groupInfo.objects.all().filter(activityID=act_id, group=current_user_groupID);
+
+    group_member_list = [];
+    for member in group_members:
+        group_member_list.append(member.users_id);
+
+    return group_member_list;
+
+#input: group number
+#output: return ID of all the group members given a group number
+def getGroupMembersID(request, group_id, act_id):
+
+    # which users are are there in this group
+    group_members = groupInfo.objects.all().filter(activityID=act_id, group=group_id);
 
     group_member_list = [];
     for member in group_members:
