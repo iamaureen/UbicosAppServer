@@ -34,28 +34,28 @@
 }
 
 #ka-submit {
-    background: #1ea2c4;
+    background: #07beb8;
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    margin-left: 290px;
+    margin-left: 40%;
     border-color: #1ea2c4;
     width: 20%;
     font-size: 17px;
     transition-duration: 0.2s;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 #ka-submit:hover {
-    background: #0b6b83;
+    background: #0570ad;
 }
 
 #ka-upload-img-form label.btn {
-    background: #159be8;
+    background: #07beb8;
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    margin-left: 220px;
+    margin-left: 35%;
 }
 
 #ka-upload-img-form label.btn:hover {
@@ -153,8 +153,8 @@
 .ka-prompt-button {
     display: inline-block;
     position: absolute;
-    top: 0px;
-    right: 120px;
+    top: 14px;
+    right: 55px;
     height: 35px;
     width: 35px;
     background: url(/static/pics/help.png) no-repeat;
