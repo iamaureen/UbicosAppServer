@@ -1,6 +1,9 @@
 var host_url = window.location.host
 
-$(function(){
+$( function () {
+    
+    
+    getRadioBtnValue();
 
     let user_inputed_personality_msc=localStorage.getItem( "personality_msc" );
     let user_inputed_personality_hsc=localStorage.getItem( "personality_hsc" );
@@ -12,7 +15,33 @@ $(function(){
     console.log( user_inputed_personality_fam )
     console.log( user_inputed_personality_con )
 
+    editBtnClick()
 } );
+
+
+var getRadioBtnValue=function () {
+    // alert( $( "#deliveryNext" ).is( ":disabled" ))
+    $( ".edit_btn" ).hide();
+    
+    $( ".personality_radio" ).change( function ( e ) {
+        
+        console.log( e.target.defaultValue )
+        window.localStorage.setItem( "radio value", e.target.defaultValue );
+
+        $( ".personality_radio" ).attr( "disabled", true );
+        $( ".edit_btn" ).show();
+    } )
+
+   
+}
+
+var editBtnClick=function () {
+    $( ".edit_btn" ).click( function () {
+        $( ".personality_radio" ).attr( "disabled", false );
+    })
+}
+
+
 
 
 var setupPersonality = function(){

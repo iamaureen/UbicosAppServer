@@ -34,8 +34,19 @@
 }
 
 #ka-submit {
-    color: red;
-    text-align: center;
+    background: #1ea2c4;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 290px;
+    border-color: #1ea2c4;
+    width: 20%;
+    font-size: 17px;
+    transition-duration: 0.2s;
+}
+
+#ka-submit:hover {
+    background: #0b6b83;
 }
 
 #ka-upload-img-form label.btn {
