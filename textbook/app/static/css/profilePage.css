@@ -1,9 +1,76 @@
-.profile_btn {
-    transition-duration: 0.1s;
-    background-color: white;
-    border-radius: 10px;
-    font-size: 16px;
+.profile_btn {}
+
+.edit_btn {
+    background: rgb(195, 243, 243);
+    color: #042c36;
+    border-radius: 5px;
     cursor: pointer;
+    width: 20%;
+    font-size: 12px;
+    transition-duration: 0.2s;
+    height: 20px;
+    box-shadow: 2px 2px #595d5e;
+}
+
+.edit_btn:hover {
+    background: rgb(41, 126, 126);
+    color: #fff;
+}
+
+#editPersonalityOptionBtnYes {
+    background: #095e74;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    border-color: #1ea2c4;
+    width: 20%;
+    font-size: 17px;
+    transition-duration: 0.2s;
+    height: 60px;
+    box-shadow: 2px 2px black;
+    margin-left: 40%;
+}
+
+#editPersonalityOptionBtnYes:hover {
+    background: #fff;
+    color: black;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    -ms-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+#editPersonalityOptionBtnNo {
+    background: #fff;
+    color: black;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 20%;
+    font-size: 17px;
+    transition-duration: 0.2s;
+    height: 60px;
+    vertical-align: middle;
+    box-shadow: 2px 2px #595d5e;
+    margin-left: 5%;
+}
+
+#editPersonalityOptionBtnNo:hover {
+    background: #dfe1e2;
+}
+
+#changePersonalityBtn {
+    background: rgb(21, 180, 180);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 40%;
+    font-size: 17px;
+    transition-duration: 0.2s;
+    height: 60px;
+    vertical-align: middle;
+    box-shadow: 2px 2px #595d5e;
+    margin-left: 30%;
 }
 
 
@@ -11,7 +78,7 @@
 
 #changePersonalityBtn:hover {
     background-color: #e9ecef;
-    color: white;
+    color: rgb(8, 69, 119);
     cursor: pointer;
 }
 
@@ -19,7 +86,7 @@
     background-color: white;
     color: blue;
     padding: 13px;
-    font-size: 18px;
+    font-size: 16px;
     border: none;
     cursor: pointer;
     border-radius: 10px;
@@ -32,7 +99,6 @@
 
 #matchedPersonality_div {
     display: inline-block;
-
 }
 
 
@@ -54,6 +120,11 @@
 .persona-narrative {
     width: 80%;
     display: inline-block;
+    padding-top: 7.05%;
+}
+
+#matchedPersonality {
+    padding-top: 9px;
 }
 
 .persona-image {
@@ -70,19 +141,13 @@
 
 .personaLikertScale_div {
     /*border: 1px solid black;*/
-    width: 125%;
+    width: 100%;
     text-align: center;
-    margin-top: -5%;
-    background-color: #e9ecef;
-}
-
-.editPersonaBtns {
-    text-align: center;
-    margin: 0 auto;
-}
-
-.editPersonaBtns button:hover {
-    background-color: #e9ecef;
+    margin-top: 4%;
+    background-color: #bcedfa;
+    padding-top: 2px;
+    margin-left: 10%;
+    box-shadow: 0 6px 10px 0 rgb(0 0 0 / 20%);
 }
 
 
@@ -93,8 +158,4 @@
     height: 30px;
     transition: all 0.25s linear;
     cursor: pointer;
-}
-
-.personality_radio:hover {
-    border: 2px solid #5f394d;
 }
