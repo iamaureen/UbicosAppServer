@@ -423,7 +423,7 @@ def getBadgeNames(request):
         'part': ['Brainstorm','Social', 'Appreciate']
     }
     badgeDesc_dict = {
-        'hg': ['Ask clarification questions to understand the concept.', 'Ask clarification questions to understand the concept.', 'Combine multiple ideas together, and explain them in your words.'],
+        'hg': ['Ask clarification questions to understand the concept.', 'Explain your thought process with reasoning.', 'Combine multiple ideas together, and explain them in your words.'],
         'trans': ['Provide ideas for improvement.', 'Share your thoughts on the existing conversation.', 'Add additional information in the conversation.'],
         'part': ['Think about a way to solve a problem.', 'Think about a way to solve a problem.', 'Appreciate others effort during the collaboration.']
     }
@@ -886,21 +886,21 @@ def handlerMatchProfile(request, charac_list, event):
                [True, False, False, False],
                [True, False, False, True],
                [True, False, True, False],
-               [True, False, True, False],
+               [True, False, True, True],
                [True, True, False, False],
                [True, True, False, True],
                [True, True, True, False],
                [True, True, True, True]]
 
-    profile_names = ['Jane', 'Tommy', 'Maya', 'Arnold', 'Sam', 'Evan', 'Ronald', 'Pam', 'Lesly', 'Amber', 'Owen', 'Noah', 'Shelly', 'Penny', 'Harry', 'Jack']
-
+    profile_names = ['August', 'Taylor', 'Phoenix', 'Nicky', 'Alexis', 'Monroe', 'Seneca', 'Morgan', 'Robin', 'Adrian',
+                     'Zion', 'Sam', 'Andy', 'Sidney', 'Quinn', 'Skyler']
     matchedprofile_index = ''
 
     for list in profile:
         if charac_list == list:
-            print('line 904 lucky number', charac_list)
-            print('line 905 lucky number', list)
-            print('line 906 lucky number', profile.index(list))
+            # print('line 904 lucky number', charac_list)
+            # print('line 905 lucky number', list)
+            # print('line 906 lucky number', profile.index(list))
             matchedprofile_index = profile.index(list)
 
 

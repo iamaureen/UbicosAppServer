@@ -60,7 +60,7 @@
 }
 
 #changePersonalityBtn {
-    background: rgb(21, 180, 180);
+    background: #095e74;
     color: white;
     border-radius: 10px;
     cursor: pointer;
@@ -110,7 +110,7 @@
 }
 
 .persona_name {
-    margin-left: 17%
+    margin-left: 50%
 }
 
 #matchedPersonality_wrapper {
@@ -118,7 +118,7 @@
 }
 
 .persona-narrative {
-    width: 80%;
+    width: 70%;
     display: inline-block;
     padding-top: 7.05%;
 }
@@ -131,8 +131,8 @@
     width: 19%;
     display: inline-block;
     position: fixed;
-    top: 40%;
-    /*border: 1px solid black;*/
+    top: 25%;
+    margin-left: 3%;
 }
 
 #editPersonality_div {

@@ -25,8 +25,8 @@ var getRadioBtnValue=function () {
     
     $( ".personality_radio" ).change( function ( e ) {
         
-        console.log( e.target.defaultValue )
-        window.localStorage.setItem( "radio value", e.target.defaultValue );
+        //console.log( e.target.defaultValue )
+        window.localStorage.setItem( "personality_radio_value", e.target.defaultValue );
 
         $( ".personality_radio" ).attr( "disabled", true );
         $( ".edit_btn" ).show();
@@ -65,7 +65,7 @@ var setupPersonality = function(){
             $('span.namePersonality').text(e.profile['name']);
 
             //set the image src here
-            $('.persona-image img').attr('src', '/static/pics/'+e.profile['name']+'.png');
+            $('.persona-image img').attr('src', '/static/pics/'+e.profile['name']+'_robot.png');
 
             //load the local storage as well, so when hit change it uses the value
             //save into localstorage
@@ -143,6 +143,7 @@ var editPersonalityOptionBtnNo_method = function(){
                 'fam': localStorage.getItem( "personality_fam" ),
                 'con': localStorage.getItem( "personality_con" ),
                 'name': $( 'span#namePersonality' ).text(),
+                'likeness': window.localStorage.getItem( "personality_radio_value"),
                 'event': "no change in html inputs"
             },
             success: function ( e ) {
@@ -204,6 +205,7 @@ var changepersonality_method=function () {
                 'fam': personality_fam,
                 'con': personality_con,
                 'name': personality_name,
+                'likeness': window.localStorage.getItem( "personality_radio_value"),
                 'event': "changed html inputs"
             },
             success: function ( e ) {

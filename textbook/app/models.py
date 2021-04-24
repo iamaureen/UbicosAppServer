@@ -26,6 +26,7 @@ class studentPersonalityChangeTable (models.Model):
     char_fam = models.CharField(max_length=200)
     char_con = models.CharField(max_length=200)
     char_name = models.CharField(max_length=100)
+    likeness = models.IntegerField(null=True)
     event = models.CharField(max_length=50)
     posted_at = models.DateTimeField(auto_now_add=True)
 
