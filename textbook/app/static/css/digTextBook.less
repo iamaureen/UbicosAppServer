@@ -1046,7 +1046,7 @@ p.cardDescription{
 /* GALLERY */
 .card.gallery {
     // background: linear-gradient(@gallery1, @gallery2);
-    background-color: #edf1f2;
+    background-color: #f7f2f2;
     p{
         color: black;
         margin-left: 75px
@@ -1233,12 +1233,21 @@ p.cardDescription{
         position: relative;
 
         img {
+                // max-height: 400px;
+                // width: 450px;
+                // height: 370px;
+                // position: absolute;
+                // left: 50px;
+                // top: 15%;
+
+                //new update
                 max-height: 400px;
-                width: 450px;
-                height: 370px;
+                width: 100%;
                 position: absolute;
-                left: 50px;
-                top: 5%;
+                top: 15%;
+                margin-left: -8%;
+                margin-top: 10%;
+                margin-right: 10%;
 
 
         }
@@ -2336,12 +2345,6 @@ p.cardDescription{
     transition: box-shadow .3s;
 }
 
-//hovering input text
-input[type="text"]:hover {
-    box-shadow: 0px 2px 10px 5px #246692;
-    color: #000;
-    border: 1px solid black;
-}
 
 //for Table and equation btn hover
 a.btn.active:hover,

@@ -1,9 +1,12 @@
-/* .card.gallery h1 {
+.card.gallery h1 {
     margin-top: 2%;
     margin-left: 10%;
+    width: 30%;
+    height: 0%;
 }
 
 .group-gallery-header-card {
+    background-color: #0c6c85;
     padding-top: 0.5%;
     color: white;
     border-top-left-radius: 15px;
@@ -13,4 +16,22 @@
 .group-gallery-header-card h3 {
     text-align: center;
     padding-bottom: 5%;
-} */
+}
+
+.card.gallery.active h1 {
+    background-color: green;
+}
+
+#gallery-description {
+    color: black;
+    box-shadow: 2px 2px 2px 2px rgb(99, 96, 96);
+    width: 47%;
+    margin-left: 2%;
+    border-radius: 15px;
+    border-color: lightgray;
+    height: 15%;
+    padding-top: 3.5%;
+    padding-left: 2%;
+    /* background: rgb(169, 230, 238); */
+    background: #b5e7f3;
+}

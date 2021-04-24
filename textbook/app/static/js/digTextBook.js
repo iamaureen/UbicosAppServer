@@ -374,6 +374,7 @@ var bindActivityButtons=function () {
             card_extension();
 
             //update the heading in the card
+            // console.log( activityButton.attr( 'data-description' ))
             $( '#gallery-description' ).text( activityButton.attr( 'data-description' ) );
 
             $( 'ul#image-feed' ).html( '' );

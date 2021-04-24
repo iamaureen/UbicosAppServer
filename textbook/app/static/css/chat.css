@@ -25,6 +25,16 @@
     text-align: center; */
 }
 
+
+/* hovering input text */
+
+.card-message-input input[type="text"]:hover {
+    box-shadow: 3px 3px #12476b;
+    /* color: #000; */
+    border: 2px solid #3f6680;
+    border-radius: 15px;
+}
+
 .card.chatCard.active {
     background-color: #f7f2f2;
     /* background-color: #f0f0f0; */
