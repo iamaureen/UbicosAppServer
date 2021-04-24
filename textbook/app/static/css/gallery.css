@@ -423,13 +423,13 @@ input[type="file"] {
 }
 
 #gallery-prompt-text{
-    margin-top: 15px;
+    margin-top: 17px;
 }
 
 .gallery-prompt-div-tips{
 
     position: absolute;
-    margin-top: 205px;
+    margin-top: 230px;
     padding-bottom: 30px;
     width: 30em;
     text-align: center;
@@ -461,8 +461,8 @@ input[type="file"] {
 .gallery-prompt-button{
     display: inline-block;
     position: absolute;
-    top: 0px;
-    right: 4%;
+    top: 14px;
+    right: 55px;
     height: 35px;
     width: 35px;
     background: url(/static/pics/help.png) no-repeat;

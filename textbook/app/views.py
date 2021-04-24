@@ -417,20 +417,27 @@ def getSelfGalleryContent(request, act_id):
 
 # used in the badgeCard, get the badge names and count
 def getBadgeNames(request):
+    badgeType_dict = {
+        'hg': ['Question', 'Elaboration', 'Summarize'],
+        'trans': ['Feedback', 'Reflection', 'AddOn'],
+        'part': ['Brainstorm','Social', 'Appreciate']
+    }
+    badgeDesc_dict = {
+        'hg': ['Ask clarification questions to understand the concept.', 'Ask clarification questions to understand the concept.', 'Combine multiple ideas together, and explain them in your words.'],
+        'trans': ['Provide ideas for improvement.', 'Share your thoughts on the existing conversation.', 'Add additional information in the conversation.'],
+        'part': ['Think about a way to solve a problem.', 'Think about a way to solve a problem.', 'Appreciate others effort during the collaboration.']
+    }
+
     if request.method == 'POST':
         badgeType = request.POST.get('badgeType');
-        #print('379 :: ', badgeType)
+        #print('422 :: ', badgeType)
 
-        #used value = "True" to get the three badgenames; true/false either way we have three badges
-        badges = list(badgeInfo.objects.filter(charac=badgeType, value="True").values('badgeName', 'imgName', 'definition').distinct());
-
-        #print('line 296', badges);
 
         badgeCountList = [];
-        for badge in badges:
+        for badge in badgeType_dict[badgeType]:
             dict = {}
-            dict['badgeName'] = badge['badgeName'];
-            #print(dict['badgeName']);
+            dict['badgeName'] = badge;
+            #print('line 440 :: ', dict['badgeName']);
             platform = ['MB', 'KA', 'TA'];
             count_list = [];
             for i in platform:
@@ -438,9 +445,9 @@ def getBadgeNames(request):
                 #print(i);
                 #get the badgecount for each platform
                 count['platform'] = i;
-                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeReceived = dict['badgeName'].lower(), platform=i).values('platform')\
+                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeReceived = dict['badgeName'], platform=i).values('platform')\
                     .annotate(Count('platform'));
-                #print(badge_count);
+                #print('line 450 :: ', badge_count);
                 if badge_count:
                     count['badgeCount'] = badge_count[0]['platform__count'];
                 else:
@@ -448,15 +455,16 @@ def getBadgeNames(request):
 
                 count_list.append(count);
 
-            #print('line 376 (debug purpose):: ', count_list);
+            #print('line 458 (debug purpose):: ', count_list);
             dict['count_List'] = count_list;
             #append this to the main list
             badgeCountList.append(dict);
 
-        #print('line 382 badge count list (debug) :: ', badgeCountList);
-        #print('line 414 badge list (debug) :: ', badges);
+        #print('line 463 badge count list (debug) :: ', badgeCountList)
 
-        return JsonResponse({'badgeNames': badges, 'badgeCount': badgeCountList});
+        return JsonResponse({'badgeNames': badgeType_dict[badgeType],
+                             'badgeDesc': badgeDesc_dict[badgeType],
+                             'badgeCount': badgeCountList});
     return HttpResponse('');
 
 

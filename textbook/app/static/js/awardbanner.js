@@ -6,13 +6,9 @@ var dict = {'suggestion': false, 'social' : false, 'relevance' : false, 'reflect
 $(function(){
 
     //load the first set of badge and highlight it
-    //updateBadgeCardBody('Understand Better!', 'msc');
+    updateBadgeCardBody('Understand Better!', 'hg');
 
-
-    //badgeCardActionItems();
-
-
-   // displayAllBadges();
+    badgeCardActionItems();
 
 })
 
@@ -54,24 +50,33 @@ var updateBadgeCardBody = function(span_text, badgeType){
             data: {'badgeType': badgeType},
             success: function(response){
                 badgeNames = response.badgeNames; //array of names
+                badgeDescription = response.badgeDesc;
+                console.log(badgeDescription)
                 //console.log('awardbanner.js line 49 :: ', badgeNames[0]['badgeName']);
                 //loop the variable badgeNames and update the html
                 i = 1;
                 $.each(badgeNames, function(key,elem){
                     //console.log(badgeNames[key]['badgeName']);
                     //set the badge name
-                    $('#badgeCard-badgeName'+i).text(badgeNames[key]['badgeName']);
-                    //set the description which is displayed upon hover
-                    $('#badgeCard-desc'+i).text(badgeNames[key]['definition']);
+                    $('#badgeCard-badgeName'+i).text(badgeNames[key]);
                     //set the image source
-                    $('#badgeCard-img'+i).attr('src', '/static/pics/'+badgeNames[key]['imgName']+'.png');
+                    $('#badgeCard-img'+i).attr('src', '/static/pics/'+badgeNames[key]+'.png');
+
+                    i = i + 1;
+                });
+
+                i = 1;
+                $.each(badgeDescription, function(key,elem){
+
+                    //set the description which is displayed upon hover
+                    $('#badgeCard-desc'+i).text(badgeDescription[key]);
 
                     i = i + 1;
                 });
 
                 //update the count now
                 badgeCount = response.badgeCount;
-                //console.log(badgeCount);
+                console.log(badgeCount);
                 //outer loop maintaining the three badges
                 i=1;
                 $.each(badgeCount, function(key,elem){
