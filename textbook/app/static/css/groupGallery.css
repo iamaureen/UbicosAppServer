@@ -1,6 +1,6 @@
 .card.gallery h1 {
     margin-top: 2%;
-    margin-left: 10%;
+    margin-left: 13%;
     width: 30%;
     height: 0%;
 }
@@ -25,7 +25,7 @@
 #gallery-description {
     color: black;
     box-shadow: 2px 2px 2px 2px rgb(99, 96, 96);
-    width: 47%;
+    width: 45%;
     margin-left: 2%;
     border-radius: 15px;
     border-color: lightgray;
@@ -34,4 +34,6 @@
     padding-left: 2%;
     /* background: rgb(169, 230, 238); */
     background: #b5e7f3;
+    padding-bottom: 8%;
+    z-index: 0;
 }
