@@ -96,8 +96,8 @@
 
     .card-message-input a {
         position: absolute;
-        top: 5px;
-        right: 10px;
+        top: 0px;
+        right: 0px;
         display: inline-block;
         height: 50px;
         width: 50px;
