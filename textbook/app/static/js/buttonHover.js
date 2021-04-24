@@ -27,16 +27,16 @@ const hoverButtonMessage=function () {
                     $( '.activity-button.'+type ).append( `<span class=${ className }> Leave Comments On Images </span>` );
                 }
                 if ( type=='gallery' ) {
-                    $( '.activity-button.'+type ).append( `<span class=${ className }> Buggy Gallery </span>` );
+                    $( '.activity-button.'+type ).append( `<span class=${ className }> Digital Discussion </span>` );
                 }
                 if ( type=='self-gallery' ) {
                     $( '.activity-button.'+type ).append( `<span class=${ className }> Review Comments </span>` );
                 }
                 if ( type=='khanacademy' ) {
-                    $( '.activity-button.'+type ).append( `<span class=${ className }> Badge Options </span>` );
+                    $( '.activity-button.'+type ).append( `<span class=${ className }> Khan Academy Tool </span>` );
                 }
                 if ( type=='table' ) {
-                    $( '.activity-button.'+type ).append( `<span class=${ className }> Buggy Lab Table </span>` );
+                    $( '.activity-button.'+type ).append( `<span class=${ className }> Table </span>` );
                 }
             }
 
