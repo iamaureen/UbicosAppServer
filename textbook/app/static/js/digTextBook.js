@@ -210,7 +210,6 @@ var bindActivityButtons=function () {
     $( '.page a' ).off().on( 'touch click', function () {
         // Get button type to open appropriate view
         //console.log('this', this)
-        console.log( '$(this)', $( this ) )
 
         var activityButton=$( this );
 

@@ -10,10 +10,10 @@ $( function () {
     let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
     let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-    console.log( user_inputed_personality_msc )
-    console.log( user_inputed_personality_hsc )
-    console.log( user_inputed_personality_fam )
-    console.log( user_inputed_personality_con )
+//    console.log( user_inputed_personality_msc )
+//    console.log( user_inputed_personality_hsc )
+//    console.log( user_inputed_personality_fam )
+//    console.log( user_inputed_personality_con )
 
     editBtnClick()
 } );

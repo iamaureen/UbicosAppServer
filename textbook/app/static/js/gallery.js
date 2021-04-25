@@ -1,7 +1,7 @@
 var gallery_act_id;
 var global_badge_selected = '';
 var global_char = ''; //to be used in postImageMessage
-var gallery_group_list
+
 
 $(function(){
 
@@ -81,7 +81,9 @@ var loadGalleryFeed=function ( act_id ) {
                 }
 
 
-                //update group member ingo
+                /* remove it
+
+                //update group member info
                 group_member_list = response.group_member;
                 //also update the global variable which will check real time messaging
                 gallery_group_list = response.group_member;
@@ -94,7 +96,7 @@ var loadGalleryFeed=function ( act_id ) {
                             //console.log(value);
                             i=key+1;
                             $('li#gallery-member-'+i).text(value);
-                        });
+                        });*/
 
              }
      });

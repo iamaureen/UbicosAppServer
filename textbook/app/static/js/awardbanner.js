@@ -51,7 +51,7 @@ var updateBadgeCardBody = function(span_text, badgeType){
             success: function(response){
                 badgeNames = response.badgeNames; //array of names
                 badgeDescription = response.badgeDesc;
-                console.log(badgeDescription)
+                //console.log(badgeDescription)
                 //console.log('awardbanner.js line 49 :: ', badgeNames[0]['badgeName']);
                 //loop the variable badgeNames and update the html
                 i = 1;
@@ -76,7 +76,7 @@ var updateBadgeCardBody = function(span_text, badgeType){
 
                 //update the count now
                 badgeCount = response.badgeCount;
-                console.log(badgeCount);
+                //console.log(badgeCount);
                 //outer loop maintaining the three badges
                 i=1;
                 $.each(badgeCount, function(key,elem){

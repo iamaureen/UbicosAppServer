@@ -620,17 +620,20 @@ def getWhiteboardURl(request, board_id):
 #updates the chat feed
 def updateFeed(request, id):
 
-    # message of all times
-    msg = Message.objects.filter(activity_id = id);
+    #TODO: F2F/whiteboardgroup
+
+    #get other members of this group
+    members_list = getGroupMembers(request, id);
+
+    # message from these group members
+    msg = Message.objects.filter(posted_by_id__in=members_list, activity_id = id);
     msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
-    return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'errorMsg': True})
 
-    # #separate message today vs other days -- keeping for any future use
-    # msg = Message.objects.filter(posted_at__gte = datetime.now() - timedelta(days=1)); #returns all the comment from today
-    # msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True);
-    # print('msg :: ', msg_data);
-    # return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'errorMsg': True});
+    group_member_name = []
+    for i in members_list:
+        group_member_name.append(User.objects.get(id=i).username);
 
+    return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'group_member_name': group_member_name})
 
 ###############################################
 ############ handler methods start ############
@@ -667,6 +670,7 @@ def getGroupMembers(request, act_id):
     for member in group_members:
         group_member_list.append(member.users_id);
 
+    print('views.py getGroupMembers :: ', group_member_list);
     return group_member_list;
 
 #input: group number
