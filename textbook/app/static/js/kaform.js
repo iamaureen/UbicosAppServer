@@ -183,6 +183,7 @@ var ka_response_save=function () {
                 //clear the textarea and the radio button
                 $( '#KAAnswer' ).val('');
                 $('.ka-radio').prop('checked', false);
+                $( '#default_ka_img' ).attr( 'src', API_URL.picsBase+"/default.png" );
 
 
             }
@@ -225,6 +226,19 @@ var ka_button_action = function(){
 
             $(".ka-upload-success-msg").css("display", "none");
       })
+
+      //copy button
+      $('#ka-so-copy').off().on('click', function(e){
+
+            //get the sentence starter from the text area
+            var sentOpener = $('#ka-prompt-so').text();
+            //console.log(sentOpener)
+            //set it to the message textbox
+            $('#KAAnswer').text(sentOpener);
+
+
+      })
+
 }
 
 

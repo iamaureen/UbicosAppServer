@@ -143,7 +143,7 @@ var galleryMsgBtnAction = function(){
         }
       });
 
-      //badge-option-div related button clicks -- start
+
 
       //reward-close-button click event
       $('.gallery-reward-closebtn').off().on('click', function(e){
@@ -151,10 +151,23 @@ var galleryMsgBtnAction = function(){
              $("#gallery-prompt").css("display", "none");
       });
 
+
       $('.gallery-prompt-button').off().on('click', function(e){
              $("#gallery-prompt").toggle();
 
       });
+
+      //copy button
+      $('#gallery-so-copy').off().on('click', function(e){
+
+            //get the sentence starter from the text area
+            var sentOpener = $('#gallery-prompt-so').text();
+            console.log(sentOpener)
+            //set it to the message textbox
+            $('#image-msg-text').val(sentOpener);
+
+
+      })
 
 
 
