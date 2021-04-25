@@ -72,7 +72,7 @@
             </div>
 
 
-<!--            badge given to the students-->
+            <!--            badge given to the students-->
             <div id="gallery-reward" class="reward-div" style="display:none">
                 <a href="javascript:void(0)" class="gallery-reward-closebtn">&times;</a>
                 <p id="reward-div-selection"> You earned the [badge_name] badge! </p>
@@ -80,21 +80,30 @@
                 <p id="reward-div-prompt"> sample praise message example, send from server </p>
             </div>
 
-<!--            prompt shown to the students-->
+            <!--            prompt shown to the students-->
             <div id="gallery-prompt" class="gallery-prompt-div">
                 <a href="javascript:void(0)" class="gallery-reward-closebtn">&times;</a>
                 <div class="gallery-prompt-div-header">
                     <img src="{% static 'pics/help.png' %}" alt="">
                     <h2>How Can I earn a Badge?</h2>
                 </div>
-                <div class="gallery-prompt-div-prompt">
-                    <p id="gallery-prompt-text" class="gallery-text"> Example prompt text. </p>
-                </div>
+                <!-- <div class="gallery-prompt-div-prompt">
+                </div> -->
                 <div class="gallery-prompt-div-tips">
+                    <p id="gallery-prompt-text" class="gallery-text"> Example prompt text. </p>
                     <p>Copy the phrase, and fill in the rest in the textbox.</p>
                     <p id="gallery-prompt-so"> What do you mean by ... ?</p>
                     <a id="gallery-so-copy"> Copy </a>
                 </div>
+            </div>
+
+
+            <div class="gallery-copy-success-msg" style="display:none">
+                <!-- <span class="gallery-copy-success-msg-closebtn">&times;</span> -->
+
+                <p id="upload-success-msg-p" style="margin-bottom:1%; margin-top: 15%;">
+                    <strong>The text has been copied!</strong>
+                </p>
             </div>
 
         </div>

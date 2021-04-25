@@ -15,8 +15,10 @@
         <div id="ka-user-options">
             <p>Are you answering a question or posting a question on the Khan Academy page? </p>
             <form class="ka-form">
-                <input class="ka-radio" type="radio" name="ka-response-type" value="answer a question"> <Strong>Answer</Strong> a Question<br>
-                <input class="ka-radio" type="radio" name="ka-response-type" value="post a question"> <Strong>Post</Strong> a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="answer a question">
+                <Strong>Answer</Strong> a Question<br>
+                <input class="ka-radio" type="radio" name="ka-response-type" value="post a question">
+                <Strong>Post</Strong> a Question<br>
             </form>
         </div>
 
@@ -39,12 +41,12 @@
             <input id="ka-submit" type="button" value="Submit" class="btn">
         </div>
 
-        
+
 
 
         <div class="ka-upload-success-msg" style="display:none">
             <span class="ka-upload-success-msg-closebtn">&times;</span>
-            <img src="{% static 'pics/success.png' %}" alt="" style="height:50px;margin-top: 5%;" >
+            <img src="{% static 'pics/success.png' %}" alt="" style="height:50px;margin-top: 5%;">
             <p id="upload-success-msg-p" style="margin-bottom:8%;">
                 <strong>Your selected image was successfully uploaded !</strong>
             </p>
@@ -55,36 +57,46 @@
 
         <div class="upload-failure-msg" style="display:none">
             <span class="upload-failure-msg-closebtn">&times;</span>
-            <img src="{% static 'pics/missing.png' %}" alt="" >
+            <img src="{% static 'pics/missing.png' %}" alt="">
             <p id="upload-failure-msg-p">
-                <strong id = "failure_text">failure uploaded !</strong>
+                <strong id="failure_text">failure uploaded !</strong>
             </p>
         </div>
 
         <!--            badge given to the students-->
-            <div id="ka-reward" class="ka-reward-div" style="display:none">
-                <a href="javascript:void(0)" class="ka-reward-closebtn">&times;</a>
-                <p id="ka-reward-div-selection"> You earned the [badge_name] badge! </p>
-                <img src="{% static 'pics/blank.png' %}" alt="">
-                <p id="ka-reward-div-prompt"> sample praise message example, send from server </p>
-            </div>
+        <div id="ka-reward" class="ka-reward-div" style="display:none">
+            <a href="javascript:void(0)" class="ka-reward-closebtn">&times;</a>
+            <p id="ka-reward-div-selection"> You earned the [badge_name] badge! </p>
+            <img src="{% static 'pics/blank.png' %}" alt="">
+            <p id="ka-reward-div-prompt"> sample praise message example, send from server </p>
+        </div>
 
-<!--            prompt shown to the students-->
-           <div id="ka-prompt" class="ka-prompt-div" style="display:none">
-                <a href="javascript:void(0)" class="ka-reward-closebtn">&times;</a>
-                <div class="ka-prompt-div-header">
-                    <img src="{% static 'pics/help.png' %}" alt="">
-                    <h2>How Can I earn a Badge?</h2>
-                </div>
-                 <div class="ka-prompt-div-prompt">
-                     <p id="ka-prompt-text" class="ka"> Example prompt text. </p>
-                </div>
-                <div class="ka-prompt-div-tips">
-                    <p>Copy the phrase, and edit the rest.</p>
-                    <p id="ka-prompt-so"> What do you mean by ... ?</p>
-                    <a id="ka-so-copy"> Copy </a>
-                </div>
-             </div>
+        <!--            prompt shown to the students-->
+        <div id="ka-prompt" class="ka-prompt-div" style="display:none">
+            <a href="javascript:void(0)" class="ka-reward-closebtn">&times;</a>
+            <div class="ka-prompt-div-header">
+                <img src="{% static 'pics/help.png' %}" alt="">
+                <h2>How Can I earn a Badge?</h2>
+            </div>
+            <!-- <div class="ka-prompt-div-prompt">
+
+            </div> -->
+            <div class="ka-prompt-div-tips">
+                <p id="ka-prompt-text" class="ka"> Example prompt text. </p>
+                <p>Copy the phrase, and edit the rest.</p>
+                <p id="ka-prompt-so"> What do you mean by ... ?</p>
+                <a id="ka-so-copy"> Copy </a>
+            </div>
+        </div>
+
+
+        <div class="ka-copy-success-msg" style="display:none">
+            <!-- <span class="ka-copy-success-msg-closebtn">&times;</span> -->
+
+            <p id="upload-success-msg-p" style="margin-bottom:8%;">
+                <strong>The text has been copied!</strong>
+            </p>
+        </div>
 
     </div>
 

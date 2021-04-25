@@ -164,8 +164,9 @@ var galleryMsgBtnAction = function(){
             var sentOpener = $('#gallery-prompt-so').text();
             console.log(sentOpener)
             //set it to the message textbox
-            $('#image-msg-text').val(sentOpener);
-
+        
+          $( '#image-msg-text' ).val( sentOpener );
+          $( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
 
       })
 

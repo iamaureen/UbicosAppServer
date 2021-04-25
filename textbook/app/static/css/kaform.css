@@ -18,12 +18,10 @@
     color: black;
 }
 
-
-.upload-failure-msg img{
+.upload-failure-msg img {
     height: 50px;
     margin-left: 10%;
 }
-
 
 .upload-failure-msg-closebtn {
     margin-left: 15px;
@@ -40,8 +38,7 @@
     color: white;
 }
 
-
-.ka-upload-success-msg{
+.ka-upload-success-msg {
     padding: 5px 20px 0px;
     text-align: center;
     color: black;
@@ -54,34 +51,53 @@
     position: absolute;
     top: 35rem;
     left: 18%;
-
 }
 
+.ka-copy-success-msg,
+.gallery-copy-success-msg {
+    color: black;
+    border-radius: 20px;
+    background-color: #f0f3bd;
+    opacity: 1;
+    transition: opacity 0.6s;
+    width: 30%;
+    position: absolute;
+    top: 43rem;
+    padding-right: 2%;
+    margin-left: 5%;
+}
+
+.gallery-copy-success-msg-closebtn,
 .ka-upload-success-msg-closebtn {
-      padding: 0px;
-      color: black;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
+    padding: 0px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
+
 #ka-submit {
     background: #07beb8;
     color: white;
     border-radius: 10px;
     cursor: pointer;
-    margin-left: 40%;
+    /* margin-left: 40%; */
+    margin-left: 37%;
     border-color: #1ea2c4;
     width: 20%;
     font-size: 17px;
     transition-duration: 0.2s;
     margin-top: 5%;
+    /* padding-left: 4%; */
+    padding-left: 3%;
 }
 
 #ka-submit:hover {
-    background: #0570ad;
+    /* background: #0570ad; */
+    background: #075856;
 }
 
 #ka-upload-img-form label.btn {
@@ -93,14 +109,15 @@
 }
 
 #ka-upload-img-form label.btn:hover {
-    background: #0570ad;
+    /* background: #0570ad; */
+    background: #075856;
 }
 
 .ka-prompt-div {
     position: fixed;
     top: 25%;
     left: 15%;
-    height: 25em;
+    /* height: 25em; */
     width: 30em;
     background-color: green;
     border-radius: 15px;
@@ -125,11 +142,13 @@
     text-decoration: none;
     color: black;
     z-index: 2;
+    margin-top: 18%;
 }
 
 .ka-prompt-div-header {
     position: fixed;
-    top: 25%;
+    /* top: 25%; */
+    top: 36%;
     left: 15%;
     height: 8em;
     width: 30em;
@@ -139,7 +158,10 @@
     border-top-left-radius: 15px;
 }
 
-.ka-prompt-div-prompt {
+#upload-success-msg-p {}
+
+
+/* .ka-prompt-div-prompt {
     position: fixed;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -147,7 +169,7 @@
     width: 30em;
     background-color: white;
     text-align: center;
-}
+} */
 
 #ka-prompt-text {
     margin-top: 15px;
@@ -209,12 +231,11 @@
     font-size: 12pt;
 }
 
-.ka-reward-div img{
-
-        width: 20%;
-        height: 50%;
-        margin-left: 5%;
-        margin-right: 5%;
-        padding-bottom: 0px;
-        float: left;
-    }
+.ka-reward-div img {
+    width: 20%;
+    height: 50%;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 0px;
+    float: left;
+}

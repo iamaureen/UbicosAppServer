@@ -1,90 +1,85 @@
-
-
 /* .center used to format login-form*/
-.center {
-  position: absolute;
-  border-radius: 20px;
-	width: 470px; /*size of the div */
-	height: 250px;
-    left: 550px; /*location of the div */
-    top: 110px;
-	background: #F0F8FF;
 
+.center {
+    position: absolute;
+    border-radius: 20px;
+    width: 470px;
+    /*size of the div */
+    height: 250px;
+    left: 550px;
+    /*location of the div */
+    top: 110px;
+    background: #F0F8FF;
 }
 
-#login_error{
+#login_error {
     margin-left: 25%;
     color: red;
     font-family: 'Open Sans', sans-serif;
     display: inline-block;
     margin-top: 3%;
-
 }
 
 .upload-btn {
-	position: absolute;
-	width: 100px;
-	height: 40px;
+    position: absolute;
+    width: 100px;
+    height: 40px;
     top: 60px;
-	left: 350px;
-	background: #6ECE3B;
-	border-radius: 3px;
-	text-align: center;
-	line-height: 40px;
-	font-size: 14px;
-	box-shadow: 0 2px 0 0 #498C25;
-	cursor: pointer;
-	outline:0;
-
+    left: 350px;
+    background: #6ECE3B;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    box-shadow: 0 2px 0 0 #498C25;
+    cursor: pointer;
+    outline: 0;
 }
 
 .submit-btnbtn {
-	position: absolute;
-	width: 100px;
-	height: 40px;
+    position: absolute;
+    width: 100px;
+    height: 40px;
     top: 110px;
-	left: 350px;
-	background: #6ECE3B;
-	border-radius: 3px;
-	text-align: center;
-	line-height: 40px;
-	font-size: 14px;
-	box-shadow: 0 2px 0 0 #498C25;
-	cursor: pointer;
-
+    left: 350px;
+    background: #6ECE3B;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    box-shadow: 0 2px 0 0 #498C25;
+    cursor: pointer;
 }
 
 .upload-img {
     position: absolute;
-	width: 220px;
-	height: 160px;
+    width: 220px;
+    height: 160px;
     top: 20px;
-	left: 50px;
+    left: 50px;
 }
-
 
 .border {
-  border-style: solid;
-  border-width: 1px;
-  border-color: #FFFFFF;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #FFFFFF;
 }
 
-.img_identifier_number{
-
+.img_identifier_number {
     position: absolute;
-    font-size:12px;
-    background-color:teal;
-    width:14px;
-    height:14px;
-    color:#fff;
-        top: 165px;
-        left:180px;
+    font-size: 12px;
+    background-color: teal;
+    width: 14px;
+    height: 14px;
+    color: #fff;
+    top: 165px;
+    left: 180px;
 }
 
 .img_identifier {
     display: inline-block;
     position: absolute;
-    width:64px;
+    width: 64px;
 }
 
 input[type="file"] {
@@ -93,51 +88,48 @@ input[type="file"] {
 
 
 /* delete button notes */
+
 .object_delete {
     position: absolute;
-        top: 2px;
-        right: 2px;
-        z-index: 100;
-        background: url(../pics/clear.png) no-repeat;
-        background-size: cover;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        opacity: 0.5;
-
-        /* &:hover {
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background: url(../pics/clear.png) no-repeat;
+    background-size: cover;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+    /* &:hover {
             opacity: 0.7;
         } */
 }
 
-.user-answer-input{
-
-    display:block;
+.user-answer-input {
+    display: block;
     border: none;
     outline: 0;
     padding: 12px 12px;
     background: #F0F0F0;
     border-radius: 20px;
     width: 90%;
-    font-family:verdana;
+    font-family: verdana;
     font-size: 15px;
     margin-left: 27px;
+}
 
- }
-
- .user-answer-input:focus{
+.user-answer-input:focus {
     border: #1ea2c4 solid;
     box-shadow: 0 0 5px #1ea2c4;
     width: 90%;
     outline: 0 !important;
-    font-family:verdana;
+    font-family: verdana;
     font-size: 15px;
 }
 
 .user-answer-input:hover {
     border: #1ea2c4 solid;
 }
-
 
 .user-input-submit-button {
     display: block;
@@ -148,25 +140,24 @@ input[type="file"] {
     font-size: 15px;
     background-color: #edf1f2;
     color: #336699;
-    outline:0; /* blue border around it */
+    outline: 0;
+    /* blue border around it */
     cursor: pointer;
 }
 
 .user-input-submit-button:hover {
     background-color: #33cccc;
     border-color: #33cccc;
-    outline:0;
-
+    outline: 0;
 }
 
 .user-input-submit-button:active {
-   background-color: #33cccc;
-   border-color: #33cccc;
-   outline:0;
+    background-color: #33cccc;
+    border-color: #33cccc;
+    outline: 0;
 }
 
-
-.user-login-input{
+.user-login-input {
     border: none;
     outline: 0;
     padding: 12px 12px;
@@ -174,61 +165,83 @@ input[type="file"] {
     border-radius: 20px;
     width: 95%;
     height: 20px;
-    margin:0;
+    margin: 0;
     margin-left: 10px;
-    font-family:verdana;
+    font-family: verdana;
     font-size: 20px;
- }
+}
 
- .user-login-input:focus{
+.user-login-input:focus {
     border: #009900 solid;
     box-shadow: 0 0 5px rgba(0, 153, 0, 1);
     width: 90%;
     height: 20px;
     outline: 0 !important;
-    font-family:verdana;
+    font-family: verdana;
     font-size: 14px;
- }
+}
 
 
 /* Add padding to containers */
+
 .container {
     padding: 16px;
 }
 
+
 /* confirmation page for user input */
 
+
 /* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2 */
+
+
 /* The Modal (background) */
+
 .modal {
-    display: none; /* Hidden by default */
-    position: absolute; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 10px; /* Location of the box */
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 10px;
+    /* Location of the box */
     left: 10px;
     top: 70%;
-    width: 90%; /* Full width */
-    height: 25%; /* Full height */
+    width: 90%;
+    /* Full width */
+    height: 25%;
+    /* Full height */
     /* overflow: auto;  Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    border-radius: 60px; /* round the edges */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+    border-radius: 60px;
+    /* round the edges */
 }
 
 .talkmodal {
-    display: none; /* Hidden by default */
-    position: absolute; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 10px; /* Location of the box */
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 10px;
+    /* Location of the box */
     left: 10px;
     top: 0px;
-    width: 90%; /* Full width */
-    height: 90%; /* Full height */
+    width: 90%;
+    /* Full width */
+    height: 90%;
+    /* Full height */
     /* overflow: auto;  Enable scroll if needed */
     /* background-color: rgb(153, 0, 255, 0.4); /* Fallback color */
-    background-color: rgba(109, 155, 192,1); /* Black w/ opacity */
-    border-radius: 10px; /* round the edges */
-
+    background-color: rgba(109, 155, 192, 1);
+    /* Black w/ opacity */
+    border-radius: 10px;
+    /* round the edges */
     display: none;
     padding: 10px 10px 10px 10px;
     position: absolute;
@@ -237,39 +250,47 @@ input[type="file"] {
     top: 100px;
     width: 40%;
     height: 70%;
-    background-color: rgba(153, 179, 255,1);
+    background-color: rgba(153, 179, 255, 1);
     border-radius: 10px;
 }
 
-.ka-modal{
-
-    display: none; /* Hidden by default */
-    position: absolute; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 10px; /* Location of the box */
+.ka-modal {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 10px;
+    /* Location of the box */
     left: 25%;
     top: 40%;
     text-align: center;
-    width: 50%; /* Full width */
+    width: 50%;
+    /* Full width */
     height: 25%;
     /* overflow: auto;  Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    border-radius: 60px; /* round the edges */
-
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+    border-radius: 60px;
+    /* round the edges */
 }
 
 .ka-modal-header {
     padding: 2px 16px;
     background-color: #6699ff;
     border-radius: 50px;
-    position:fixed;
-    top:50%;
-    left:29%;
-    width:40%;
-
+    position: fixed;
+    top: 50%;
+    left: 29%;
+    width: 40%;
 }
+
+
 /* Modal Content */
+
 .modal-content {
     position: relative;
     background-color: #fefefe;
@@ -282,7 +303,9 @@ input[type="file"] {
     /*box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);*/
 }
 
+
 /* The Close Button */
+
 .modal-close {
     color: white;
     float: right;
@@ -301,17 +324,16 @@ input[type="file"] {
     padding: 2px 16px;
     background-color: #33cccc;
     border-radius: 50px;
-    position:fixed;
-    top:80%;
-    left:12%;
-    width:70%;
-
-
+    position: fixed;
+    top: 80%;
+    left: 12%;
+    width: 70%;
 }
+
 
 /* modal css ends here */
 
-#gallery-view-only{
+#gallery-view-only {
     display: flex;
     justify-content: space-between;
 }
@@ -323,62 +345,55 @@ input[type="file"] {
 
 
 /* personality page 0.html css - start */
-.initPersonality {
 
-}
+.initPersonality {}
 
-.initPersonality p{
+.initPersonality p {
     width: 80%;
-
 }
-
-
 
 .personaImgDiv {
-        position: absolute;
-        top: 0%;
-        left: 10%;
+    position: absolute;
+    top: 0%;
+    left: 10%;
 }
 
-.personaImgDiv img{
-        height: 100px;
-        width: 130px;
-        margin-left: 23rem;
-    }
+.personaImgDiv img {
+    height: 100px;
+    width: 130px;
+    margin-left: 23rem;
+}
 
-.personaImgDiv span{
+.personaImgDiv span {
     height: 100px;
     width: 130px;
     margin-left: 25rem;
 }
 
-.personalityProfiles{
-
+.personalityProfiles {
     width: 100%;
     margin-top: 10%;
 }
 
-#editPersonalityBtn{
+#editPersonalityBtn {
     border: none;
 }
 
-#matchedPersonality span{
+#matchedPersonality span {
     color: blue;
 }
 
+
 /* personality page 0.html css - end */
 
-
-.gallery-prompt-div{
-
+.gallery-prompt-div {
     position: fixed;
     top: 25%;
     left: 35%;
-    height: 25em;
+    /* height: 25em; */
     width: 30em;
     background-color: green;
     border-radius: 15px;
-
 }
 
 .gallery-reward-closebtn {
@@ -390,13 +405,14 @@ input[type="file"] {
     text-decoration: none;
     color: black;
     z-index: 2;
+    margin-top: 20%;
 }
 
-.gallery-prompt-div-header{
+.gallery-prompt-div-header {
     position: fixed;
-    top: 25%;
+    top: 37%;
     left: 35%;
-    height: 8em;
+    /* height: 8em; */
     width: 30em;
     background-color: green;
     text-align: center;
@@ -405,12 +421,14 @@ input[type="file"] {
     color: white;
 }
 
-.gallery-prompt-div-header img{
+.gallery-prompt-div-header img {
     height: 55px;
     width: 55px;
     margin-top: 15px;
 }
 
+
+/* 
 .gallery-prompt-div-prompt{
 
     position: fixed;
@@ -420,14 +438,14 @@ input[type="file"] {
     width: 30em;
     background-color: white;
     text-align: center;
-}
+} */
 
-#gallery-prompt-text{
+#gallery-prompt-text {
     margin-top: 17px;
+    margin-left: 11%;
 }
 
-.gallery-prompt-div-tips{
-
+.gallery-prompt-div-tips {
     position: absolute;
     margin-top: 230px;
     padding-bottom: 30px;
@@ -439,7 +457,7 @@ input[type="file"] {
     border-bottom-left-radius: 15px;
 }
 
-#gallery-so-copy{
+#gallery-so-copy {
     display: block;
     width: 115px;
     height: 35px;
@@ -454,11 +472,11 @@ input[type="file"] {
     margin-top: 3em;
 }
 
-#gallery-so-copy:hover{
+#gallery-so-copy:hover {
     background: rgb(3, 71, 3);
 }
 
-.gallery-prompt-button{
+.gallery-prompt-button {
     display: inline-block;
     position: absolute;
     top: 14px;
@@ -468,8 +486,4 @@ input[type="file"] {
     background: url(/static/pics/help.png) no-repeat;
     background-size: 100%;
     z-index: 2;
-
 }
-
-
-
