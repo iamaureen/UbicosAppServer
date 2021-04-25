@@ -232,9 +232,12 @@ var ka_button_action = function(){
 
             //get the sentence starter from the text area
             var sentOpener = $('#ka-prompt-so').text();
-            //console.log(sentOpener)
+            //console.log(sentOpener)p
             //set it to the message textbox
-            $('#KAAnswer').text(sentOpener);
+          $( '#KAAnswerP' ).text( sentOpener );
+          $( ".ka-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
+          
+
 
 
       })

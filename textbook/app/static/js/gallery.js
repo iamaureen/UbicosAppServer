@@ -166,7 +166,7 @@ var galleryMsgBtnAction = function(){
             //set it to the message textbox
         
           $( '#image-msg-text' ).val( sentOpener );
-          $( ".gallery-copy-success-msg" ).show( 0 ).delay( 2000 ).hide( 0 );
+          $( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
 
       })
 
