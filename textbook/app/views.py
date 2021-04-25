@@ -73,7 +73,6 @@ def broadcastImageComment(request):
     rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST['message']);
 
     #save the badge info as history
-    #TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
     saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
 
 
@@ -85,7 +84,7 @@ def broadcastImageComment(request):
     #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
     #     entry.save()
 
-    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to gallery.js
 
 #called from teachable agent
 def getBadges(request):

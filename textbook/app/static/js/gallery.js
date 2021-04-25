@@ -1,6 +1,7 @@
 var gallery_act_id;
 var global_badge_selected = '';
 var global_char = ''; //to be used in postImageMessage
+var gallery_group_list
 
 
 $(function(){
@@ -80,6 +81,9 @@ var loadGalleryFeed=function ( act_id ) {
                     element.scrollTop = element.scrollHeight;
                 }
 
+
+                //group member - get group member from groupInfo table
+                gallery_group_list = response.group_member;
 
                 /* remove it
 
@@ -164,7 +168,6 @@ var postImageMessage = function () {
 
         if(!message){
             //message = 'Your answer is too brief. Try writing a more specific answer.';
-            //displayNotifier("#gallery-notifier", message);
             enterLogIntoDatabase('Gallery Input Button Click', 'Gallery feed empty message input' , '', global_current_pagenumber);
             return false;
 
@@ -197,18 +200,8 @@ var postImageMessage = function () {
                     $('#reward-div-selection').text("You earned the " + data.rewardType + " badge!");
                     $('#reward-div-prompt').text(data.praiseText);
                     console.log(data.rewardType.toLowerCase())
-                    $('#gallery-reward img').attr('src','/static/pics/'+data.rewardType.toLowerCase()+'.png');
+                    $('#gallery-reward img').attr('src','/static/pics/'+data.rewardType+'.png');
                 }
-
-                if(data.promptInMiddle){
-                    console.log("true")
-                    promptText = getPrompt(logged_in, "MB", gallery_act_id);
-                    $("#gallery-prompt").css("display", "block");
-                    $('#gallery-prompt-text').text(promptText);
-                }
-
-
-
 
 
             },
@@ -246,6 +239,7 @@ var realTimeMsgTransfer = function(){
                 //defined in utility.js
                 time = getCurrentTime();
                 console.log('from gallery.js', time);
+                console.log('from gallery.js', data.message);
 
                 //defined in utility.js
                 buildFeedwithMsgs(data.message, "#image-feed", data.name, time);
@@ -258,10 +252,3 @@ var realTimeMsgTransfer = function(){
 }// end of realTimeMsgTransfer method
 
 
-var displayNotifier = function(container, message){
-
-    $(container).text('');
-    $(container).text(message);
-    $(container).hide().slideDown().delay(5000).fadeOut();
-
-}

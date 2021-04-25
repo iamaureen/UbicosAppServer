@@ -43,8 +43,16 @@ model = DialogTag('distilbert-base-uncased')
 class utteranceClassifier():
     def classifierMethod(self, message):
 
+        #check message length, if less than 5 words, classifies for reward
+        if len(message.split()) < 7:
+            print('message length less than 7 words');
+            return '', 'empty';
+
+
+        #message length is greater than 7 words
         rewardType = ''
         postTag = model.predict_tag(message)
+        print('label classified by dialogtag', postTag);
 
 
         if postTag == 'Wh-Question' or postTag == 'Open-Question' or postTag == 'Rhetorical-Question' or postTag == 'Yes-No-Question':
@@ -56,65 +64,50 @@ class utteranceClassifier():
         elif postTag == 'Conventional-closing':
             rewardType = 'Social'
         elif postTag == 'Agree/Accept':
-            rewardType = 'Transactive'
-
-        print('utteranceclassifier.py line 61 :: ', rewardType, len(message))
+            rewardType = 'Reflection'
 
 
         temp = rewardType
-        reward_list = ['Question', 'Feedback', 'Appreciate', 'Social', 'Transactive']
+        reward_list = ['Question', 'Reflection', 'Feedback', 'Social', 'Appreciate']
 
 
-        elab_list = ['since','this reminds me', 'in my opinion', 'an example', 'explanation', 'perspective', 'because', 'because of', 'for example']
-        summarize_list = ['in summary', 'to summarize', 'summarizing', 'combine our approach', 'combine our opinion', 'in your opinion', 'based on the discussion',
-                   'based on our discussion', 'based on this discussion']
+        elab_list = ['since','this reminds me', 'in my opinion', 'the example', 'an example',
+                     'explanation', 'perspective', 'because', 'because of', 'for example', 'therefore', 'an alternative way', 'example of']
+        summarize_list = ['in summary', 'to summarize', 'summarizing', 'combine our approach', 'combine our opinion',
+                          'in your opinion', 'based on the discussion',
+                        'based on our discussion', 'based on this discussion']
         addon_list = ['this reminds me', 'add on', 'in addition', 'furthermore', 'moreover', 'an alternative approach',
-         'sharing an example']
-        brainstorm_list = ['this reminds me', 'let\'s discuss', 'one way we could start', 'we can approach', 'one approach',
-                       'i think',
-                       'another approach', 'from the video', 'initial idea', 'one idea', 'another idea',
-                       'one way', 'another way', 'one way we could start this problem', 'what strategy'],
+         'sharing an example', 'On the contrary']
+        brainstorm_list = ['this reminds me', 'one way we could start', 'we can approach', 'one approach',
+                       'i think', 'another approach', 'from the video', 'initial idea', 'one idea', 'another idea',
+                       'one way', 'another way', 'one way we could start this problem', 'what strategy']
+
+
         if temp not in reward_list or rewardType == 'Statement-non-opinion':
             # check for elaboration
             # for each keywords in the elab_list, check if the keyword is present in the user message
             for elem in elab_list:
-                #check if length of the message is less than 7, then does not quality for elaboration
-                if len(message.split()) < 7:
-                    print('length less than 7, no reward')
-                    break;
                 if elem.lower() in message.lower():
                     rewardType = 'Elaboration'
                     break;
             #check for summarize
             for elem in summarize_list:
-                #check if length of the message is less than 7, then does not quality for summarization
-                if len(message.split()) < 7:
-                    print('length less than 7, no reward')
-                    break;
                 if elem.lower() in message.lower():
-                    rewardType = 'Summarize'
+                    rewardType = 'Summarization'
                     break;
             # check for addon
             for elem in addon_list:
-                # check if length of the message is less than 7, then does not quality for summarization
-                if len(message.split()) < 7:
-                    print('length less than 7, no reward')
-                    break;
                 if elem.lower() in message.lower():
                     rewardType = 'Addon'
                     break;
             # check for brainstorm
-            for elem in addon_list:
-                # check if length of the message is less than 7, then does not quality for summarization
-                if len(message.split()) < 7:
-                    print('length less than 7, no reward')
-                    break;
+            for elem in brainstorm_list:
                 if elem.lower() in message.lower():
                     rewardType = 'Addon'
                     break;
 
 
-        print('utteranceclassifier.py line 74 :: ', rewardType)
+        print('utteranceclassifier.py line 109 :: ', rewardType)
 
 
         praise_messages_part1_list = ['Very Good!', 'Well Done!', 'Way to go!', 'Wonderful!', 'Great Effort!', 'Nice One!'];
@@ -128,17 +121,14 @@ class utteranceClassifier():
              'summarize': 'Summarizing is a great skill.',
              'feedback': 'Your feedback to others is highly appreciated!',
              'addon': 'Adding to an existing conversation is useful.',
-             'transactive': 'Responding to others is a great way of learning.',
+             'reflection': 'Responding to others is a great way of learning.',
              'brainstorm': 'This will help you to understand better.',
              'appreciate': 'Appreciating others encourages collaboration.',
              'social': 'You are doing a great job!',
-
-
              }
 
-        # praised text generated randomly
+
         if rewardType:
-            print(rewardType)
             praiseText = praise_messages_part1 +' '+praise_message_part2_dict[rewardType.lower()];
         else:
             praiseText = "empty"
@@ -147,4 +137,4 @@ class utteranceClassifier():
 
 if __name__ == "__main__":
     #keywordMatch.matchingMethod(None, "Good job", "appreciate");
-    utteranceClassifier.classifierMethod(None, "I would like to add on to that.");
+    utteranceClassifier.classifierMethod(None, "On the contrary, my answer is is different from yours. I can see why you would say this is like fitting the number in but, what this really is, is relationships between two variables where their ratios are equivalent. Another way to think about them is that, in a proportional relationship, one variable is always a constant value times the other. I hope this helps you out a little bit.");
