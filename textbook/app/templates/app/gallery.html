@@ -63,7 +63,7 @@
                 <ul id="image-feed" class="feed">
                 </ul>
 
-                <span id="gallery-notifier" class="notifier"> Your answer is too brief. Try writing a more specific answer. </span>
+
                 <div class="message-input">
                     <input type="text" id="image-msg-text" name="image-msg-text" placeholder="Comment on this picture">
                     <input type="hidden" name="username" value={{ user.get_username }}>
@@ -72,7 +72,7 @@
             </div>
 
 
-
+<!--            badge given to the students-->
             <div id="gallery-reward" class="reward-div" style="display:none">
                 <a href="javascript:void(0)" class="gallery-reward-closebtn">&times;</a>
                 <p id="reward-div-selection"> You earned the [badge_name] badge! </p>
@@ -80,6 +80,7 @@
                 <p id="reward-div-prompt"> sample praise message example, send from server </p>
             </div>
 
+<!--            prompt shown to the students-->
             <div id="gallery-prompt" class="gallery-prompt-div">
                 <a href="javascript:void(0)" class="gallery-reward-closebtn">&times;</a>
                 <div class="gallery-prompt-div-header">

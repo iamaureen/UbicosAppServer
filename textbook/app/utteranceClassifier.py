@@ -98,12 +98,12 @@ class utteranceClassifier():
             # check for addon
             for elem in addon_list:
                 if elem.lower() in message.lower():
-                    rewardType = 'Addon'
+                    rewardType = 'AddOn'
                     break;
             # check for brainstorm
             for elem in brainstorm_list:
                 if elem.lower() in message.lower():
-                    rewardType = 'Addon'
+                    rewardType = 'Brainstorm'
                     break;
 
 

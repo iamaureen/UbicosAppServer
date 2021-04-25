@@ -417,7 +417,7 @@ def getSelfGalleryContent(request, act_id):
 # used in the badgeCard, get the badge names and count
 def getBadgeNames(request):
     badgeType_dict = {
-        'hg': ['Question', 'Elaboration', 'Summarize'],
+        'hg': ['Question', 'Elaboration', 'Summarization'],
         'trans': ['Feedback', 'Reflection', 'AddOn'],
         'part': ['Brainstorm','Social', 'Appreciate']
     }
@@ -479,7 +479,12 @@ def submitKAAnswer(request):
                                                response=request.POST.get('answer'));
         khanAcademy_answer.save();
 
-    return HttpResponse('');
+
+    # pass through dialogtag to get the tag
+    rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST.get('answer'));
+
+
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to kaform.js
 
 # save the badges that students received.
 def saveBadgeHistory(username, platform, activity_id, message, received_badge):

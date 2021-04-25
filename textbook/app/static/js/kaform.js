@@ -41,6 +41,7 @@ var ka_img_upload_display=function () {
             if ( $( this ).val()=="answer a question" ) {
                 //if it is 'answer' display the image upload
                 $( "#ka-img-upload" ).show();
+                $( "#ka-upload-img-form" ).show();
                 $( "#default_ka_img_div" ).show();
             } else {
                 //if it is 'question' do NOT display the image upload
@@ -81,7 +82,7 @@ var ka_img_upload=function () {
             success: function ( response ) {
                 console.log( response );
                 //success message
-                $( '.upload-success-msg' ).show();
+                $( '.ka-upload-success-msg' ).show();
                 console.log(response.ka_imgID)
                 KA_imgID = response.ka_imgID;
 
@@ -141,11 +142,11 @@ var ka_response_save=function () {
         var wasChecked=$( this ).data( 'checked' )
 
         if ( !$( '.ka-radio' ).is( ':checked' ) ) {
-            $( "#failure_text" ).text( "Please select radio !" )
+            $( "#failure_text" ).text( "Please select an option!" )
             $( '.upload-failure-msg' ).show();
 
         } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()===undefined ) {
-            $( "#failure_text" ).text( "Please enter text into response box!" )
+            $( "#failure_text" ).text( "Please enter text into the response box!" )
             $( '.upload-failure-msg' ).show();
         }
         else {
@@ -166,10 +167,24 @@ var ka_response_save=function () {
                     'response_type': ka_response_type,
                     'answer': ka_response,
                     },
-               success: function(response){
-                    //showKAConfirmMsg("Your response was saved");
-                    //console.log(response)
-                    //enterLogIntoDatabase('khan academy after inserting into db, img id'+imgID, 'answer'+activity_id , answer_text, current_pagenumber)
+               success: function(data){
+
+                //populate the reward-div
+                if(data.praiseText != "empty"){
+                    $("#ka-reward").css("display", "block");
+                    $('#ka-reward-div-selection').text("You earned the " + data.rewardType + " badge!");
+                    $('#ka-reward-div-prompt').text(data.praiseText);
+                    console.log(data.rewardType.toLowerCase())
+                    $('#ka-reward img').attr('src','/static/pics/'+data.rewardType+'.png');
+
+
+                }
+
+                //clear the textarea and the radio button
+                $( '#KAAnswer' ).val('');
+                $('.ka-radio').prop('checked', false);
+
+
             }
 
             });
@@ -204,6 +219,12 @@ var ka_button_action = function(){
              $("#ka-reward").css("display", "none");
              $("#ka-prompt").css("display", "none");
       });
+
+      //success msg close event
+      $('.ka-upload-success-msg-closebtn').off().on('click', function(e){
+
+            $(".ka-upload-success-msg").css("display", "none");
+      })
 }
 
 
