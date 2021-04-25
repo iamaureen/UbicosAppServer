@@ -10,6 +10,7 @@
     transition-duration: 0.2s;
     height: 20px;
     box-shadow: 2px 2px #595d5e;
+    margin-bottom: 3%;
 }
 
 .edit_btn:hover {
@@ -148,6 +149,7 @@
     padding-top: 2px;
     margin-left: 10%;
     box-shadow: 0 6px 10px 0 rgb(0 0 0 / 20%);
+    border-radius: 15px;
 }
 
 

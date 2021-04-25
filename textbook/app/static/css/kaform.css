@@ -18,12 +18,10 @@
     color: black;
 }
 
-
-.upload-failure-msg img{
+.upload-failure-msg img {
     height: 50px;
     margin-left: 10%;
 }
-
 
 .upload-failure-msg-closebtn {
     margin-left: 15px;
@@ -40,8 +38,7 @@
     color: white;
 }
 
-
-.ka-upload-success-msg{
+.ka-upload-success-msg {
     padding: 5px 20px 0px;
     text-align: center;
     color: black;
@@ -54,19 +51,33 @@
     position: absolute;
     top: 35rem;
     left: 18%;
-
 }
 
+.gallery-copy-success-msg {
+    color: black;
+    border-radius: 20px;
+    background-color: #f0f3bd;
+    opacity: 1;
+    transition: opacity 0.6s;
+    width: 30%;
+    position: absolute;
+    top: 43rem;
+    padding-right: 2%;
+    margin-left: 5%;
+}
+
+.gallery-copy-success-msg-closebtn,
 .ka-upload-success-msg-closebtn {
-      padding: 0px;
-      color: black;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
+    padding: 0px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
+
 #ka-submit {
     background: #07beb8;
     color: white;
@@ -209,12 +220,11 @@
     font-size: 12pt;
 }
 
-.ka-reward-div img{
-
-        width: 20%;
-        height: 50%;
-        margin-left: 5%;
-        margin-right: 5%;
-        padding-bottom: 0px;
-        float: left;
-    }
+.ka-reward-div img {
+    width: 20%;
+    height: 50%;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 0px;
+    float: left;
+}
