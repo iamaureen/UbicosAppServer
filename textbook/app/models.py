@@ -141,6 +141,14 @@ class badgeInfo(models.Model):
     sentence_opener1 = models.CharField(max_length=1000);
     sentence_opener2 = models.CharField(max_length=1000);
 
+class nameTAmapping(models.Model):
+    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    TAusername = models.CharField(max_length=20)
+
+    def natural_key(self):
+        return (self.posted_by.username)
+
+
 # logs what support user offered
 class supportOffered(models.Model):
     userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

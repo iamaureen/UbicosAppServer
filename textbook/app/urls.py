@@ -56,6 +56,7 @@ urlpatterns = [
 
     #urls for different tool utility
     url('insertWhiteboardInfo',views.insertWhiteboardInfo),
+    url('insertCharacInfo',views.insertCharacInfo),
     url('getWhiteboardURl/(?P<board_id>\d+)',views.getWhiteboardURl),
     url('insertKhanAcademyInfo', views.insertKhanAcademyInfo),
     url('matchPersonalityProfile', views.matchPersonalityProfile),

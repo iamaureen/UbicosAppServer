@@ -150,6 +150,36 @@ class infoFileRead():
             return userlist;
 
 
+    def studentCharacfileRead(self):
+        filename = '/Users/isa14/Downloads/2021utilityfolder/m-period4-db.csv';
+
+        with open(filename) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',');
+            line_count = 0;
+            charac = []; #will store the rows and will return this list of dictionaries to the server
+            for row in csv_reader:
+                dict = {};
+                if line_count == 0:
+                    #print(f'Column names are {", ".join(row)}');
+                    line_count += 1;
+                else:
+                    dict['name'] = row[0];
+                    dict['msc'] = row[5];
+                    dict['hsc'] = row[6];
+                    dict['fam'] = row[8];
+                    dict['con'] = row[7];
+
+                    #print(dict);
+
+                    charac.append(dict);
+                    line_count += 1;
+
+        #print(whiteboardInfoList)
+        #print(len(whiteboardInfoList));
+
+        return charac;
+
+
 
 
 

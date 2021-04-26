@@ -732,6 +732,23 @@ def insertSupportInfo(request):
 
     return HttpResponse('');
 
+def insertCharacInfo(request):
+
+    #1. read the excel file (used a separate py file for this)
+    characInfo = infoFileRead.studentCharacfileRead(None);
+    #print(type(bagdeInfoList));
+
+    # 2. insert into the table
+    for elem in characInfo:
+
+        print(elem['name'])
+
+        charac = studentCharacteristicModel(user = User.objects.get(username=elem['name']), has_msc = elem['msc'], has_hsc = elem['hsc'], has_fam = elem['fam'],
+                                        has_con=elem['con'],has_social=1);
+        charac.save();
+
+    return HttpResponse('');
+
 def insertWhiteboardInfo(request):
 
     #1. read the excel file (used a separate py file for this)

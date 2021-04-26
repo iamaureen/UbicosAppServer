@@ -60,6 +60,8 @@ var updateBadgeCardBody = function(span_text, badgeType){
                     //set the badge name
                     $('#badgeCard-badgeName'+i).text(badgeNames[key]);
                     //set the image source
+                    var imageName = badgeNames[key].toLowerCase()
+                    console.log('awardbanner.js ', imageName)
                     $('#badgeCard-img'+i).attr('src', '/static/pics/'+badgeNames[key]+'.png');
 
                     i = i + 1;
