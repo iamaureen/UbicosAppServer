@@ -1,5 +1,5 @@
 var host_url = window.location.host
-var gallery_group_list
+var wb_group_list
 
 $(function(){
 
@@ -22,8 +22,8 @@ function updateActivityFeedRealtime(){
     //wait for an event to be triggered in that channel - when
     my_channel.bind("an_event", function (data) {
 
-        //if the data.name (user who is posting) is in the gallery_group_list continue else do nothing
-        if(jQuery.inArray(data.name, gallery_group_list) !== -1){
+        //if the data.name (user who is posting) is in the wb_group_list continue else do nothing
+        if(jQuery.inArray(data.name, wb_group_list) !== -1){
 
                 //defined in utility.js
                 time = getCurrentTime();
@@ -107,8 +107,6 @@ function loadFeed(id){
                 msg_data = response.success
                 var obj = jQuery.parseJSON(msg_data);
 
-                gallery_group_list = response.group_member_name;
-
                 $.each(obj, function(key, value){
                     //method defined in individual_gallery.js
                     var message = value.fields['content'];
@@ -117,9 +115,11 @@ function loadFeed(id){
                     buildFeedwithMsgs(message, "#activity-feed", posted_by, time);
 
                 });
-//
-//                // Scroll page to bottom
-//                $('#activity-feed').animate({ scrollTop: $('#activity-feed').height() }, 400);
+
+                //TODO: display these names on the top-right corner
+                wb_group_list = response.group_member_name;
+                console.log('whiteboard group members :: ', wb_group_list)
+
             }
         });
 }

@@ -483,7 +483,21 @@ input[type="file"] {
     right: 55px;
     height: 35px;
     width: 35px;
-    background: url(/static/pics/help.png) no-repeat;
+    background: url('/static/pics/help.png') no-repeat;
     background-size: 100%;
     z-index: 2;
+}
+
+.gallery-group-members-icon{
+
+    display: inline-block;
+    position: absolute;
+    margin-top: 1%;
+    margin-left: 90%;
+    height: 35px;
+    width: 35px;
+    background: url('/static/pics/group-members.png') no-repeat;
+    background-size: 100%;
+    z-index: 2;
+
 }

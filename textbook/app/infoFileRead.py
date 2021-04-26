@@ -1,11 +1,13 @@
 import csv
 
+
 class infoFileRead():
     def fileRead(self):
-        filename = '/Users/isa14/Downloads/supportInfo.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/supportInfo.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
+
             line_count = 0;
             bagdeInfoList = []; #will store the rows and will return this list of dictionaries to the server
             for row in csv_reader:
@@ -18,9 +20,10 @@ class infoFileRead():
                     dict['value'] = row[1];
                     dict['supporttype'] = row[2];
                     dict['index'] = row[3];
-                    dict['platform'] = row[4];
-                    dict['prompt'] = row[5];
-                    dict['sentopener'] = row[6];
+                    dict['platform'] = row[5];
+                    dict['prompt'] = row[6];
+                    dict['sentopener1'] = row[7];
+                    dict['sentopener2'] = row[8];
 
                     #print(dict);
 
@@ -88,7 +91,7 @@ class infoFileRead():
         return khanacademyInfoList;
 
     def usernamefileRead(self):
-        filename = '/Users/isa14/Downloads/studentlist.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -101,10 +104,43 @@ class infoFileRead():
                     # print(f'Column names are {", ".join(row)}');
                     line_count += 1;
                 else:
-                    dict['username'] = row[4];
-                    dict['password'] = row[6];
-                    dict['class'] = row[7]
-                    dict['condition'] = row[9];
+                    dict['username'] = row[0];
+                    dict['password'] = row[1];
+                    dict['class'] = row[2];
+                    dict['condition'] = row[3];
+                    dict['WBgroup'] = row[4];
+                    dict['DGgroup'] = row[5];
+
+
+                    userlist.append(dict);
+                    line_count += 1;
+
+            # print(whiteboardInfoList)
+            # print(len(whiteboardInfoList));
+
+            return userlist;
+
+    def characteristicfileRead(self):
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
+
+        with open(filename) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',');
+            line_count = 0;
+
+            userlist = [] #will store the rows and will return this list of dictionaries to the server
+            for row in csv_reader:
+                dict = {};
+                if line_count == 0:
+                    # print(f'Column names are {", ".join(row)}');
+                    line_count += 1;
+                else:
+                    dict['username'] = row[0];
+                    dict['password'] = row[1];
+                    dict['class'] = row[2];
+                    dict['condition'] = row[3];
+                    dict['WBgroup'] = row[4];
+                    dict['DGgroup'] = row[5];
+
 
                     userlist.append(dict);
                     line_count += 1;
@@ -120,4 +156,4 @@ class infoFileRead():
 
 
 if __name__ == "__main__":
-    infoFileRead.fileRead(None)
+    infoFileRead.usernamefileRead(None)

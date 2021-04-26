@@ -97,10 +97,10 @@ var editPersonalityOptionBtnYes_method = function(){
         let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
         let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-        console.log(`${user_inputed_personality_msc}`)
-        console.log(user_inputed_personality_hsc)
-        console.log(user_inputed_personality_fam)
-        console.log(user_inputed_personality_con)
+//        console.log(`${user_inputed_personality_msc}`)
+//        console.log(user_inputed_personality_hsc)
+//        console.log(user_inputed_personality_fam)
+//        console.log(user_inputed_personality_con)
 
         //TODO: set the dropdown values based on the localstorage items
     // $( `#dropdown-msc option[value=${ user_inputed_personality_msc }]` ).attr( "selected", true );
@@ -169,10 +169,10 @@ var changepersonality_method=function () {
 
 
 
-        console.log( personality_msc );
-        console.log( personality_hsc );
-        console.log( personality_con );
-        console.log( personality_fam );
+//        console.log( personality_msc );
+//        console.log( personality_hsc );
+//        console.log( personality_con );
+//        console.log( personality_fam );
 
         //save into localstorage
         localStorage.setItem( "personality_msc", personality_msc );

@@ -84,6 +84,7 @@ var loadGalleryFeed=function ( act_id ) {
 
                 //group member - get group member from groupInfo table
                 gallery_group_list = response.group_member;
+                console.log('gallery DD group member :: ', gallery_group_list)
 
                 /* remove it
 

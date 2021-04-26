@@ -59,3 +59,17 @@
     margin-top: 0%;
     margin-left: 0%;
 }
+
+a.chat-group-members{
+
+    display: inline-block;
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 86%;
+    height: 35px;
+    width: 35px;
+    background: url('/static/pics/group-members.png') no-repeat;
+    background-size: 100%;
+    z-index: 2;
+
+}
