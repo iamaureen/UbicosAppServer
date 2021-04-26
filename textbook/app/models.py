@@ -123,6 +123,7 @@ class KAPostModel(models.Model):
 class Message(models.Model):
     content = models.CharField(max_length=400)
     activity_id = models.IntegerField(null=True)
+    group_id = models.IntegerField(null=True)
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     posted_at = models.DateTimeField(auto_now_add=True)
 
@@ -138,6 +139,15 @@ class badgeInfo(models.Model):
     platform = models.CharField(max_length=20)
     prompt = models.CharField(max_length=20)
     sentence_opener1 = models.CharField(max_length=1000);
+    sentence_opener2 = models.CharField(max_length=1000);
+
+class nameTAmapping(models.Model):
+    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    TAusername = models.CharField(max_length=20)
+
+    def natural_key(self):
+        return (self.posted_by.username)
+
 
 # logs what support user offered
 class supportOffered(models.Model):
@@ -183,6 +193,7 @@ class tableChartData(models.Model):
     table_id = models.IntegerField(null=True)
     plot_type = models.CharField(max_length=20) #enumeration
     plot_data = jsonfield.JSONField() #https://stackoverflow.com/questions/37007109/django-1-9-jsonfield-in-models
+    posted_at = models.DateTimeField(auto_now_add=True)
 
 # saves the students individual work data
 class userQuesAnswerTable(models.Model):
@@ -201,6 +212,7 @@ class khanAcademyInfoTable(models.Model):
 class whiteboardInfoTable(models.Model):
     whiteboard_activityID = models.IntegerField(null=True)
     userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    whiteboardGroupID = models.IntegerField()
     whiteboard_link = models.CharField(max_length=300)
 
     def natural_key(self):

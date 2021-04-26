@@ -53,8 +53,6 @@
         </div>
 
 
-
-
         <div class="upload-failure-msg" style="display:none">
             <span class="upload-failure-msg-closebtn">&times;</span>
             <img src="{% static 'pics/missing.png' %}" alt="">
@@ -72,11 +70,11 @@
         </div>
 
         <!--            prompt shown to the students-->
-        <div id="ka-prompt" class="ka-prompt-div" style="display:none">
+        <div id="ka-prompt" class="ka-prompt-div" >
             <a href="javascript:void(0)" class="ka-reward-closebtn">&times;</a>
             <div class="ka-prompt-div-header">
                 <img src="{% static 'pics/help.png' %}" alt="">
-                <h2>How Can I earn a Badge?</h2>
+                <h2>How Can I Earn A Badge?</h2>
             </div>
             <!-- <div class="ka-prompt-div-prompt">
 
@@ -84,7 +82,7 @@
             <div class="ka-prompt-div-tips">
                 <p id="ka-prompt-text" class="ka"> Example prompt text. </p>
                 <p>Copy the phrase, and edit the rest.</p>
-                <p id="ka-prompt-so"> What do you mean by ... ?</p>
+                <p id="ka-prompt-so" style="font-style:italic;"> What do you mean by ... ?</p>
                 <a id="ka-so-copy"> Copy </a>
             </div>
         </div>

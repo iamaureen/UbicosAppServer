@@ -42,12 +42,16 @@ pusher2 = Pusher(app_id=u'525110', key=u'5da367936aa67ecdf673', secret=u'e43f21c
 @csrf_exempt
 def broadcast(request):
 
+    #get the current users' whiteboard group
+    current_user_id, group_member_list, group_member_name = getWhiteboardGroupMember(request, request.POST['activity_id']);
+
     pusher.trigger(u'a_channel', u'an_event', {u'name': request.POST['username'],
                                                u'message': request.POST['message'],
                                                u'activity_id': request.POST['activity_id']})
 
     #insert into database
-    msg = Message(content=request.POST['message'], posted_by=request.user, activity_id = request.POST['activity_id']);
+    msg = Message(content=request.POST['message'], posted_by=request.user, activity_id = request.POST['activity_id'],
+                  group_id = current_user_id);
     msg.save();
 
     return JsonResponse({'success': ''})
@@ -621,21 +625,41 @@ def getWhiteboardURl(request, board_id):
 
     return HttpResponse('');
 
-#updates the chat feed
-def updateFeed(request, id):
+def getWhiteboardGroupMember(request, act_id):
+    current_user = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, userid_id=request.user).values(
+        'whiteboardGroupID');
 
-    #TODO: F2F/whiteboardgroup
+    current_user_id = current_user[0]['whiteboardGroupID'];
 
-    #get other members of this group
-    members_list = getGroupMembers(request, id);
+    members_list = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, whiteboardGroupID=current_user_id).values(
+        'userid_id');
 
-    # message from these group members
-    msg = Message.objects.filter(posted_by_id__in=members_list, activity_id = id);
-    msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
+    #print(members_list)
+    group_member_list = [];
+    for member in members_list:
+        group_member_list.append(member['userid_id'])
 
     group_member_name = []
     for i in members_list:
-        group_member_name.append(User.objects.get(id=i).username);
+        group_member_name.append(User.objects.get(id=i['userid_id']).username);
+
+    return current_user_id, group_member_list, group_member_name;
+
+
+
+
+#updates the chat feed
+def updateFeed(request, id):
+
+    #get other members of this group
+    # get the current users' whiteboard group
+    current_user_id, group_member_list, group_member_name = getWhiteboardGroupMember(request,id);
+
+    print('views py whiteboard group members :: ', group_member_name)
+
+    # message from these group members
+    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id);
+    msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
 
     return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'group_member_name': group_member_name})
 
@@ -674,7 +698,7 @@ def getGroupMembers(request, act_id):
     for member in group_members:
         group_member_list.append(member.users_id);
 
-    print('views.py getGroupMembers :: ', group_member_list);
+    print('views.py digital discussion getGroupMembers :: ', group_member_list);
     return group_member_list;
 
 #input: group number
@@ -702,8 +726,26 @@ def insertSupportInfo(request):
     for supportElem in supportInfoList:
         #print(badgeElem['characteristic'])
         entry = badgeInfo(charac = supportElem['characteristic'], value = supportElem['value'], index = supportElem['index'],
-                    supportType = supportElem['supporttype'], prompt = supportElem['prompt'], sentence_opener1 = supportElem['sentopener']);
+                    supportType = supportElem['supporttype'], prompt = supportElem['prompt'], sentence_opener1 = supportElem['sentopener1'],
+                          sentence_opener2 = supportElem['sentopener2']);
         entry.save();
+
+    return HttpResponse('');
+
+def insertCharacInfo(request):
+
+    #1. read the excel file (used a separate py file for this)
+    characInfo = infoFileRead.studentCharacfileRead(None);
+    #print(type(bagdeInfoList));
+
+    # 2. insert into the table
+    for elem in characInfo:
+
+        print(elem['name'])
+
+        charac = studentCharacteristicModel(user = User.objects.get(username=elem['name']), has_msc = elem['msc'], has_hsc = elem['hsc'], has_fam = elem['fam'],
+                                        has_con=elem['con'],has_social=1);
+        charac.save();
 
     return HttpResponse('');
 
@@ -715,10 +757,11 @@ def insertWhiteboardInfo(request):
 
     # 2. insert into the table
     for whiteboard in whiteboardInfoList:
-        #print(whiteboard['user'])
+        #print(whiteboard['name'])
 
         entry = whiteboardInfoTable(whiteboard_activityID = int(whiteboard['whiteboard_id']),
-                                    userid_id = User.objects.get(username=whiteboard['user']).pk, whiteboard_link = whiteboard['url']);
+                                    userid_id = User.objects.get(username=whiteboard['name']).pk,
+                                    whiteboardGroupID = whiteboard['groupID'], whiteboard_link = whiteboard['url']);
         entry.save();
 
     return HttpResponse('');
@@ -764,31 +807,18 @@ def registerUser(request):
 
 def groupAdd(request):
 
-    users_list = [str(user) for user in User.objects.all()]
-    print(len(users_list))
+    userlist = infoFileRead.usernamefileRead(None);
 
-    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Gengar", "Tangela", "AW1",
-                       "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Horsea", "AW2",
-                       "Psyduck", "Mew", "Dragonite", "Charizard", "Charmander",  "Ekans", "AW3",
-                       "AW", "user1", "user2"];
+    for userinfo in userlist:
+        #rangeVal = total number of unique gallery activities
+        rangeVal = 8;
 
-    username_groupID = ['1', '1', '1', '1', '1', '1', '1',
-                        '2', '2', '2', '2', '2', '2', '2',
-                        '3', '3', '3', '3', '3', '3', '3',
-                        '4', '4', '4']
-
-
-    # for i in range(len(usernames_array)):
-    #     print (usernames_array[i], ' ----- ', username_groupID[usernames_array.index(usernames_array[i])]);
-    #
-
-    #rangeVal = total number of unique gallery activities
-    rangeVal = 9;
-    for username in users_list:
         for i in range(1, rangeVal):
-            member = groupInfo(activityID=i, group=username_groupID[usernames_array.index(username)],
-                               users=User.objects.get(username=username))
+            member = groupInfo(activityID=i, group=userinfo['DGgroup'],
+                               users=User.objects.get(username=userinfo['username']))
             member.save();
+
+    print('/groupAdd done input')
 
     return render(request, 'app/login.html', {});
 
@@ -818,6 +848,7 @@ def createBulkUser(request):
         user_studentInfo.save()
 
 
+    print('/createBulkUser done input');
     return render(request, 'app/login.html', {})
 
 ##############################################
@@ -985,6 +1016,8 @@ def saveEditedPersonality(request):
         entry.save();
 
     return HttpResponse('');
+
+# def saveStudentCharacteristicModel(request):
 
 # def getImagePerUser(request, act_id, username):
 #     print('receiving parameter :: activity id :: username ' + act_id + '  ' + username);
