@@ -36,7 +36,7 @@ class infoFileRead():
         return bagdeInfoList;
 
     def whiteboardfileRead(self):
-        filename = '/Users/isa14/Downloads/whiteboard.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/wb-period4.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -48,11 +48,10 @@ class infoFileRead():
                     #print(f'Column names are {", ".join(row)}');
                     line_count += 1;
                 else:
-                    dict['platform'] = row[0];
-                    dict['title'] = row[1];
-                    dict['whiteboard_id'] = row[2];
-                    dict['user'] = row[3];
-                    dict['url'] = row[4];
+                    dict['whiteboard_id'] = row[1];
+                    dict['name'] = row[3];
+                    dict['groupID'] = row[4];
+                    dict['url'] = row[5];
                     #print(dict);
 
                     whiteboardInfoList.append(dict);

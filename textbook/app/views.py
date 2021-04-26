@@ -634,7 +634,7 @@ def getWhiteboardGroupMember(request, act_id):
     members_list = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, whiteboardGroupID=current_user_id).values(
         'userid_id');
 
-    print(members_list)
+    #print(members_list)
     group_member_list = [];
     for member in members_list:
         group_member_list.append(member['userid_id'])
@@ -740,10 +740,11 @@ def insertWhiteboardInfo(request):
 
     # 2. insert into the table
     for whiteboard in whiteboardInfoList:
-        #print(whiteboard['user'])
+        #print(whiteboard['name'])
 
         entry = whiteboardInfoTable(whiteboard_activityID = int(whiteboard['whiteboard_id']),
-                                    userid_id = User.objects.get(username=whiteboard['user']).pk, whiteboard_link = whiteboard['url']);
+                                    userid_id = User.objects.get(username=whiteboard['name']).pk,
+                                    whiteboardGroupID = whiteboard['groupID'], whiteboard_link = whiteboard['url']);
         entry.save();
 
     return HttpResponse('');
