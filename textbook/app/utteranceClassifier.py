@@ -45,7 +45,8 @@ class utteranceClassifier():
     def classifierMethod(self, message):
 
         rewardType = ''
-        postTag = model.predict_tag(message)
+        #postTag = model.predict_tag(message)
+        postTag = ''
 
 
         if postTag == 'Wh-Question' or postTag == 'Open-Question' or postTag == 'Rhetorical-Questions' or postTag == 'Yes-no-Question':
