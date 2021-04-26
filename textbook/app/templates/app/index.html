@@ -77,20 +77,78 @@
             <div id="page-controls">
 <!--                <span id="page-control-number">Page 1/35</span>-->
                 <a id="study-menu">Menu</a> <!-- this is defined in sidenavigation.html and activityindex.js -->
-                <a id="page-control-previous" onclick="movePage(false);" style="left:150%">
+                <a id="page-control-previous" onclick="movePage(false);" style="left:80%">
                     <span class="hover-text-pre-btn"> Previous Page </span>
                 </a>
 
 <!--                <a id="tab-week1" data-id="2">Week 1</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
 <!--                <a id="tab-week2" data-id="12">Week 2</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
 <!--                <a id="tab-week3" data-id="25">Week 3</a> &lt;!&ndash; action item for this is defined in activityindex.js &ndash;&gt;-->
-                <a id="page-control-next" onclick="movePage(true);" style="left:160%">
+                <a id="page-control-next" onclick="movePage(true);" style="left:90%">
                     <span class="hover-text-next-btn"> Next Page </span>
                 </a>
             </div>
             <!-- necessary classes for page navigation end -->
 
         </div>
+        <div id="dynamic-content">
+            <div class="user-login">
+                {% if user.is_authenticated %}
+                    Welcome, {{ user.get_username }}!
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/">Login</a>
+                {% endif %}
+            </div>
+
+
+
+
+            <div id="activity-feed-view" >
+                {% include 'app/badge.html' %}
+            </div>
+
+            <!--
+                Ideally we'd only have one div.card, whose content is loaded dynamically on click.
+            -->
+
+            <div class="card upload">
+                <a class="close-card"></a>
+                {% include 'app/upload.html' %}
+            </div>
+
+            <div class="card gallery">
+                <a class="close-card"></a>
+                <a class="gallery-group-members-icon"></a>
+                <a class="gallery-prompt-button"></a>
+
+                {% include 'app/gallery.html' %}
+            </div>
+
+            <div class="card video">
+                <a class="close-card"></a>
+                {% include 'app/video.html' %}
+            </div>
+
+            <div class="card table">
+                <a class="close-card"></a>
+                {% include 'app/table.html' %}
+            </div>
+
+
+            <div class="card chatCard">
+                <a class="close-card"></a>
+                <a class="chat-group-members"></a>
+                {% include 'app/activityfeed.html' %}
+            </div>
+
+            <div class="card personaCard">
+                <a class="close-card"></a>
+                {% include 'app/persona.html' %}
+            </div>
+
+        </div>
+    </div>
 
     </div>
 
@@ -107,7 +165,7 @@
 <!--    <script src="{% static 'js/awardbanner.js' %}"></script>-->
 <!--    <script src="{% static 'js/upload.js' %}"></script>-->
 <!--    <script src="{% static 'js/gallery.js' %}"></script>-->
-<!--    <script src="{% static 'js/activityfeed.js' %}"></script>-->
+    <script src="{% static 'js/activityfeed.js' %}"></script>
 <!--    <script src="{% static 'js/brainstorm.js' %}"></script>-->
 <!--    <script src="{% static 'js/individual_gallery.js' %}"></script>-->
 <!--    <script src="{% static 'js/table.js' %}"></script>-->
