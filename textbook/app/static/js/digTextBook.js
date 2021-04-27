@@ -262,10 +262,9 @@ var bindActivityButtons=function () {
             //get the whiteboard id
             console.log( 'whiteboard id :: ', id );
 
-            //using the whiteboard id and the logged in user
-
+            //using the whiteboard id and the logged in user -- defined in utility.js
             var whiteboard_url=getWhiteboardURl( id ); //this will come from the database
-            //console.log('whiteboard URl', whiteboard_url);
+            console.log('whiteboard URl', whiteboard_url);
             window.open( whiteboard_url, '_blank' ); //open any external video in a new window
         }
         //        ------------------------------TABLE-----------------------

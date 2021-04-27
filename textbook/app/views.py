@@ -615,9 +615,10 @@ def getPrompt(request):
 
 def getWhiteboardURl(request, board_id):
 
-    #print('line 592 :: ', board_id);
+    # print('line 618 :: ', board_id);
+    # print('line 618 :: ', request.user);
     whiteboard = whiteboardInfoTable.objects.filter(whiteboard_activityID = board_id, userid_id = request.user).values('whiteboard_link');
-    #print(whiteboard[0]['whiteboard_link']);
+    print(whiteboard);
 
     if whiteboard:
         url = whiteboard[0]['whiteboard_link'];

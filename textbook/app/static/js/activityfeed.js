@@ -21,13 +21,14 @@ function updateActivityFeedRealtime(){
     //wait for an event to be triggered in that channel - when
     my_channel.bind("an_event", function (data) {
 
-        //defined in utility.js
-            time = getCurrentTime();
+        //if the data.name (user who is posting) is in the wb_group_list continue else do nothing
+        if(jQuery.inArray(data.name, wb_group_list) !== -1){
 
+                //defined in utility.js
+                time = getCurrentTime();
+                buildFeedwithMsgs(data.message, "#activity-feed", data.name, time);
 
-        //add in the thread itself
-        //defined in utility.js
-        buildFeedwithMsgs(data.message, "#activity-feed", data.name, time);
+        }
 
     });
 
@@ -114,9 +115,16 @@ function loadFeed(id){
                     buildFeedwithMsgs(message, "#activity-feed", posted_by, time);
 
                 });
-//
-//                // Scroll page to bottom
-//                $('#activity-feed').animate({ scrollTop: $('#activity-feed').height() }, 400);
+
+
+                wb_group_list=response.group_member_name;
+                $( '.all_students' ).text( wb_group_list );
+//                jQuery.each(wb_group_list, function(index, item) {
+//                        console.log(item);
+//                    });
+                console.log('whiteboard group members :: ', wb_group_list)
+
+
             }
         });
 }
