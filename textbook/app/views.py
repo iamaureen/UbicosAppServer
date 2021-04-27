@@ -713,8 +713,10 @@ def insertWhiteboardInfo(request):
     for whiteboard in whiteboardInfoList:
         #print(whiteboard['user'])
 
-        entry = whiteboardInfoTable(whiteboard_activityID = int(whiteboard['whiteboard_id']),
-                                    userid_id = User.objects.get(username=whiteboard['user']).pk, whiteboard_link = whiteboard['url']);
+        entry = whiteboardInfoTable(whiteboard_activityID=int(whiteboard['whiteboard_id']),
+                                    userid_id=User.objects.get(username=whiteboard['name']).pk,
+                                    whiteboardGroupID=whiteboard['groupID'], whiteboard_link=whiteboard['url']);
+
         entry.save();
 
     return HttpResponse('');
@@ -759,32 +761,19 @@ def registerUser(request):
     return render(request, 'app/register.html', {})
 
 def groupAdd(request):
+    
+    userlist = infoFileRead.usernamefileRead(None);
 
-    users_list = [str(user) for user in User.objects.all()]
-    print(len(users_list))
+    for userinfo in userlist:
+        # rangeVal = total number of unique gallery activities
+        rangeVal = 8;
 
-    usernames_array = ["Squirtle", "Umbreon", "Ponyta", "Chansey", "Gengar", "Tangela", "AW1",
-                       "Paras", "Bulbasaur", "Eevee", "Gyarados", "Lapras", "Horsea", "AW2",
-                       "Psyduck", "Mew", "Dragonite", "Charizard", "Charmander",  "Ekans", "AW3",
-                       "AW", "user1", "user2"];
-
-    username_groupID = ['1', '1', '1', '1', '1', '1', '1',
-                        '2', '2', '2', '2', '2', '2', '2',
-                        '3', '3', '3', '3', '3', '3', '3',
-                        '4', '4', '4']
-
-
-    # for i in range(len(usernames_array)):
-    #     print (usernames_array[i], ' ----- ', username_groupID[usernames_array.index(usernames_array[i])]);
-    #
-
-    #rangeVal = total number of unique gallery activities
-    rangeVal = 9;
-    for username in users_list:
         for i in range(1, rangeVal):
-            member = groupInfo(activityID=i, group=username_groupID[usernames_array.index(username)],
-                               users=User.objects.get(username=username))
+            member = groupInfo(activityID=i, group=userinfo['DGgroup'],
+                               users=User.objects.get(username=userinfo['username']))
             member.save();
+
+    print('/groupAdd done input')
 
     return render(request, 'app/login.html', {});
 

@@ -33,7 +33,7 @@ class infoFileRead():
         return bagdeInfoList;
 
     def whiteboardfileRead(self):
-        filename = '/Users/isa14/Downloads/whiteboard.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/wb-period4.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -45,11 +45,10 @@ class infoFileRead():
                     #print(f'Column names are {", ".join(row)}');
                     line_count += 1;
                 else:
-                    dict['platform'] = row[0];
-                    dict['title'] = row[1];
-                    dict['whiteboard_id'] = row[2];
-                    dict['user'] = row[3];
-                    dict['url'] = row[4];
+                    dict['whiteboard_id'] = row[1];
+                    dict['name'] = row[3];
+                    dict['groupID'] = row[4];
+                    dict['url'] = row[5];
                     #print(dict);
 
                     whiteboardInfoList.append(dict);
@@ -88,7 +87,7 @@ class infoFileRead():
         return khanacademyInfoList;
 
     def usernamefileRead(self):
-        filename = '/Users/isa14/Downloads/studentlist.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -101,10 +100,13 @@ class infoFileRead():
                     # print(f'Column names are {", ".join(row)}');
                     line_count += 1;
                 else:
-                    dict['username'] = row[4];
-                    dict['password'] = row[6];
-                    dict['class'] = row[7]
-                    dict['condition'] = row[9];
+                    dict['username'] = row[0];
+                    dict['password'] = row[1];
+                    dict['class'] = row[2];
+                    dict['condition'] = row[3];
+                    dict['WBgroup'] = row[4];
+                    dict['DGgroup'] = row[5];
+
 
                     userlist.append(dict);
                     line_count += 1;
@@ -113,6 +115,64 @@ class infoFileRead():
             # print(len(whiteboardInfoList));
 
             return userlist;
+
+    def characteristicfileRead(self):
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
+
+        with open(filename) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',');
+            line_count = 0;
+
+            userlist = []  # will store the rows and will return this list of dictionaries to the server
+            for row in csv_reader:
+                dict = {};
+                if line_count == 0:
+                    # print(f'Column names are {", ".join(row)}');
+                    line_count += 1;
+                else:
+                    dict['username'] = row[0];
+                    dict['password'] = row[1];
+                    dict['class'] = row[2];
+                    dict['condition'] = row[3];
+                    dict['WBgroup'] = row[4];
+                    dict['DGgroup'] = row[5];
+
+                    userlist.append(dict);
+                    line_count += 1;
+
+            # print(whiteboardInfoList)
+            # print(len(whiteboardInfoList));
+
+            return userlist;
+
+    def studentCharacfileRead(self):
+        filename = '/Users/isa14/Downloads/2021utilityfolder/m-period4-db.csv';
+
+        with open(filename) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',');
+            line_count = 0;
+            charac = [];  # will store the rows and will return this list of dictionaries to the server
+            for row in csv_reader:
+                dict = {};
+                if line_count == 0:
+                    # print(f'Column names are {", ".join(row)}');
+                    line_count += 1;
+                else:
+                    dict['name'] = row[0];
+                    dict['msc'] = row[5];
+                    dict['hsc'] = row[6];
+                    dict['fam'] = row[8];
+                    dict['con'] = row[7];
+
+                    # print(dict);
+
+                    charac.append(dict);
+                    line_count += 1;
+
+        # print(whiteboardInfoList)
+        # print(len(whiteboardInfoList));
+
+        return charac;
 
 
 
