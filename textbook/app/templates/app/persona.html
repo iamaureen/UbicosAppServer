@@ -1,10 +1,5 @@
 <h1>Profile Page</h1>
 
-<div id="taskoftheday">
-    <h4>Coming UP: <span classname="taskttitle">digital discussion with peers </span></h4>
-
-</div>
-
 <div id="matchedPersonality_div">
 
     <div class="persona-narrative">
@@ -16,22 +11,22 @@
         </p>
 
         <p id="editPersonality" style="display:none">
-            <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. They think that they are 1.
+            <span class="namePersonality" id="namePersonality"><strong><i>X</i></strong></span> is a student in 8th Grade math class. They think that they are
 
             <select id="dropdown-msc" class="dropdown_btn" name="dropdown-msc">
               <option value="not that great at math">not that great at math</option>
               <option value="pretty great at math">pretty great at math</option>
-            </select>. Of course, they work with other people on math in a lot of different settings 2.
+            </select>. Of course, they work with other people on math in a lot of different settings
 
             <select id="dropdown-hsc" class="dropdown_btn" name="dropdown-hsc">
               <option value="but they do not feel like they are very good at giving help to others" >but they do not feel like they are very good at giving help to others</option>
               <option value="and they think they are pretty good at giving help to others" >and they think they are pretty good at giving help to others</option>
-            </select>. When it comes to working on activities for class and other things, 3.
+            </select>. When it comes to working on activities for class and other things,
 
             <select id="dropdown-con" class="dropdown_btn" name="dropdown-con">
                 <option value="they do not always participate">they do not always participate</option>
                 <option value="they usually do what they are supposed to do">they usually do what they are supposed to do</option>
-            </select> Sometimes, that depends on who she is working with. However, honestly 4.
+            </select> Sometimes, that depends on who she is working with. However, honestly
 
             <select id="dropdown-fam" class="dropdown_btn" name="dropdown-fam">
               <option value="they prefer only working with people they know">they prefer only working with people they know</option>
@@ -77,6 +72,7 @@
                     <td><input type="radio" value="5" name="personality_radio"
                         class="personality_radio"/></td>
                     <td>Very much like me</td>
+                    <button class="edit_btn" >Not you?</button>
                 </tr>
             </tbody>
         </table>
@@ -86,12 +82,27 @@
 
     <div class="editPersonaBtns">
 
-        <p>Based on your feelings today, would you like to edit any of the choices? </p>
+        <p id="question_edit">Based on your feelings today, would you like to edit any of the choices? </p>
 
-        <button id="editPersonalityOptionBtnYes" class="profile_btn"> Yes, Edit </button>
-        <button id="editPersonalityOptionBtnNo" class="profile_btn"> No, I feel the same </button>
+        <div class="profile_btn">
+            <button id="editPersonalityOptionBtnYes"> Yes, Edit </button>
+            <button id="editPersonalityOptionBtnNo" > No, I feel the same </button>
+        </div>
+
     </div>
 
+<!--    <a href="#0" class="cd-popup-trigger">View Pop-up</a>-->
+
+    <div class="cd-popup" role="alert">
+        <div class="cd-popup-container">
+            <p>Noted! If you feel otherwise, hit 'Yes Edit' and let us know how you are feeling today!</p>
+            <ul class="cd-buttons">
+                <li><a id="profileOKbtn" href="#0">OK</a></li>
+            </ul>
+
+        </div> <!-- cd-popup-container -->
+    </div> <!-- cd-popup -->
 
 </div>
+
 

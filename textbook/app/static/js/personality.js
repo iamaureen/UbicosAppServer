@@ -1,18 +1,47 @@
 var host_url = window.location.host
 
-$(function(){
+$( function () {
+
+
+    getRadioBtnValue();
 
     let user_inputed_personality_msc=localStorage.getItem( "personality_msc" );
     let user_inputed_personality_hsc=localStorage.getItem( "personality_hsc" );
     let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
     let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-    console.log( user_inputed_personality_msc )
-    console.log( user_inputed_personality_hsc )
-    console.log( user_inputed_personality_fam )
-    console.log( user_inputed_personality_con )
+//    console.log( user_inputed_personality_msc )
+//    console.log( user_inputed_personality_hsc )
+//    console.log( user_inputed_personality_fam )
+//    console.log( user_inputed_personality_con )
 
+    editBtnClick()
 } );
+
+
+var getRadioBtnValue=function () {
+    // alert( $( "#deliveryNext" ).is( ":disabled" ))
+    $( ".edit_btn" ).hide();
+
+    $( ".personality_radio" ).change( function ( e ) {
+
+        //console.log( e.target.defaultValue )
+        window.localStorage.setItem( "personality_radio_value", e.target.defaultValue );
+
+        $( ".personality_radio" ).attr( "disabled", true );
+        $( ".edit_btn" ).show();
+    } )
+
+
+}
+
+var editBtnClick=function () {
+    $( ".edit_btn" ).click( function () {
+        $( ".personality_radio" ).attr( "disabled", false );
+    })
+}
+
+
 
 
 var setupPersonality = function(){
@@ -36,7 +65,7 @@ var setupPersonality = function(){
             $('span.namePersonality').text(e.profile['name']);
 
             //set the image src here
-            $('.persona-image img').attr('src', '/static/pics/'+e.profile['name']+'.png');
+            $('.persona-image img').attr('src', '/static/pics/'+e.profile['name']+'_robot.png');
 
             //load the local storage as well, so when hit change it uses the value
             //save into localstorage
@@ -58,7 +87,7 @@ var editPersonalityOptionBtnYes_method = function(){
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
          $( "#editPersonality_div" ).toggle();
-    
+
        console.log( $( '#dropdown-msc .selected' ).text() )
 
         enterLogIntoDatabase( 'Personality Edit Button Click', 'Personality Edit Button Click', logged_in, global_current_pagenumber );
@@ -68,10 +97,10 @@ var editPersonalityOptionBtnYes_method = function(){
         let user_inputed_personality_fam=localStorage.getItem( "personality_fam" );
         let user_inputed_personality_con=localStorage.getItem( "personality_con" );
 
-        console.log(`${user_inputed_personality_msc}`)
-        console.log(user_inputed_personality_hsc)
-        console.log(user_inputed_personality_fam)
-        console.log(user_inputed_personality_con)
+//        console.log(`${user_inputed_personality_msc}`)
+//        console.log(user_inputed_personality_hsc)
+//        console.log(user_inputed_personality_fam)
+//        console.log(user_inputed_personality_con)
 
         //TODO: set the dropdown values based on the localstorage items
     // $( `#dropdown-msc option[value=${ user_inputed_personality_msc }]` ).attr( "selected", true );
@@ -114,6 +143,7 @@ var editPersonalityOptionBtnNo_method = function(){
                 'fam': localStorage.getItem( "personality_fam" ),
                 'con': localStorage.getItem( "personality_con" ),
                 'name': $( 'span#namePersonality' ).text(),
+                'likeness': window.localStorage.getItem( "personality_radio_value"),
                 'event': "no change in html inputs"
             },
             success: function ( e ) {
@@ -126,7 +156,7 @@ var editPersonalityOptionBtnNo_method = function(){
 }
 
 var changepersonality_method=function () {
-    
+
         $( "#editPersonality" ).toggle();
         $( "#matchedPersonality" ).toggle();
         $( "#editPersonality_div" ).toggle();
@@ -139,10 +169,10 @@ var changepersonality_method=function () {
 
 
 
-        console.log( personality_msc );
-        console.log( personality_hsc );
-        console.log( personality_con );
-        console.log( personality_fam );
+//        console.log( personality_msc );
+//        console.log( personality_hsc );
+//        console.log( personality_con );
+//        console.log( personality_fam );
 
         //save into localstorage
         localStorage.setItem( "personality_msc", personality_msc );
@@ -175,6 +205,7 @@ var changepersonality_method=function () {
                 'fam': personality_fam,
                 'con': personality_con,
                 'name': personality_name,
+                'likeness': window.localStorage.getItem( "personality_radio_value"),
                 'event': "changed html inputs"
             },
             success: function ( e ) {
@@ -184,13 +215,14 @@ var changepersonality_method=function () {
             }
         } );
 
+        setupPersonality();
+
 
 
 
         enterLogIntoDatabase( 'Personality Profile Page Button Click', 'Changed Personality options', logged_in, global_current_pagenumber );
 
 }
-
 
 
 

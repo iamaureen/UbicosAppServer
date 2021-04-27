@@ -210,7 +210,6 @@ var bindActivityButtons=function () {
     $( '.page a' ).off().on( 'touch click', function () {
         // Get button type to open appropriate view
         //console.log('this', this)
-        console.log( '$(this)', $( this ) )
 
         var activityButton=$( this );
 
@@ -301,9 +300,18 @@ var bindActivityButtons=function () {
             //if the card is already extended, put it back to normal
             card_extension_close();
 
-            loadFeed( id ); //load the chat feed based on the activity id
+            var output = loadFeed( id ); //load the chat feed based on the activity id
 
             console.log( 'card opened' );
+
+
+            $( ".chat-group-members" ).hover( function () {
+                $( ".hover-username" ).css( 'display', 'flex' );
+            }, function () {
+                $( ".hover-username" ).css( 'display', 'none' );
+            } );
+
+
         }
         //        ---------------------badge card-----------------------
         if ( $( '.card.badgeCard' ).hasClass( 'active' ) ) {
@@ -374,6 +382,7 @@ var bindActivityButtons=function () {
             card_extension();
 
             //update the heading in the card
+            // console.log( activityButton.attr( 'data-description' ))
             $( '#gallery-description' ).text( activityButton.attr( 'data-description' ) );
 
             $( 'ul#image-feed' ).html( '' );
@@ -395,6 +404,7 @@ var bindActivityButtons=function () {
         if ( $( '.card.personaCard' ).hasClass( 'active' ) ) {
 
             //update this section based on curriculum
+            $( 'span.taskttitle' ).text( activityButton.attr( 'data-activity' ) );
 
             //if the card is already extended, put it back to normal
             card_extension_close();
@@ -463,10 +473,17 @@ var bindActivityButtons=function () {
     } );
     //right hand side card button actions -- end
 
+    //this is the first load
+    $( '#getInitPersonality' ).off().on( 'click', function ( event ) {
+        //load event matches with the characteristic table
+        setupPersonality();
+        enterLogIntoDatabase( 'Personality Profile Page Button Click', 'See who you match with Btn', logged_in, global_current_pagenumber );
+
+    } );
 
     //personality page 0.html, personality option button
     $( '#editPersonalityOptionBtnYes' ).off().on( 'click', function ( event ) {
-        
+
         //defined in personality.js
         editPersonalityOptionBtnYes_method();
 
@@ -474,17 +491,20 @@ var bindActivityButtons=function () {
 
     $( '#editPersonalityOptionBtnNo' ).off().on( 'click', function ( event ) {
 
+        $('.cd-popup').addClass('is-visible');
+
         //defined in personality.js
         editPersonalityOptionBtnNo_method();
 
     } );
 
-    $( '#getInitPersonality' ).off().on( 'click', function ( event ) {
-        //load event matches with the characteristic table
-        setupPersonality();
-        enterLogIntoDatabase( 'Personality Profile Page Button Click', 'See who you match with Btn', logged_in, global_current_pagenumber );
+    $('#profileOKbtn').off().on( 'click', function ( event ) {
+
+        $('.cd-popup').removeClass('is-visible');
 
     } );
+
+
 
     //personality page 0.html, personality edit button
     $( '#changePersonalityBtn' ).off().on( 'click', function ( event ) {
