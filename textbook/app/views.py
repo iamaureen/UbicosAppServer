@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import imageModel, imageComment, individualMsgComment, Message, brainstormNote, userLogTable, tableChartData, \
-    userQuesAnswerTable, groupInfo, userLogTable, badgeOffered, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
+    userQuesAnswerTable, groupInfo, userLogTable, badgeReceived, studentCharacteristicModel, badgeInfo, KAPostModel,\
     participationHistory, whiteboardInfoTable, khanAcademyInfoTable, studentPersonalityChangeTable, computationalModelLog, khanAcademyAnswer, \
-    studentInfo
+    studentInfo, supportOffered
 from django.contrib.auth import authenticate
 from django.http.response import JsonResponse
 from django.contrib.auth import login as auth_login
@@ -42,12 +42,16 @@ pusher2 = Pusher(app_id=u'525110', key=u'5da367936aa67ecdf673', secret=u'e43f21c
 @csrf_exempt
 def broadcast(request):
 
+    #get the current users' whiteboard group
+    current_user_id, group_member_list, group_member_name = getWhiteboardGroupMember(request, request.POST['activity_id']);
+
     pusher.trigger(u'a_channel', u'an_event', {u'name': request.POST['username'],
                                                u'message': request.POST['message'],
                                                u'activity_id': request.POST['activity_id']})
 
     #insert into database
-    msg = Message(content=request.POST['message'], posted_by=request.user, activity_id = request.POST['activity_id']);
+    msg = Message(content=request.POST['message'], posted_by=request.user, activity_id = request.POST['activity_id'],
+                  group_id = current_user_id);
     msg.save();
 
     return JsonResponse({'success': ''})
@@ -73,10 +77,8 @@ def broadcastImageComment(request):
     rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST['message']);
 
     #save the badge info as history
-    #TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
     saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
 
-    checkPrompt(request)
 
     # # #save into the history table once
     # if participationHistory.objects.filter(platform="MB", activity_id=request.POST['activityID'], posted_by=request.user).exists():
@@ -86,32 +88,36 @@ def broadcastImageComment(request):
     #     entry = participationHistory(platform="MB", activity_id=request.POST['activityID'],didParticipate='yes',posted_by=request.user);
     #     entry.save()
 
-    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText, 'promptInMiddle': checkPrompt(request)}) #goes to
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to gallery.js
 
+#called from teachable agent
+def getBadges(request):
+    if request.method == 'POST':
+        username = request.POST.get('username');
+        platform = request.POST.get('platform');
+        message = request.POST['message']
+        activity_id = request.POST.get('activity_id');
 
-def checkPrompt(request):
-    data = badgeReceived.objects.filter(userid=request.user).order_by('-id')[:3].values('badgeReceived')
-    data_list = [k['badgeReceived'] for k in data]
-    print('line 93 :: ', any(data_list))
-    if any(data_list):
-        print("prompt pathabona")
-        return False;
-    else:
-        print("prompt pathabo")
-        return True;
+        # pass through dialogtag to get the tag
+        rewardType, praiseText = utteranceClassifier.classifierMethod(None, message);
+
+        # save the badge info as history
+        # TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
+        saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+
+        return JsonResponse({'rewardType': rewardType,
+                             'promptSO': praiseText})
 
 
 #in the browser: http://127.0.0.1:8000/app/
-
+@login_required
 def index(request):
-    # if request.user.is_authenticated:
-    #     return render(request, 'app/index.html')
-    #     #if teacher then open up teacher portal, else student portal
-    #     # if request.user.get_username() == 'AW':
-    #     #     return render(request, 'app/teacherindex.html')
-    #     # else: return render(request, 'app/index.html')
-    return render(request, 'app/index.html')
-
+    if request.user.is_authenticated:
+        return render(request, 'app/index.html')
+        #if teacher then open up teacher portal, else student portal
+        # if request.user.get_username() == 'AW':
+        #     return render(request, 'app/teacherindex.html')
+        # else: return render(request, 'app/index.html')
 
 def login_form(request):
     return render(request, 'app/login.html',{})
@@ -169,7 +175,7 @@ def getCharacteristic(request, username):
 
     #determine the condition of the current user, and get the info from two different tables.
     # 1-dynamic, #2-static
-    whichCondition = getCondition(request);
+    whichCondition = getCondition(request, username);
     print("def getCharacteristic student condition:: ", whichCondition);
 
     dict = {}
@@ -323,36 +329,37 @@ def getIndividualCommentMsgs(request,imageId):
 # display a random image outside the group
 def getGalleryImage(request, act_id):
 
-    print('debug purpose, def updateImage, gallery id, ', act_id);
-    # first get the images from the group-members
-    # get the group members of the current users
-    member_list = getGroupMembers(request, act_id);
+    print('debug purpose, def updateImage, gallery id:: ', act_id);
+    # first get group id of the current user
+    member_id = getGroupID(request, act_id);
+    print('current user member of group :: ', member_id)
+
+    dict_group = {
+        1: 2, 2: 1, 3:2, 4:3, 5:4, 6:3, 7:2, 8:4, 9:3, 10: 4
+    }
+
+    print('image to be shown from group :: ', dict_group[member_id])
+    member_list = getGroupMembersID(request, dict_group[member_id], act_id)
+    print('member list of that group', member_list)
 
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 295 current user member image Id list:: ', member_image_id_list);
+    print('line 345 current user member image Id list:: ', member_image_id_list);
 
-    all_image_id_query = imageModel.objects.filter(gallery_id=act_id).values('id');
-    all_image_id_list = [item['id'] for item in all_image_id_query];
-    print('line 299 all students image Id list:: ', all_image_id_list);
-
-    outside_group_image = list(set(all_image_id_list) - set(member_image_id_list))
-    #outside_group_image can be empty if no image is uploaded in this gallery activity
-    print('line 303 outside digital discussion group image:: ', outside_group_image);
-    if(len(outside_group_image) == 0):
+    if(len(member_image_id_list) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
         return HttpResponse('');
     else:
         #the list is not empty
         #outside_group_image_id = random.choice(outside_group_image); #not sending random as then participants from the same group also sees different image
-        outside_group_image_id = outside_group_image[0];
-        print('debug purpose, def getGalleryImage,  outside_group_image_id :: ', outside_group_image_id);
+        imageToBeReturned_id = member_image_id_list[-1];
+        print('debug purpose, def getGalleryImage,  outside_group_image_id :: ', imageToBeReturned_id);
 
-        images = imageModel.objects.filter(id=outside_group_image_id).values('image');
+        images = imageModel.objects.filter(id=imageToBeReturned_id).values('image');
         if images:
             dict = {}
-            dict['imagePk'] = outside_group_image_id;
+            dict['imagePk'] = imageToBeReturned_id;
             dict['url'] = images[0]['image'];
 
             return JsonResponse({'imageData': dict});
@@ -413,20 +420,27 @@ def getSelfGalleryContent(request, act_id):
 
 # used in the badgeCard, get the badge names and count
 def getBadgeNames(request):
+    badgeType_dict = {
+        'hg': ['Question', 'Elaboration', 'Summarization'],
+        'trans': ['Feedback', 'Reflection', 'AddOn'],
+        'part': ['Brainstorm','Social', 'Appreciate']
+    }
+    badgeDesc_dict = {
+        'hg': ['Ask clarification questions to understand the concept.', 'Explain your thought process with reasoning.', 'Combine multiple ideas together, and explain them in your words.'],
+        'trans': ['Provide ideas for improvement.', 'Share your thoughts on the existing conversation.', 'Add additional information in the conversation.'],
+        'part': ['Think about a way to solve a problem.', 'Think about a way to solve a problem.', 'Appreciate others effort during the collaboration.']
+    }
+
     if request.method == 'POST':
         badgeType = request.POST.get('badgeType');
-        #print('379 :: ', badgeType)
+        #print('422 :: ', badgeType)
 
-        #used value = "True" to get the three badgenames; true/false either way we have three badges
-        badges = list(badgeInfo.objects.filter(charac=badgeType, value="True").values('badgeName', 'imgName', 'definition').distinct());
-
-        #print('line 296', badges);
 
         badgeCountList = [];
-        for badge in badges:
+        for badge in badgeType_dict[badgeType]:
             dict = {}
-            dict['badgeName'] = badge['badgeName'];
-            #print(dict['badgeName']);
+            dict['badgeName'] = badge;
+            #print('line 440 :: ', dict['badgeName']);
             platform = ['MB', 'KA', 'TA'];
             count_list = [];
             for i in platform:
@@ -434,9 +448,9 @@ def getBadgeNames(request):
                 #print(i);
                 #get the badgecount for each platform
                 count['platform'] = i;
-                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeReceived = dict['badgeName'].lower(), platform=i).values('platform')\
+                badge_count = badgeReceived.objects.filter(userid_id=request.user, badgeReceived = dict['badgeName'], platform=i).values('platform')\
                     .annotate(Count('platform'));
-                #print(badge_count);
+                #print('line 450 :: ', badge_count);
                 if badge_count:
                     count['badgeCount'] = badge_count[0]['platform__count'];
                 else:
@@ -444,15 +458,16 @@ def getBadgeNames(request):
 
                 count_list.append(count);
 
-            #print('line 376 (debug purpose):: ', count_list);
+            #print('line 458 (debug purpose):: ', count_list);
             dict['count_List'] = count_list;
             #append this to the main list
             badgeCountList.append(dict);
 
-        #print('line 382 badge count list (debug) :: ', badgeCountList);
-        #print('line 414 badge list (debug) :: ', badges);
+        #print('line 463 badge count list (debug) :: ', badgeCountList)
 
-        return JsonResponse({'badgeNames': badges, 'badgeCount': badgeCountList});
+        return JsonResponse({'badgeNames': badgeType_dict[badgeType],
+                             'badgeDesc': badgeDesc_dict[badgeType],
+                             'badgeCount': badgeCountList});
     return HttpResponse('');
 
 
@@ -468,7 +483,12 @@ def submitKAAnswer(request):
                                                response=request.POST.get('answer'));
         khanAcademy_answer.save();
 
-    return HttpResponse('');
+
+    # pass through dialogtag to get the tag
+    rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST.get('answer'));
+
+
+    return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to kaform.js
 
 # save the badges that students received.
 def saveBadgeHistory(username, platform, activity_id, message, received_badge):
@@ -482,79 +502,21 @@ def saveBadgeHistory(username, platform, activity_id, message, received_badge):
     return HttpResponse('');
 
 
-# modelbook: gallery ID
-# khanacademy: khan academy
-# TODO: test for april2021 study
-def computationalModel(request):
-    if request.method == 'POST':
-        username = request.POST.get('username');
-        platform = request.POST.get('platform');
-        activity_id = request.POST.get('activity_id');
+# called from def getPrompt
+def computationalModel(request, charac, platform):
 
-        # first check if this student will participate or not based on their history
-        # willParticipate = false --> when the student did not participate in the last two activities -- badgeKey = NP related key
-        # willParticipate = true --> when the student participated in the last two activities -- badgeKey = CP related key
-
-        willParticipate = False;
-        if (platform == 'TA'):
-            #for TA, willParticipate will come from the csharp server; based on utterance count
-            #True means participate; null means no participate (false)
-            willParticipate = bool(request.POST.get('willParticipate')); #this comes from TA
-
-        else:
-            #for the other two platforms, calculate will participate variable here
-            if int(activity_id) == 1:
-                willParticipate = False;
-            elif int(activity_id) >= 2:
-                prev_actID = int(activity_id)-1;
-
-                # check if participated in the previous activity if a given platform
-                # the following table should have one entry [per activity id] at any moment of time
-                #todo: check the 'did participate' table for the correct entry logics
-                didParticipate = participationHistory.objects.filter(posted_by=User.objects.get(username=username),
-                                                                     activity_id=prev_actID,
-                                                                     platform=platform).values('didParticipate');
-
-                print('line 496 did participate in the prev activity?', didParticipate);
-                # Todo check the chronological participation here -->
-                #if there is a queryset, means current user participated in the previous activity
-                if didParticipate:
-                    willParticipate = True;
-                else: #because did not participate in the previous act
-                    willParticipate = False;
-
-        #second, using the willParticipate variable, decide whether to call CPmodel or not
-        badgeKey = [];
-        if(willParticipate == True):
-            #call the CP model equation here to check the likelihood of participation and log it
-            #first, get students characteristic
-            #todo: write this as documentation so we know what to do/how to format the data
-            charac = studentCharacteristicModel.objects.filter(user = User.objects.get(username=username)).values('has_msc', 'has_hsc', 'has_fam');
-            charac_dict = [dict(item) for item in charac];
-            #print('link 510 :: ', charac_dict);
-            likelihood = binaryLogisticModel.model(None, charac_dict, platform);
-            print('from the view class, likelihood score', likelihood);
-
-            entry = computationalModelLog(likelihood = likelihood, student = User.objects.get(username=username), platform = platform,
-                                          activity_id=activity_id);
-            entry.save();
-            # later from the data will verify whether students participated or not
-            badgeKey = ['msc', 'hsc', 'fam']
-        else:
-            #based on student history, will not participate so display conscien and social badges
-            badgeKey = ['con1', 'con2', 'social']
+    data = binaryLogisticModel.model(None, charac, platform);
+    print('from the view class, likelihood score', data);
 
 
-        badgeList = getBadgeOptions(request, username, platform, badgeKey,activity_id);
+    return data;
 
-        return JsonResponse({'badgeList': badgeList}); #goes back to utility.js
-
-    return HttpResponse('');
-
-def getCondition(request):
+# called from def getCharacteristic method
+def getCondition(request, username):
 
     #1-dynamic, #2-static
-    condition = studentInfo.objects.filter(user_id=request.user).values('condition');
+    condition = studentInfo.objects.filter(user_id=User.objects.get(username=username)).values('condition');
+
     #print('def getCondition :: ', condition[0]['condition']);
     condition = condition[0]['condition'];
 
@@ -562,62 +524,91 @@ def getCondition(request):
 
 def getPrompt(request):
 
+    if request.method == 'POST':
+        username = request.POST.get('username');
+        platform = request.POST.get('platform');
+        activity_id = request.POST.get('activity_id');
 
-    #get student characteristic
-    charac = getCharacteristic(request, request.GET['username']) #this method will check the condition and return charac based on this
-    charac_list = list(charac.values())[0:4]
+        print(username + ' joined from ' + platform + ' working on activity id ' + activity_id);
 
-    #order: msc, hsc, fam, con, social
-    print('views.py getCharac ::', charac);
+        #get student characteristic
+        charac = getCharacteristic(request, username) #this method will check the condition and return charac based on this
+        charac_list = list(charac.values())[0:4]
 
-    supportType = ''
-    supportText = ''
+        #order: msc, hsc, fam, con, social
+        print('views.py def getPrompt --> getCharac ::', charac);
 
-    if request.GET['platform'] == 'MB':
-        print('from Modelbook');
-        if charac_list[0]:
-            print('MSC high');
+        #computational model
+        likelihood = computationalModel(request, charac, platform);
+        print('views.py computational model ::', likelihood)
+
+        supportType = ''
+        supportText = ''
+
+        index_list = [1, 2, 3];  # initial list
+        randomNO = str(random.choice(index_list))
+        print('line 536 ::', randomNO)
+
+        # start likelihood if
+        if likelihood > 0.3:
             supportType = 'transactive'
-            #TODO: randomize index value
-            supportText = badgeInfo.objects.filter(charac="MSC", value="high", index=1, supportType=supportType).values(
-                'prompt','sentence_opener1');
+            #todo
         else:
-            print('MSC low');
-            supportType = 'question'
-            supportText = badgeInfo.objects.filter(charac="MSC", value="low", index=1, supportType=supportType).values(
-                'prompt','sentence_opener1');
+            # likelihood less than 0.3, depending on platform check charac and return support
+            if platform == 'MB':
+                #TODO: make entry to support history
+                print('from Modelbook');
+                if charac_list[0]:
+                    print('MSC high');
+                    supportType = 'transactive'
+                    charac_ = "MSC"
+                    charac_val = "high"
 
-        print('line 521 ::', supportText[0]['prompt']) #sentence opener supportText[1]['sentopener']
-        return  JsonResponse({'promptText': supportText[0]['prompt']}); #goes to gallery.js
-    elif request.GET['platform'] == 'KA':
-        print('from Khan Academy');
-        if charac_list[2]:
-            print('Fam high');
-            supportType = 'participation'
-            supportText = badgeInfo.objects.filter(charac="Fam", value="high", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        else:
-            print('Fam low');
-            supportType = 'transactive'
-            #TODO: handle this case
-            supportText = badgeInfo.objects.filter(charac="Fam", value="low", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
-        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to KAform.js
-    else:
-        print('from Teachable Agent')
-        if charac_list[1]:
-            print('hsc high');
-            supportText = badgeInfo.objects.filter(charac="HSC", value="high", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        else:
-            print('hsc low');
-            supportType = 'elaboration'
-            supportText = badgeInfo.objects.filter(charac="HSC", value="low", index=1, supportType=supportType).values(
-                'prompt', 'sentence_opener1');
-        print('line 537 ::', supportText[0]['prompt'])  # sentence opener supportText[1]['sentopener']
-        return JsonResponse({'promptText': supportText[0]['prompt']});  # goes to teachable agent
+                else:
+                    print('MSC low');
+                    supportType = 'question'
+                    charac_ = "MSC"
+                    charac_val = "low"
 
+            elif platform == 'KA':
+                print('from Khan Academy');
+                if charac_list[2]:
+                    print('Fam high');
+                    supportType = 'participation'
+                    charac_ = "Fam"
+                    charac_val = "high"
+
+                else:
+                    print('Fam low');
+                    supportType = 'transactive'
+                    charac_ = "Fam"
+                    charac_val = "low"
+
+            else:
+                print('from Teachable Agent')
+                if charac_list[1]:
+                    print('hsc high');
+                    supportType = 'elaboration'
+                    charac_="HSC"
+                    charac_val="high"
+
+                else:
+                    print('hsc low');
+                    supportType = 'elaboration'
+                    charac_="HSC"
+                    charac_val="low"
+
+
+
+        support = supportOffered(userid=User.objects.get(username=username), platform=platform, activity_id=activity_id,
+                                        supportType=supportType, charac=charac_, charac_val=charac_val)
+        support.save();
+
+        supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=randomNO, supportType=supportType).values(
+            'prompt', 'sentence_opener1');
+
+        return JsonResponse({'promptText': supportText[0]['prompt'],
+                             'promptSO': supportText[0]['sentence_opener1']})
 
 
     return HttpResponse('');
@@ -634,20 +625,43 @@ def getWhiteboardURl(request, board_id):
 
     return HttpResponse('');
 
+def getWhiteboardGroupMember(request, act_id):
+    current_user = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, userid_id=request.user).values(
+        'whiteboardGroupID');
+
+    current_user_id = current_user[0]['whiteboardGroupID'];
+
+    members_list = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, whiteboardGroupID=current_user_id).values(
+        'userid_id');
+
+    #print(members_list)
+    group_member_list = [];
+    for member in members_list:
+        group_member_list.append(member['userid_id'])
+
+    group_member_name = []
+    for i in members_list:
+        group_member_name.append(User.objects.get(id=i['userid_id']).username);
+
+    return current_user_id, group_member_list, group_member_name;
+
+
+
+
 #updates the chat feed
 def updateFeed(request, id):
 
-    # message of all times
-    msg = Message.objects.filter(activity_id = id);
+    #get other members of this group
+    # get the current users' whiteboard group
+    current_user_id, group_member_list, group_member_name = getWhiteboardGroupMember(request,id);
+
+    print('views py whiteboard group members :: ', group_member_name)
+
+    # message from these group members
+    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id);
     msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
-    return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'errorMsg': True})
 
-    # #separate message today vs other days -- keeping for any future use
-    # msg = Message.objects.filter(posted_at__gte = datetime.now() - timedelta(days=1)); #returns all the comment from today
-    # msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True);
-    # print('msg :: ', msg_data);
-    # return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'errorMsg': True});
-
+    return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'group_member_name': group_member_name})
 
 ###############################################
 ############ handler methods start ############
@@ -684,6 +698,20 @@ def getGroupMembers(request, act_id):
     for member in group_members:
         group_member_list.append(member.users_id);
 
+    print('views.py digital discussion getGroupMembers :: ', group_member_list);
+    return group_member_list;
+
+#input: group number
+#output: return ID of all the group members given a group number
+def getGroupMembersID(request, group_id, act_id):
+
+    # which users are are there in this group
+    group_members = groupInfo.objects.all().filter(activityID=act_id, group=group_id);
+
+    group_member_list = [];
+    for member in group_members:
+        group_member_list.append(member.users_id);
+
     return group_member_list;
 
 #this method reads badge info from an excel and saves into the database
@@ -698,8 +726,26 @@ def insertSupportInfo(request):
     for supportElem in supportInfoList:
         #print(badgeElem['characteristic'])
         entry = badgeInfo(charac = supportElem['characteristic'], value = supportElem['value'], index = supportElem['index'],
-                    supportType = supportElem['supporttype'], prompt = supportElem['prompt'], sentence_opener1 = supportElem['sentopener']);
+                    supportType = supportElem['supporttype'], prompt = supportElem['prompt'], sentence_opener1 = supportElem['sentopener1'],
+                          sentence_opener2 = supportElem['sentopener2']);
         entry.save();
+
+    return HttpResponse('');
+
+def insertCharacInfo(request):
+
+    #1. read the excel file (used a separate py file for this)
+    characInfo = infoFileRead.studentCharacfileRead(None);
+    #print(type(bagdeInfoList));
+
+    # 2. insert into the table
+    for elem in characInfo:
+
+        print(elem['name'])
+
+        charac = studentCharacteristicModel(user = User.objects.get(username=elem['name']), has_msc = elem['msc'], has_hsc = elem['hsc'], has_fam = elem['fam'],
+                                        has_con=elem['con'],has_social=1);
+        charac.save();
 
     return HttpResponse('');
 
@@ -711,12 +757,11 @@ def insertWhiteboardInfo(request):
 
     # 2. insert into the table
     for whiteboard in whiteboardInfoList:
-        #print(whiteboard['user'])
+        #print(whiteboard['name'])
 
-        entry = whiteboardInfoTable(whiteboard_activityID=int(whiteboard['whiteboard_id']),
-                                    userid_id=User.objects.get(username=whiteboard['name']).pk,
-                                    whiteboardGroupID=whiteboard['groupID'], whiteboard_link=whiteboard['url']);
-
+        entry = whiteboardInfoTable(whiteboard_activityID = int(whiteboard['whiteboard_id']),
+                                    userid_id = User.objects.get(username=whiteboard['name']).pk,
+                                    whiteboardGroupID = whiteboard['groupID'], whiteboard_link = whiteboard['url']);
         entry.save();
 
     return HttpResponse('');
@@ -765,7 +810,7 @@ def groupAdd(request):
     userlist = infoFileRead.usernamefileRead(None);
 
     for userinfo in userlist:
-        # rangeVal = total number of unique gallery activities
+        #rangeVal = total number of unique gallery activities
         rangeVal = 8;
 
         for i in range(1, rangeVal):
@@ -803,6 +848,7 @@ def createBulkUser(request):
         user_studentInfo.save()
 
 
+    print('/createBulkUser done input');
     return render(request, 'app/login.html', {})
 
 ##############################################
@@ -855,7 +901,7 @@ def matchPersonalityProfile(request):
         charac = getCharacteristic(request, request.user);  # this is a dict
         #translate charac to a list, take the first four elem, fifth is the social
         charac_list = list(charac.values())[0:4]
-        #print('debug matchPersonalityProfile', charac);
+        print('debug matchPersonalityProfile student initial charac', charac);
         #print('debug matchPersonalityProfile', charac_list[0]);
 
         personality_dict = handlerMatchProfile(request, charac_list, 'based on survey response')
@@ -879,22 +925,21 @@ def handlerMatchProfile(request, charac_list, event):
                [True, False, False, False],
                [True, False, False, True],
                [True, False, True, False],
-               [True, False, True, False],
+               [True, False, True, True],
                [True, True, False, False],
                [True, True, False, True],
                [True, True, True, False],
                [True, True, True, True]]
 
-    #profile_names = ['Jane', 'Tommy', 'Maya', 'Arnold', 'Sam', 'Evan', 'Ronald', 'Pam', 'Lesly', 'Amber', 'Owen', 'Noah']
-    profile_names = ['jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane', 'jane']
-
+    profile_names = ['August', 'Taylor', 'Phoenix', 'Nicky', 'Alexis', 'Monroe', 'Seneca', 'Morgan', 'Robin', 'Adrian',
+                     'Zion', 'Sam', 'Andy', 'Sidney', 'Quinn', 'Skyler']
     matchedprofile_index = ''
 
     for list in profile:
         if charac_list == list:
-            print('line 904 lucky number', charac_list)
-            print('line 905 lucky number', list)
-            print('line 906 lucky number', profile.index(list))
+            # print('line 904 lucky number', charac_list)
+            # print('line 905 lucky number', list)
+            # print('line 906 lucky number', profile.index(list))
             matchedprofile_index = profile.index(list)
 
 
@@ -905,18 +950,18 @@ def handlerMatchProfile(request, charac_list, event):
     }
 
     hsc_statements = {
-        'False': 'but they don’t feel like they are very good at giving help to others',
+        'False': 'but they do not feel like they are very good at giving help to others',
         'True': 'and they think they are pretty good at giving help to others'
     }
 
     #true/false reversed in april 2021 implementation
     fam_statements = {
         'True': 'they prefer only working with people they know',
-        'False': 'they don\'t mind working with anybody'
+        'False': 'they do not mind working with anybody'
     }
 
     con_statements = {
-        'False': 'they don\'t always participate',
+        'False': 'they do not always participate',
         'True': 'they usually do what they are supposed to do'
     }
 
@@ -971,6 +1016,8 @@ def saveEditedPersonality(request):
         entry.save();
 
     return HttpResponse('');
+
+# def saveStudentCharacteristicModel(request):
 
 # def getImagePerUser(request, act_id, username):
 #     print('receiving parameter :: activity id :: username ' + act_id + '  ' + username);
