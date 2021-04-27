@@ -300,9 +300,18 @@ var bindActivityButtons=function () {
             //if the card is already extended, put it back to normal
             card_extension_close();
 
-            loadFeed( id ); //load the chat feed based on the activity id
+            var output = loadFeed( id ); //load the chat feed based on the activity id
 
             console.log( 'card opened' );
+
+
+            $( ".chat-group-members" ).hover( function () {
+                $( ".hover-username" ).css( 'display', 'flex' );
+            }, function () {
+                $( ".hover-username" ).css( 'display', 'none' );
+            } );
+
+
         }
         //        ---------------------badge card-----------------------
         if ( $( '.card.badgeCard' ).hasClass( 'active' ) ) {

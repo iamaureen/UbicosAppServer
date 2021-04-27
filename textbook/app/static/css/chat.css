@@ -60,8 +60,7 @@
     margin-left: 0%;
 }
 
-a.chat-group-members{
-
+a.chat-group-members {
     display: inline-block;
     position: absolute;
     margin-top: 2%;
@@ -71,5 +70,24 @@ a.chat-group-members{
     background: url('/static/pics/group-members.png') no-repeat;
     background-size: 100%;
     z-index: 2;
+}
 
+.all_students {
+    width: 50%;
+    background-color: rgb(177, 236, 229);
+    color: rgb(12, 13, 17);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: 30%;
+    margin-top: 3%;
+    height: 5%;
+    padding: 1%;
+}
+
+.chat-group-members:hover .all_students {
+    visibility: visible;
+    opacity: 1;
 }

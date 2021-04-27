@@ -117,10 +117,12 @@ function loadFeed(id){
                 });
 
                 //TODO: display these names on the top-right corner
-                wb_group_list = response.group_member_name;
+                wb_group_list=response.group_member_name;
+                $( '.all_students' ).text( wb_group_list );
                 console.log('whiteboard group members :: ', wb_group_list)
 
             }
-        });
+    } );
+    
 }
 
