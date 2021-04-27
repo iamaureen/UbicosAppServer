@@ -757,7 +757,7 @@ def insertWhiteboardInfo(request):
 
     # 2. insert into the table
     for whiteboard in whiteboardInfoList:
-        #print(whiteboard['name'])
+        print(whiteboard['name'])
 
         entry = whiteboardInfoTable(whiteboard_activityID = int(whiteboard['whiteboard_id']),
                                     userid_id = User.objects.get(username=whiteboard['name']).pk,

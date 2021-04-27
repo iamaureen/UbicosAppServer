@@ -2,7 +2,7 @@ import csv
 
 class infoFileRead():
     def fileRead(self):
-        filename = '/Users/isa14/Downloads/supportInfo.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/supportInfo.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -18,9 +18,10 @@ class infoFileRead():
                     dict['value'] = row[1];
                     dict['supporttype'] = row[2];
                     dict['index'] = row[3];
-                    dict['platform'] = row[4];
-                    dict['prompt'] = row[5];
-                    dict['sentopener'] = row[6];
+                    dict['platform'] = row[5];
+                    dict['prompt'] = row[6];
+                    dict['sentopener1'] = row[7];
+                    dict['sentopener2'] = row[8];
 
                     #print(dict);
 
@@ -33,7 +34,7 @@ class infoFileRead():
         return bagdeInfoList;
 
     def whiteboardfileRead(self):
-        filename = '/Users/isa14/Downloads/2021utilityfolder/wb-period4.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/wb-period3.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -87,7 +88,7 @@ class infoFileRead():
         return khanacademyInfoList;
 
     def usernamefileRead(self):
-        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period3.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -117,7 +118,7 @@ class infoFileRead():
             return userlist;
 
     def characteristicfileRead(self):
-        filename = '/Users/isa14/Downloads/2021utilityfolder/period4.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/period3.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');
@@ -146,7 +147,7 @@ class infoFileRead():
             return userlist;
 
     def studentCharacfileRead(self):
-        filename = '/Users/isa14/Downloads/2021utilityfolder/m-period4-db.csv';
+        filename = '/Users/isa14/Downloads/2021utilityfolder/m-period3-db.csv';
 
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',');

@@ -39,6 +39,7 @@ urlpatterns = [
     url('insertSupportInfo',views.insertSupportInfo), #used by gallery.js, kaform.js
     url('getBadgeNames',views.getBadgeNames), #used by gallery.js, kaform.js
     url('getPrompt', views.getPrompt), #used by gallery.js, kaform.js
+    url('insertCharacInfo', views.insertCharacInfo), #used by gallery.js, kaform.js
 
     #computational model urls
     url('computationalModel', views.computationalModel),
