@@ -28,6 +28,7 @@ var getRadioBtnValue=function () {
         //console.log( e.target.defaultValue )
         window.localStorage.setItem( "personality_radio_value", e.target.defaultValue );
 
+
         $( ".personality_radio" ).attr( "disabled", true );
         $( ".edit_btn" ).show();
     } )
@@ -132,7 +133,8 @@ var editPersonalityOptionBtnYes_method = function(){
 
 var editPersonalityOptionBtnNo_method = function(){
 
-    //saves to the database
+        console.log(window.localStorage.getItem( "personality_radio_value"))
+        //saves to the database
         $.ajax( {
             type: 'POST',
             url: '/saveEditedPersonality/',
@@ -144,7 +146,7 @@ var editPersonalityOptionBtnNo_method = function(){
                 'con': localStorage.getItem( "personality_con" ),
                 'name': $( 'span#namePersonality' ).text(),
                 'likeness': window.localStorage.getItem( "personality_radio_value"),
-                'event': "no change in html inputs"
+                'event': "feel same, no change in html inputs"
             },
             success: function ( e ) {
 
@@ -193,6 +195,7 @@ var changepersonality_method=function () {
 
 
         //todo the matched personality thing
+          console.log(window.localStorage.getItem( "personality_radio_value"))
 
         //saves to the database
         $.ajax( {
