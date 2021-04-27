@@ -27,9 +27,9 @@ SECRET_KEY = '&82g0ts$v5j-0nu_iu3hhtdd+xc7%)757zz7#ll8ir)pw!^&(_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['facetlab.pythonanywhere.com']
+ALLOWED_HOSTS = ['facetlab.pythonanywhere.com']
 # ALLOWED_HOSTS = ['facetlab.pythonanywhere.com','127.0.0.1','localhost','192.168.0.8']
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 #URL for @login_required decorator to use
 LOGIN_URL = '/login'
