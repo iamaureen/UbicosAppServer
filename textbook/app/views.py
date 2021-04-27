@@ -1012,6 +1012,7 @@ def saveEditedPersonality(request):
                                  char_fam=request.POST.get('fam'),
                                  char_con=request.POST.get('con'),
                                  char_name=request.POST.get('name'),
+                                 likeness=request.POST.get('likeness'),
                                  event=request.POST.get('event'))
         entry.save();
 
