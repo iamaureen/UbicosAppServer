@@ -491,8 +491,16 @@ var bindActivityButtons=function () {
 
     $( '#editPersonalityOptionBtnNo' ).off().on( 'click', function ( event ) {
 
+        $('.cd-popup').addClass('is-visible');
+
         //defined in personality.js
         editPersonalityOptionBtnNo_method();
+
+    } );
+
+    $('#profileOKbtn').off().on( 'click', function ( event ) {
+
+        $('.cd-popup').removeClass('is-visible');
 
     } );
 
