@@ -36,7 +36,7 @@ week1_relevance = [];
 
 import re
 import string
-from dialog_tag import DialogTag
+#from dialog_tag import DialogTag
 import random
 
 #model = DialogTag('distilbert-base-uncased')
