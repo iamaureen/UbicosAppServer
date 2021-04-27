@@ -761,7 +761,7 @@ def registerUser(request):
     return render(request, 'app/register.html', {})
 
 def groupAdd(request):
-    
+
     userlist = infoFileRead.usernamefileRead(None);
 
     for userinfo in userlist:
