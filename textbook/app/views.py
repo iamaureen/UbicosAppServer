@@ -383,7 +383,7 @@ def updateImageFeed(request):
     #however, if there is no image uploaded yet for the gallery, then img_id will be null
     img_msg = ''
     if img_id:
-        img_msg = imageComment.objects.filter(imageId_id=img_id, posted_by__in = group_member_id);
+        img_msg = imageComment.objects.filter(imageId_id=img_id, posted_by__in = group_member_id).order_by('posted_at');
         img_msg = serializers.serialize('json', img_msg, use_natural_foreign_keys=True, use_natural_primary_keys=True);
 
     group_member_name = []
@@ -658,7 +658,8 @@ def updateFeed(request, id):
     print('views py whiteboard group members :: ', group_member_name)
 
     # message from these group members
-    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id);
+    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id).order_by('posted_at');
+
     msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
 
     return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'group_member_name': group_member_name})
