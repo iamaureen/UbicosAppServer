@@ -310,6 +310,26 @@ def getIndividualImages(request, act_id):
     return JsonResponse({'imageData': json.dumps(image_list)});
     #return HttpResponse('');
 
+
+def imageGalleryPerActivity(request, act_id):
+
+    print('in image Gallery year 2021')
+    images = imageModel.objects.filter(gallery_id=act_id);
+
+    image_list = [];
+    for image in images:
+        dict = {};
+        if images:
+            dict['posted_by'] = image.posted_by.get_username();
+            dict['image_id'] = image.pk;
+            dict['url'] = image.image.url;
+            image_list.append(dict);
+
+    #print(image_list)
+    return JsonResponse({'imageData': json.dumps(image_list)});
+    #return HttpResponse('');
+
+
 def saveIndividualCommentMsgs(request):
     #insert into the model
     comment = individualMsgComment(activityID=request.POST.get('activityID'), imageId_id=request.POST.get('imagePK'), content=request.POST.get('message'),

@@ -24,6 +24,7 @@ urlpatterns = [
     url('getGalleryImage/(?P<act_id>\d+)', views.getGalleryImage),
     url('imageComment', views.broadcastImageComment),
     url('updateImageFeed/', views.updateImageFeed),
+    url('imageGalleryPerActivity/(?P<act_id>\d+)', views.imageGalleryPerActivity),
     #urls for self-gallery tool
     url('getSelfGalleryContent/(?P<act_id>\d+)', views.getSelfGalleryContent),
     #urls for student characteristic

@@ -761,10 +761,15 @@ p.cardDescription{
 }
 
 #ind-feed {
-    height: 20%;
+    height: 100%;
     padding: 15px 15px 15px 15px;
     //border-style: dotted;
     overflow-y: auto;
+
+    img{
+        width: 450px;
+        margin-left: 5%;
+    }
 }
 
 #ind-comment-feed{
@@ -1028,7 +1033,7 @@ p.cardDescription{
 /* upload */
 .card.individual {
     background: linear-gradient(@gallery1, @gallery2);
-
+    overflow-y: scroll;
     p{
         color: black;
         margin-left: 50px
@@ -2318,15 +2323,16 @@ a.btn:hover{
     color: #000;
 }
 
-//first page left side menu bar related CSS -- end
-
-
-//badgeCard css -- start
-
-
-
-//badgeCard css -- end
-
-// persona profile css -- start
-
-//persona profile css -- end
+.image_num_span{
+    height: 2rem;
+    width: 2rem;
+    padding: 10px;
+    background: #2D9CDB;
+    display: inline-block;
+    position: absolute;
+    bottom: -5px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,1);
+}

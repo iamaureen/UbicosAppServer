@@ -372,7 +372,7 @@ var bindActivityButtons=function () {
             card_extension_close();
 
             //when a user opens this card, load with appropriate images and comments wrt the current user
-            loadIndividualFeed( id );
+            loadGalleryImage( id );
 
         }
         //       ------------------------------ GALLERY (group discussion) -----------------------
