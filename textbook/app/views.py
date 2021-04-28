@@ -323,6 +323,11 @@ def imageGalleryPerActivity(request, act_id):
             dict['posted_by'] = image.posted_by.get_username();
             dict['image_id'] = image.pk;
             dict['url'] = image.image.url;
+
+            #get the whiteboard id for this current user
+            whiteboardIDquery = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, userid_id=User.objects.get(username = image.posted_by.get_username()).pk).values('whiteboardGroupID')
+            #print('in image Gallery year 2021 ', whiteboardIDquery[0]['whiteboardGroupID'])
+            dict['whiteboardGroupID'] = whiteboardIDquery[0]['whiteboardGroupID']
             image_list.append(dict);
 
     #print(image_list)
