@@ -61,7 +61,12 @@ var loadGalleryImage = function(act_id) {
 
                     img.on('click', function(event){
 
-                        alert(imageID);
+                        //$(this).toggleClass('ind-feed-image-fullsize');
+                          document.getElementById("teacher-myModal").style.display = "block";
+                          console.log(this.src)
+                          $('#img01').attr('src',this.src);
+
+
                     })
 
 //                    var id=key+1;
@@ -93,7 +98,11 @@ var loadGalleryImage = function(act_id) {
 
 
 var teacherGalleryImageButtonAction = function(){
+        $('.teacher-close').click(function(event){
 
+            document.getElementById("teacher-myModal").style.display = "none";
+
+        })
 
 } //end of teacherGalleryImageButtonAction method
 
