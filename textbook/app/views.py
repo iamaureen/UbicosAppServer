@@ -453,7 +453,7 @@ def getBadgeNames(request):
     badgeDesc_dict = {
         'hg': ['Ask clarification questions to understand the concept.', 'Explain your thought process with reasoning.', 'Combine multiple ideas together, and explain them in your words.'],
         'trans': ['Provide ideas for improvement.', 'Share your thoughts on the existing conversation.', 'Add additional information in the conversation.'],
-        'part': ['Think about a way to solve a problem.', 'Think about a way to solve a problem.', 'Appreciate others effort during the collaboration.']
+        'part': ['Think about a way to solve a problem.', 'Helping others is great!', 'Appreciate others effort during the collaboration.']
     }
 
     if request.method == 'POST':
