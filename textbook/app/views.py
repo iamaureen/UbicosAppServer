@@ -574,54 +574,69 @@ def getPrompt(request):
         randomNO = str(random.choice(index_list))
         print('line 536 ::', randomNO)
 
-        # start likelihood if
+        # if likelihood is greater than 0.3 (using the old data)
         if likelihood > 0.3:
             supportType = 'transactive'
-            #todo
+            charac_ = "HSC"
+            charac_val = "high" #this combination gives support to improve discussion quality
         else:
-            # likelihood less than 0.3, depending on platform check charac and return support
-            if platform == 'MB':
-                #TODO: make entry to support history
-                print('from Modelbook');
-                if charac_list[0]:
-                    print('MSC high');
-                    supportType = 'transactive'
-                    charac_ = "MSC"
-                    charac_val = "high"
-
-                else:
-                    print('MSC low');
-                    supportType = 'question'
-                    charac_ = "MSC"
-                    charac_val = "low"
-
-            elif platform == 'KA':
-                print('from Khan Academy');
-                if charac_list[2]:
-                    print('Fam high');
-                    supportType = 'participation'
-                    charac_ = "Fam"
-                    charac_val = "high"
-
-                else:
-                    print('Fam low');
-                    supportType = 'transactive'
-                    charac_ = "Fam"
-                    charac_val = "low"
-
+            if charac_list[3]:
+                print("CON high")
+                charac_ = "Con"
+                charac_val = "high"
+                supportType = 'transactive'
             else:
-                print('from Teachable Agent')
-                if charac_list[1]:
-                    print('hsc high');
-                    supportType = 'elaboration'
-                    charac_="HSC"
-                    charac_val="high"
+                print("CON low")
+                # likelihood less than 0.3, depending on platform check charac and return support
+                if platform == 'MB':
+                    print('from Modelbook');
+                    if charac_list[0]:
+                        print('MSC high');
+                        supportType = 'transactive'
+                        charac_ = "MSC"
+                        charac_val = "high"
+
+                    else:
+                        print('MSC low');
+                        supportType = 'question'
+                        charac_ = "MSC"
+                        charac_val = "low"
+
+                elif platform == 'KA':
+                    print('from Khan Academy');
+                    if charac_list[2]:
+                        print('Fam high');
+                        supportType = 'participation'
+                        charac_ = "Fam"
+                        charac_val = "high"
+
+                    else:
+                        print('Fam low');
+                        supportType = 'transactive'
+                        charac_ = "Fam"
+                        charac_val = "low"
 
                 else:
-                    print('hsc low');
-                    supportType = 'elaboration'
-                    charac_="HSC"
-                    charac_val="low"
+                    print('from Teachable Agent')
+                    if charac_list[1]:
+                        print('hsc high');
+                        supportType = 'elaboration'
+                        charac_="HSC"
+                        charac_val="high"
+
+                    else:
+                        print('hsc low');
+                        supportType = 'elaboration'
+                        charac_="HSC"
+                        charac_val="low"
+
+
+        #add computational model log -
+        # todo: when analyzing, combine computational model log and support offered to check
+        entry = computationalModelLog(likelihood=likelihood, student=User.objects.get(username=username),
+                                      platform=platform,
+                                      activity_id=activity_id);
+        entry.save();
 
 
 
@@ -629,8 +644,11 @@ def getPrompt(request):
                                         supportType=supportType, charac=charac_, charac_val=charac_val)
         support.save();
 
+        # todo: add platform specific query
         supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=randomNO, supportType=supportType).values(
             'prompt', 'sentence_opener1');
+
+        print(supportText)
 
         return JsonResponse({'promptText': supportText[0]['prompt'],
                              'promptSO': supportText[0]['sentence_opener1']})

@@ -122,7 +122,7 @@ var loadGalleryFeed=function ( act_id ) {
     //defined in utility.js
     //computationalModelMethod(logged_in, 'MB', gallery_act_id);
 
-    //defined in utility.js
+    //defined in utility.js -- goes to utility.js --> views.js --> returns value to utility.js --> returns in gallery.js
     obj = getPrompt(logged_in, "MB", gallery_act_id);
 
     $('#gallery-prompt-text').text(obj['promptText']);
@@ -168,7 +168,15 @@ var galleryMsgBtnAction = function(){
 
 
       $('.gallery-prompt-button').off().on('click', function(e){
-             $("#gallery-prompt").toggle();
+
+                console.log('clicking the gallery prompt button');
+
+                obj = getPrompt(logged_in, "MB", gallery_act_id);
+
+                $('#gallery-prompt-text').text(obj['promptText']);
+                $('#gallery-prompt-so').text(obj['promptSO']);
+
+                $("#gallery-prompt").toggle();
 
       });
 
@@ -181,7 +189,7 @@ var galleryMsgBtnAction = function(){
             //set it to the message textbox
         
           $( '#image-msg-text' ).val( sentOpener );
-          $( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
+          //$( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
 
       })
 
