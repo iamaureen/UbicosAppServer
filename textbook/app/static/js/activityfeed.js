@@ -39,11 +39,16 @@ function updateActivityFeedRealtime(){
     //add event listener to the chat button click
     $("#msg-send-btn").off().on('click', function(e){
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
         postMessage();
     });
 
     $('#msg-text').off().on('keypress', function (e) {
         if (e.which == 13) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
           postMessage();
           return false;
         }

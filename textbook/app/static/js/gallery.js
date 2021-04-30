@@ -84,7 +84,18 @@ var loadGalleryFeed=function ( act_id ) {
 
                 //group member - get group member from groupInfo table
                 gallery_group_list = response.group_member;
-                console.log('gallery DD group member :: ', gallery_group_list)
+                discard_users = ['CM', 'user1','user2']
+
+                let checker = (arr, target) => target.every(v => arr.includes(v));
+
+                if(checker(gallery_group_list, discard_users)){
+                    gallery_group_list = gallery_group_list.filter( ( el ) => !discard_users.includes( el ) );
+                    //console.log('line 95', gallery_group_list)
+                }
+
+                $( '.gal_all_students' ).text( gallery_group_list );
+
+
 
                 /* remove it
 
@@ -129,6 +140,8 @@ var galleryMsgBtnAction = function(){
     //adding event listener to the chat button click
     $("#image-msg-send-btn").off().on('click', function(e){
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         //alert("im clicked");
         postImageMessage();
 
@@ -138,7 +151,8 @@ var galleryMsgBtnAction = function(){
     //adding event lister for 'enter' button
     $('#image-msg-text').off().on('keypress', function (e) {
         if (e.which == 13) {
-
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             postImageMessage();
             return false;
         }

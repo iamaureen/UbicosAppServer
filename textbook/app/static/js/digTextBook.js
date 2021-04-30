@@ -389,6 +389,12 @@ var bindActivityButtons=function () {
 
             loadGalleryFeed( id );
 
+            $( ".gallery-group-members-icon" ).hover( function () {
+                $( ".gal-hover-username" ).css( 'display', 'flex' );
+            }, function () {
+                $( ".gal-hover-username" ).css( 'display', 'none' );
+            } );
+
 
 
         }
