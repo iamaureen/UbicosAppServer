@@ -357,7 +357,7 @@ def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id:: ', act_id);
     # first get the whiteboard group id of the current user
-    member_id = getWBGroupID(request, act_id);
+    member_id = getDDGroupID(request, act_id);
     print('current user white board group ID :: ', member_id)
 
     dict_group = {

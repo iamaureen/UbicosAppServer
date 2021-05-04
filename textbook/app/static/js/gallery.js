@@ -84,6 +84,7 @@ var loadGalleryFeed=function ( act_id ) {
 
                 //group member - get group member from groupInfo table
                 gallery_group_list = response.group_member;
+                console.log('gallery.js', gallery_group_list);
                 discard_users = ['CM', 'user1','user2']
 
                 let checker = (arr, target) => target.every(v => arr.includes(v));
@@ -228,7 +229,7 @@ var postImageMessage = function () {
             },
             success: function (data) {
                 //empty the message pane
-                $("input[name='image-msg-text']").val('');
+                $("#image-msg-text").val('');
 
 
                 //populate the reward-div
@@ -267,6 +268,7 @@ var realTimeMsgTransfer = function(){
         //if the element is not found in the list, returns -1
         //if found will return the index
         //so, if the data.name (user who is posting) is in the gallery_group_list continue else do nothing
+        console.log('gallery_group_list', gallery_group_list)
         if(jQuery.inArray(data.name, gallery_group_list) !== -1){
             //console.log('(server)', data.imageid)
             //console.log('(local)', $("input[name='image-db-pk']").val())
