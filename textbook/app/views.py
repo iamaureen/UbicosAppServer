@@ -103,7 +103,8 @@ def getBadges(request):
 
         # save the badge info as history
         # TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
-        saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+        badgeHistory = saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+        badgeHistory.save()
 
         return JsonResponse({'rewardType': rewardType,
                              'promptSO': praiseText})
@@ -356,9 +357,10 @@ def getIndividualCommentMsgs(request,imageId):
 def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id:: ', act_id);
-    # first get the whiteboard group id of the current user
+    # first get the digital group id of the current user
+    # this is to ensure all the digital group members see the same image
     member_id = getDDGroupID(request, act_id);
-    print('current user white board group ID :: ', member_id)
+    print('current user digital board group ID :: ', member_id)
 
     dict_group = {
         1: 2, 2: 1, 3:2, 4:3, 5:4, 6:3, 7:2, 8:4, 9:3, 10: 4
