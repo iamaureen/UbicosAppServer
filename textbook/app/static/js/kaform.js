@@ -143,21 +143,20 @@ var ka_response_save=function () {
 
         if ( !$( '.ka-radio' ).is( ':checked' ) ) {
             $( "#failure_text" ).text( "Please select an option!" )
-            $( '.upload-failure-msg' ).show();
+            //$( '.upload-failure-msg' ).show();
+            $(".upload-failure-msg").css("display", "block");
 
-        } else if ( $( "#KAAnswer" ).val()===""||$( "#KAAnswer" ).val()===undefined ) {
-            $( "#failure_text" ).text( "Please enter text into the response box!" )
-            $( '.upload-failure-msg' ).show();
+        } else if ( $( "#KAAnswer" ).val()=== "" ||$( "#KAAnswer" ).val()===undefined ) {
+            console.log("KA input text is empty, show error message");
+            $( "#failure_text" ).text( "Please enter text into the textbox!" )
+            //$( '.upload-failure-msg' ).show();
+            $(".upload-failure-msg").css("display", "block");
         }
         else {
 
             $( '.upload-failure-msg' ).hide();
 
-        }
-
-
-
-        $.post({
+            $.post({
 
                url:'/submitKAAnswer',
                async: false,
@@ -184,26 +183,31 @@ var ka_response_save=function () {
                 $( '#KAAnswer' ).val('');
                 $('.ka-radio').prop('checked', false);
                 $( '#default_ka_img' ).attr( 'src', API_URL.picsBase+"/default.png" );
+                $(".ka-upload-success-msg").css("display", "none");
 
 
             }
 
             });
 
+
+        }
+
+
+
+
+
         //event for failure message close button
         $( ".upload-failure-msg-closebtn" ).on( 'click', function () {
-            var div=this.parentElement;
-            div.style.opacity="0";
-            setTimeout( function () {div.style.display="none";}, 300 );
+//            var div=this.parentElement;
+//            div.style.opacity="0";
+//            setTimeout( function () {div.style.display="none";}, 300 );
+              $(".upload-failure-msg").css("display", "none");
 
         } );
 
 
-
-
-
-
-        enterLogIntoDatabase( 'KA Bagde Copy Button Click', 'Button Click', global_badge_selected, global_current_pagenumber );
+        enterLogIntoDatabase( 'KA Form Submit Click', 'Button Click', global_badge_selected, global_current_pagenumber );
 
 
     } );
@@ -234,7 +238,7 @@ var ka_button_action = function(){
             var sentOpener = $('#ka-prompt-so').text();
             //console.log(sentOpener)p
             //set it to the message textbox
-          $( '#KAAnswerP' ).text( sentOpener );
+          $( '#KAAnswer' ).text( sentOpener );
           $( ".ka-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
           
 
