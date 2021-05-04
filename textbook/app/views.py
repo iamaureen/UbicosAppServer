@@ -233,8 +233,8 @@ def uploadImage(request):
         gallery_id = request.POST.get('act-id')
         print('gallery_id :: ', gallery_id);
 
-        #made a query here to get the student group ID
-        group_id = getGroupID(request, gallery_id);
+        #made a query here to get the student group ID from their digital discussion group
+        group_id = getDDGroupID(request, gallery_id);
         print('group_id :: ', group_id);
 
         # print(type(request.FILES['gallery_img'].name))
@@ -297,6 +297,7 @@ def getIndividualImages(request, act_id):
     image_list = [];
     for user_id in member_list:
         #get the LAST image uploaded by the user_id
+        # because imageModel uses digital discussion group id
         images = imageModel.objects.filter(posted_by_id = user_id, gallery_id=act_id).last();
         dict = {};
         if images:
@@ -355,25 +356,28 @@ def getIndividualCommentMsgs(request,imageId):
 def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id:: ', act_id);
-    # first get group id of the current user
-    member_id = getGroupID(request, act_id);
-    print('current user member of group :: ', member_id)
+    # first get the whiteboard group id of the current user
+    member_id = getWBGroupID(request, act_id);
+    print('current user white board group ID :: ', member_id)
 
     dict_group = {
         1: 2, 2: 1, 3:2, 4:3, 5:4, 6:3, 7:2, 8:4, 9:3, 10: 4
     }
 
-    print('image to be shown from group :: ', dict_group[member_id])
-    member_list = getGroupMembersID(request, dict_group[member_id], act_id)
-    print('member list of that group', member_list)
+    print('image to be shown from whiteboard group :: ', dict_group[member_id])
+    #get group member id from the whiteboard group
+    member_list = getGroupWBMembersID(request, dict_group[member_id], act_id)
+    print('member list of that whiteboard group', member_list)
 
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
+
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 345 current user member image Id list:: ', member_image_id_list);
+    print('image Id list from that whiteboard group :: ', member_image_id_list);
 
     if(len(member_image_id_list) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
+        #TODO: if the desired group did not uplaod any image, send any other image [0]
         return HttpResponse('');
     else:
         #the list is not empty
@@ -400,7 +404,7 @@ def updateImageFeed(request):
 
     print('debug purpose, def getGalupdateImageFeedleryImage, image id, :: ' + img_id + ' in activity id :: ', act_id);
 
-    # get the current users' group-member name
+    # get the current users' digital group-member id
     group_member_id = getGroupMembers(request, act_id);
 
     # get all the comments in the given image id
@@ -717,23 +721,29 @@ def getUsername(request):
     return HttpResponse('');
 
 # input: activity ID
-# output: the group ID of the current user for the given activity ID
-def getGroupID(request, act_id):
+# output: the digital discussion group ID of the current user for the given activity ID
+def getDDGroupID(request, act_id):
     groupID = groupInfo.objects.all().filter(activityID = act_id)
     groupID = groupID.filter(users_id = request.user)
 
     return groupID[0].group;
 
+def getWBGroupID(request, act_id):
+    groupID = whiteboardInfoTable.objects.all().filter(whiteboard_activityID = act_id)
+    groupID = groupID.filter(userid_id = request.user)
+
+    return groupID[0].whiteboardGroupID;
+
 
 def getCurrentUserGroupID(request, act_id):
 
-    return JsonResponse({'groupID': getGroupID(request, act_id)});
+    return JsonResponse({'groupID': getDDGroupID(request, act_id)});
 
 #input: activity ID
 #output: return the ID of the group members of the current user for the given activity
 def getGroupMembers(request, act_id):
     # what is the group number of the current user in a particular activity
-    current_user_groupID = getGroupID(request, act_id);
+    current_user_groupID = getDDGroupID(request, act_id);
 
     # which users are are there in this group
     group_members = groupInfo.objects.all().filter(activityID=act_id, group=current_user_groupID);
@@ -747,14 +757,14 @@ def getGroupMembers(request, act_id):
 
 #input: group number
 #output: return ID of all the group members given a group number
-def getGroupMembersID(request, group_id, act_id):
+def getGroupWBMembersID(request, group_id, act_id):
 
     # which users are are there in this group
-    group_members = groupInfo.objects.all().filter(activityID=act_id, group=group_id);
+    group_members = whiteboardInfoTable.objects.all().filter(whiteboard_activityID=act_id, whiteboardGroupID=group_id);
 
     group_member_list = [];
     for member in group_members:
-        group_member_list.append(member.users_id);
+        group_member_list.append(member.userid_id);
 
     return group_member_list;
 
