@@ -395,6 +395,36 @@ var bindActivityButtons=function () {
                 $( ".gal-hover-username" ).css( 'display', 'none' );
             } );
 
+            $( "#galleryImg" ).ezPlus( {
+
+                //first option --  comment out from line 401 - line 405 & comment after 406 all
+                // zoomType: 'lens',
+                // lensShape: 'round',
+                // lensSize: 150,
+                // lensColour: 'transparent',
+                // scrollZoom: true,
+                tint: true,
+                tintColour: "#0c6c85",
+                tintOpacity: 0.5,
+                borderColour: 'grey',
+                //zoom window place at the bottom
+                // zoomWindowPosition: 5,
+                //at the right side
+                zoomWindowPosition: 3,
+                cursor: 'pointer',
+                galleryActiveClass: "active",
+                imageCrossfade: true,
+                loadingIcon: "https://www.elevateweb.co.uk/spinner.gif"
+            } );
+            
+            $( "#galleryImg" ).bind( "click", function ( e ) {
+                var ez=$( '#galleryImg' ).data( 'ezPlus' );
+                ez.closeAll();
+                $.fancyboxPlus( ez.getGalleryList() );
+                return false;
+            } );
+
+
 
 
         }
