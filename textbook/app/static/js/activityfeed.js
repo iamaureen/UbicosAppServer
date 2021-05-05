@@ -39,11 +39,16 @@ function updateActivityFeedRealtime(){
     //add event listener to the chat button click
     $("#msg-send-btn").off().on('click', function(e){
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
         postMessage();
     });
 
     $('#msg-text').off().on('keypress', function (e) {
         if (e.which == 13) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
           postMessage();
           return false;
         }
@@ -119,6 +124,9 @@ function loadFeed(id){
                 //TODO: display these names on the top-right corner
                 wb_group_list=response.group_member_name;
                 $( '.all_students' ).text( wb_group_list );
+//                jQuery.each(wb_group_list, function(index, item) {
+//                        console.log(item);
+//                    });
                 console.log('whiteboard group members :: ', wb_group_list)
 
             }

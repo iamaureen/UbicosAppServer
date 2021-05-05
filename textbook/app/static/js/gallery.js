@@ -84,7 +84,19 @@ var loadGalleryFeed=function ( act_id ) {
 
                 //group member - get group member from groupInfo table
                 gallery_group_list = response.group_member;
-                console.log('gallery DD group member :: ', gallery_group_list)
+                console.log('gallery.js', gallery_group_list);
+                discard_users = ['CM', 'user1','user2']
+
+                let checker = (arr, target) => target.every(v => arr.includes(v));
+
+                if(checker(gallery_group_list, discard_users)){
+                    gallery_group_list = gallery_group_list.filter( ( el ) => !discard_users.includes( el ) );
+                    //console.log('line 95', gallery_group_list)
+                }
+
+                $( '.gal_all_students' ).text( gallery_group_list );
+
+
 
                 /* remove it
 
@@ -111,7 +123,7 @@ var loadGalleryFeed=function ( act_id ) {
     //defined in utility.js
     //computationalModelMethod(logged_in, 'MB', gallery_act_id);
 
-    //defined in utility.js
+    //defined in utility.js -- goes to utility.js --> views.js --> returns value to utility.js --> returns in gallery.js
     obj = getPrompt(logged_in, "MB", gallery_act_id);
 
     $('#gallery-prompt-text').text(obj['promptText']);
@@ -129,6 +141,8 @@ var galleryMsgBtnAction = function(){
     //adding event listener to the chat button click
     $("#image-msg-send-btn").off().on('click', function(e){
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         //alert("im clicked");
         postImageMessage();
 
@@ -138,7 +152,8 @@ var galleryMsgBtnAction = function(){
     //adding event lister for 'enter' button
     $('#image-msg-text').off().on('keypress', function (e) {
         if (e.which == 13) {
-
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             postImageMessage();
             return false;
         }
@@ -154,7 +169,15 @@ var galleryMsgBtnAction = function(){
 
 
       $('.gallery-prompt-button').off().on('click', function(e){
-             $("#gallery-prompt").toggle();
+
+                console.log('clicking the gallery prompt button');
+
+                obj = getPrompt(logged_in, "MB", gallery_act_id);
+
+                $('#gallery-prompt-text').text(obj['promptText']);
+                $('#gallery-prompt-so').text(obj['promptSO']);
+
+                $("#gallery-prompt").toggle();
 
       });
 
@@ -167,7 +190,7 @@ var galleryMsgBtnAction = function(){
             //set it to the message textbox
         
           $( '#image-msg-text' ).val( sentOpener );
-          $( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
+          //$( ".gallery-copy-success-msg" ).show( 0 ).delay( 5000 ).hide( 0 );
 
       })
 
@@ -206,7 +229,7 @@ var postImageMessage = function () {
             },
             success: function (data) {
                 //empty the message pane
-                $("input[name='image-msg-text']").val('');
+                $("#image-msg-text").val('');
 
 
                 //populate the reward-div
@@ -245,6 +268,7 @@ var realTimeMsgTransfer = function(){
         //if the element is not found in the list, returns -1
         //if found will return the index
         //so, if the data.name (user who is posting) is in the gallery_group_list continue else do nothing
+        console.log('gallery_group_list', gallery_group_list)
         if(jQuery.inArray(data.name, gallery_group_list) !== -1){
             //console.log('(server)', data.imageid)
             //console.log('(local)', $("input[name='image-db-pk']").val())

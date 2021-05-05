@@ -372,7 +372,7 @@ var bindActivityButtons=function () {
             card_extension_close();
 
             //when a user opens this card, load with appropriate images and comments wrt the current user
-            loadIndividualFeed( id );
+            loadGalleryImage( id );
 
         }
         //       ------------------------------ GALLERY (group discussion) -----------------------
@@ -388,6 +388,12 @@ var bindActivityButtons=function () {
             $( 'ul#image-feed' ).html( '' );
 
             loadGalleryFeed( id );
+
+            $( ".gallery-group-members-icon" ).hover( function () {
+                $( ".gal-hover-username" ).css( 'display', 'flex' );
+            }, function () {
+                $( ".gal-hover-username" ).css( 'display', 'none' );
+            } );
 
 
 
@@ -491,8 +497,16 @@ var bindActivityButtons=function () {
 
     $( '#editPersonalityOptionBtnNo' ).off().on( 'click', function ( event ) {
 
+        $('.cd-popup').addClass('is-visible');
+
         //defined in personality.js
         editPersonalityOptionBtnNo_method();
+
+    } );
+
+    $('#profileOKbtn').off().on( 'click', function ( event ) {
+
+        $('.cd-popup').removeClass('is-visible');
 
     } );
 

@@ -72,19 +72,27 @@ a.chat-group-members {
     z-index: 2;
 }
 
+.hover-username{
+    width: 30%;
+}
+
 .all_students {
-    width: 50%;
-    background-color: rgb(177, 236, 229);
-    color: rgb(12, 13, 17);
+    width: 30%;
+    display: inline-block;
+    background-color: #f2d0a9;
+    color: black;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    margin-left: 30%;
-    margin-top: 3%;
-    height: 5%;
+    margin-left: 65%;
+    margin-top: 8%;
+    height: 10%;
     padding: 1%;
+    word-wrap: break-word;
+
+
 }
 
 .chat-group-members:hover .all_students {

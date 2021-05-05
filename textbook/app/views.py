@@ -103,7 +103,8 @@ def getBadges(request):
 
         # save the badge info as history
         # TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
-        saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+        badgeHistory = saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+        badgeHistory.save()
 
         return JsonResponse({'rewardType': rewardType,
                              'promptSO': praiseText})
@@ -233,8 +234,8 @@ def uploadImage(request):
         gallery_id = request.POST.get('act-id')
         print('gallery_id :: ', gallery_id);
 
-        #made a query here to get the student group ID
-        group_id = getGroupID(request, gallery_id);
+        #made a query here to get the student group ID from their digital discussion group
+        group_id = getDDGroupID(request, gallery_id);
         print('group_id :: ', group_id);
 
         # print(type(request.FILES['gallery_img'].name))
@@ -297,6 +298,7 @@ def getIndividualImages(request, act_id):
     image_list = [];
     for user_id in member_list:
         #get the LAST image uploaded by the user_id
+        # because imageModel uses digital discussion group id
         images = imageModel.objects.filter(posted_by_id = user_id, gallery_id=act_id).last();
         dict = {};
         if images:
@@ -309,6 +311,31 @@ def getIndividualImages(request, act_id):
 
     return JsonResponse({'imageData': json.dumps(image_list)});
     #return HttpResponse('');
+
+
+def imageGalleryPerActivity(request, act_id):
+
+    print('in image Gallery year 2021')
+    images = imageModel.objects.filter(gallery_id=act_id);
+
+    image_list = [];
+    for image in images:
+        dict = {};
+        if images:
+            dict['posted_by'] = image.posted_by.get_username();
+            dict['image_id'] = image.pk;
+            dict['url'] = image.image.url;
+
+            #get the whiteboard id for this current user
+            whiteboardIDquery = whiteboardInfoTable.objects.filter(whiteboard_activityID=act_id, userid_id=User.objects.get(username = image.posted_by.get_username()).pk).values('whiteboardGroupID')
+            #print('in image Gallery year 2021 ', whiteboardIDquery[0]['whiteboardGroupID'])
+            dict['whiteboardGroupID'] = whiteboardIDquery[0]['whiteboardGroupID']
+            image_list.append(dict);
+
+    #print(image_list)
+    return JsonResponse({'imageData': json.dumps(image_list)});
+    #return HttpResponse('');
+
 
 def saveIndividualCommentMsgs(request):
     #insert into the model
@@ -330,25 +357,29 @@ def getIndividualCommentMsgs(request,imageId):
 def getGalleryImage(request, act_id):
 
     print('debug purpose, def updateImage, gallery id:: ', act_id);
-    # first get group id of the current user
-    member_id = getGroupID(request, act_id);
-    print('current user member of group :: ', member_id)
+    # first get the digital group id of the current user
+    # this is to ensure all the digital group members see the same image
+    member_id = getDDGroupID(request, act_id);
+    print('current user digital board group ID :: ', member_id)
 
     dict_group = {
         1: 2, 2: 1, 3:2, 4:3, 5:4, 6:3, 7:2, 8:4, 9:3, 10: 4
     }
 
-    print('image to be shown from group :: ', dict_group[member_id])
-    member_list = getGroupMembersID(request, dict_group[member_id], act_id)
-    print('member list of that group', member_list)
+    print('image to be shown from whiteboard group :: ', dict_group[member_id])
+    #get group member id from the whiteboard group
+    member_list = getGroupWBMembersID(request, dict_group[member_id], act_id)
+    print('member list of that whiteboard group', member_list)
 
     #get all the image id by the member list
     member_image_id_query= imageModel.objects.filter(posted_by__in=member_list, gallery_id=act_id).values('id');
+
     member_image_id_list = [item['id'] for item in member_image_id_query];
-    print('line 345 current user member image Id list:: ', member_image_id_list);
+    print('image Id list from that whiteboard group :: ', member_image_id_list);
 
     if(len(member_image_id_list) == 0):
         print('debug purpose, def updateImage, image list is empty as no image is uploaded in this activity yet');
+        #TODO: if the desired group did not uplaod any image, send any other image [0]
         return HttpResponse('');
     else:
         #the list is not empty
@@ -375,7 +406,7 @@ def updateImageFeed(request):
 
     print('debug purpose, def getGalupdateImageFeedleryImage, image id, :: ' + img_id + ' in activity id :: ', act_id);
 
-    # get the current users' group-member name
+    # get the current users' digital group-member id
     group_member_id = getGroupMembers(request, act_id);
 
     # get all the comments in the given image id
@@ -383,7 +414,7 @@ def updateImageFeed(request):
     #however, if there is no image uploaded yet for the gallery, then img_id will be null
     img_msg = ''
     if img_id:
-        img_msg = imageComment.objects.filter(imageId_id=img_id, posted_by__in = group_member_id);
+        img_msg = imageComment.objects.filter(imageId_id=img_id, posted_by__in = group_member_id).order_by('posted_at');
         img_msg = serializers.serialize('json', img_msg, use_natural_foreign_keys=True, use_natural_primary_keys=True);
 
     group_member_name = []
@@ -428,7 +459,7 @@ def getBadgeNames(request):
     badgeDesc_dict = {
         'hg': ['Ask clarification questions to understand the concept.', 'Explain your thought process with reasoning.', 'Combine multiple ideas together, and explain them in your words.'],
         'trans': ['Provide ideas for improvement.', 'Share your thoughts on the existing conversation.', 'Add additional information in the conversation.'],
-        'part': ['Think about a way to solve a problem.', 'Think about a way to solve a problem.', 'Appreciate others effort during the collaboration.']
+        'part': ['Think about a way to solve a problem.', 'Helping others is great!', 'Appreciate others effort during the collaboration.']
     }
 
     if request.method == 'POST':
@@ -549,54 +580,69 @@ def getPrompt(request):
         randomNO = str(random.choice(index_list))
         print('line 536 ::', randomNO)
 
-        # start likelihood if
+        # if likelihood is greater than 0.3 (using the old data)
         if likelihood > 0.3:
             supportType = 'transactive'
-            #todo
+            charac_ = "HSC"
+            charac_val = "high" #this combination gives support to improve discussion quality
         else:
-            # likelihood less than 0.3, depending on platform check charac and return support
-            if platform == 'MB':
-                #TODO: make entry to support history
-                print('from Modelbook');
-                if charac_list[0]:
-                    print('MSC high');
-                    supportType = 'transactive'
-                    charac_ = "MSC"
-                    charac_val = "high"
-
-                else:
-                    print('MSC low');
-                    supportType = 'question'
-                    charac_ = "MSC"
-                    charac_val = "low"
-
-            elif platform == 'KA':
-                print('from Khan Academy');
-                if charac_list[2]:
-                    print('Fam high');
-                    supportType = 'participation'
-                    charac_ = "Fam"
-                    charac_val = "high"
-
-                else:
-                    print('Fam low');
-                    supportType = 'transactive'
-                    charac_ = "Fam"
-                    charac_val = "low"
-
+            if charac_list[3]:
+                print("CON high")
+                charac_ = "Con"
+                charac_val = "high"
+                supportType = 'transactive'
             else:
-                print('from Teachable Agent')
-                if charac_list[1]:
-                    print('hsc high');
-                    supportType = 'elaboration'
-                    charac_="HSC"
-                    charac_val="high"
+                print("CON low")
+                # likelihood less than 0.3, depending on platform check charac and return support
+                if platform == 'MB':
+                    print('from Modelbook');
+                    if charac_list[0]:
+                        print('MSC high');
+                        supportType = 'transactive'
+                        charac_ = "MSC"
+                        charac_val = "high"
+
+                    else:
+                        print('MSC low');
+                        supportType = 'question'
+                        charac_ = "MSC"
+                        charac_val = "low"
+
+                elif platform == 'KA':
+                    print('from Khan Academy');
+                    if charac_list[2]:
+                        print('Fam high');
+                        supportType = 'participation'
+                        charac_ = "Fam"
+                        charac_val = "high"
+
+                    else:
+                        print('Fam low');
+                        supportType = 'transactive'
+                        charac_ = "Fam"
+                        charac_val = "low"
 
                 else:
-                    print('hsc low');
-                    supportType = 'elaboration'
-                    charac_="HSC"
-                    charac_val="low"
+                    print('from Teachable Agent')
+                    if charac_list[1]:
+                        print('hsc high');
+                        supportType = 'elaboration'
+                        charac_="HSC"
+                        charac_val="high"
+
+                    else:
+                        print('hsc low');
+                        supportType = 'elaboration'
+                        charac_="HSC"
+                        charac_val="low"
+
+
+        #add computational model log -
+        # todo: when analyzing, combine computational model log and support offered to check
+        entry = computationalModelLog(likelihood=likelihood, student=User.objects.get(username=username),
+                                      platform=platform,
+                                      activity_id=activity_id);
+        entry.save();
 
 
 
@@ -604,8 +650,11 @@ def getPrompt(request):
                                         supportType=supportType, charac=charac_, charac_val=charac_val)
         support.save();
 
+        # todo: add platform specific query
         supportText = badgeInfo.objects.filter(charac=charac_, value=charac_val, index=randomNO, supportType=supportType).values(
             'prompt', 'sentence_opener1');
+
+        print(supportText)
 
         return JsonResponse({'promptText': supportText[0]['prompt'],
                              'promptSO': supportText[0]['sentence_opener1']})
@@ -658,7 +707,8 @@ def updateFeed(request, id):
     print('views py whiteboard group members :: ', group_member_name)
 
     # message from these group members
-    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id);
+    msg = Message.objects.filter(posted_by_id__in=group_member_list, activity_id = id).order_by('posted_at');
+
     msg_data = serializers.serialize('json', msg, use_natural_foreign_keys=True)
 
     return JsonResponse({'success': msg_data, 'username': request.user.get_username(), 'group_member_name': group_member_name})
@@ -673,23 +723,29 @@ def getUsername(request):
     return HttpResponse('');
 
 # input: activity ID
-# output: the group ID of the current user for the given activity ID
-def getGroupID(request, act_id):
+# output: the digital discussion group ID of the current user for the given activity ID
+def getDDGroupID(request, act_id):
     groupID = groupInfo.objects.all().filter(activityID = act_id)
     groupID = groupID.filter(users_id = request.user)
 
     return groupID[0].group;
 
+def getWBGroupID(request, act_id):
+    groupID = whiteboardInfoTable.objects.all().filter(whiteboard_activityID = act_id)
+    groupID = groupID.filter(userid_id = request.user)
+
+    return groupID[0].whiteboardGroupID;
+
 
 def getCurrentUserGroupID(request, act_id):
 
-    return JsonResponse({'groupID': getGroupID(request, act_id)});
+    return JsonResponse({'groupID': getDDGroupID(request, act_id)});
 
 #input: activity ID
 #output: return the ID of the group members of the current user for the given activity
 def getGroupMembers(request, act_id):
     # what is the group number of the current user in a particular activity
-    current_user_groupID = getGroupID(request, act_id);
+    current_user_groupID = getDDGroupID(request, act_id);
 
     # which users are are there in this group
     group_members = groupInfo.objects.all().filter(activityID=act_id, group=current_user_groupID);
@@ -703,14 +759,14 @@ def getGroupMembers(request, act_id):
 
 #input: group number
 #output: return ID of all the group members given a group number
-def getGroupMembersID(request, group_id, act_id):
+def getGroupWBMembersID(request, group_id, act_id):
 
     # which users are are there in this group
-    group_members = groupInfo.objects.all().filter(activityID=act_id, group=group_id);
+    group_members = whiteboardInfoTable.objects.all().filter(whiteboard_activityID=act_id, whiteboardGroupID=group_id);
 
     group_member_list = [];
     for member in group_members:
-        group_member_list.append(member.users_id);
+        group_member_list.append(member.userid_id);
 
     return group_member_list;
 
@@ -1012,6 +1068,7 @@ def saveEditedPersonality(request):
                                  char_fam=request.POST.get('fam'),
                                  char_con=request.POST.get('con'),
                                  char_name=request.POST.get('name'),
+                                 likeness=request.POST.get('likeness'),
                                  event=request.POST.get('event'))
         entry.save();
 

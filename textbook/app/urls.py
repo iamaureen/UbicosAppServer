@@ -12,7 +12,8 @@ urlpatterns = [
     url('groupAdd', views.groupAdd),
     url('index', views.index, name='index'),
     url('getUsername', views.getUsername),
-    url('getGroupID/(?P<act_id>\d+)', views.getGroupID),
+    url('getDDGroupID/(?P<act_id>\d+)', views.getDDGroupID),
+    url('getWBGroupID/(?P<act_id>\d+)', views.getWBGroupID),
     #urls for upload image tool
     url('uploadImage', views.uploadImage, name='uploadImage'),
     url('uploadKAImage', views.uploadKAImage, name='uploadKAImage'),
@@ -24,6 +25,7 @@ urlpatterns = [
     url('getGalleryImage/(?P<act_id>\d+)', views.getGalleryImage),
     url('imageComment', views.broadcastImageComment),
     url('updateImageFeed/', views.updateImageFeed),
+    url('imageGalleryPerActivity/(?P<act_id>\d+)', views.imageGalleryPerActivity),
     #urls for self-gallery tool
     url('getSelfGalleryContent/(?P<act_id>\d+)', views.getSelfGalleryContent),
     #urls for student characteristic
