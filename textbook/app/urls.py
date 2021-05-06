@@ -36,6 +36,7 @@ urlpatterns = [
     url('updateFeed/(?P<id>\d+)', views.updateFeed),
     #url for khan academy tool
     url('submitKAAnswer',views.submitKAAnswer),
+    url('khanAcademyCompletionList',views.khanAcademyCompletionList),
 
     #badge related urls
     url('insertSupportInfo',views.insertSupportInfo), #used by gallery.js, kaform.js

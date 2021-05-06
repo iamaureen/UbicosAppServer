@@ -77,7 +77,8 @@ def broadcastImageComment(request):
     rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST['message']);
 
     #save the badge info as history
-    saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
+    badge = saveBadgeHistory(request.user, "MB", request.POST['activityID'], request.POST['message'], rewardType)
+    badge.save();
 
 
     # # #save into the history table once
@@ -103,8 +104,8 @@ def getBadges(request):
 
         # save the badge info as history
         # TODO add condition: if rewardType not null, then save badge history, if null, check the second condition
-        badgeHistory = saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
-        badgeHistory.save()
+        saveBadgeHistory(User.objects.get(username=username), platform, activity_id, message, rewardType)
+
 
         return JsonResponse({'rewardType': rewardType,
                              'promptSO': praiseText})
@@ -518,6 +519,10 @@ def submitKAAnswer(request):
     # pass through dialogtag to get the tag
     rewardType, praiseText = utteranceClassifier.classifierMethod(None, request.POST.get('answer'));
 
+    # save the badge info as history
+    saveBadgeHistory(request.user, "KA", request.POST.get('activity_id'), request.POST.get('answer'), rewardType)
+
+
 
     return JsonResponse({'rewardType': rewardType, 'praiseText': praiseText}) #goes to kaform.js
 
@@ -532,6 +537,15 @@ def saveBadgeHistory(username, platform, activity_id, message, received_badge):
 
     return HttpResponse('');
 
+def khanAcademyCompletionList (request):
+    query = khanAcademyAnswer.objects.filter(ka_id=1).values('posted_by_id')
+    print(query)
+
+    completed_user_list_name = []
+    for i in query:
+        completed_user_list_name.append(User.objects.get(id=i['posted_by_id']).username);
+
+    return HttpResponse(json.dumps(completed_user_list_name));
 
 # called from def getPrompt
 def computationalModel(request, charac, platform):

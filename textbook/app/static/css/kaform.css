@@ -38,7 +38,7 @@
     color: white;
 }
 
-.ka-upload-success-msg {
+.ka-upload-success-msg, .ka-submit-success {
     padding: 5px 20px 0px;
     text-align: center;
     color: black;

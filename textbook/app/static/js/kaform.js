@@ -185,6 +185,8 @@ var ka_response_save=function () {
                 $( '#default_ka_img' ).attr( 'src', API_URL.picsBase+"/default.png" );
                 $(".ka-upload-success-msg").css("display", "none");
 
+                $(".ka-submit-success").css("display", "block");
+
 
             }
 
@@ -229,6 +231,7 @@ var ka_button_action = function(){
       $('.ka-upload-success-msg-closebtn').off().on('click', function(e){
 
             $(".ka-upload-success-msg").css("display", "none");
+            $(".ka-submit-success").css("display", "none");
       })
 
       //copy button
