@@ -2,7 +2,7 @@ var host_url = window.location.host
 
 $( function () {
     
-    
+    checkIfRadioHasValue()
     getRadioBtnValue();
 
     let user_inputed_personality_msc=localStorage.getItem( "personality_msc" );
@@ -16,18 +16,31 @@ $( function () {
 //    console.log( user_inputed_personality_con )
 
     editBtnClick()
+    
 } );
+var checkIfRadioHasValue=function () {
+    let currentRadioValue=localStorage.getItem( "personality_radio_value" );
+    $( `input[name=personality_radio][value=${ currentRadioValue }]` ).prop( "checked", true );
+    
+    if ( currentRadioValue===null ) {
+        $( ".edit_btn" ).hide();
+        return false;
+    } else {
+        $( ".personality_radio" ).attr( "disabled", true );
+        $( ".edit_btn" ).show();
+        return true;
+    }
+
+}
 
 
 var getRadioBtnValue=function () {
-    // alert( $( "#deliveryNext" ).is( ":disabled" ))
-    $( ".edit_btn" ).hide();
+    // $( ".edit_btn" ).hide();
     
     $( ".personality_radio" ).change( function ( e ) {
         
         //console.log( e.target.defaultValue )
         window.localStorage.setItem( "personality_radio_value", e.target.defaultValue );
-
         $( ".personality_radio" ).attr( "disabled", true );
         $( ".edit_btn" ).show();
     } )
