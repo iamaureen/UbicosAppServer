@@ -538,14 +538,19 @@ def saveBadgeHistory(username, platform, activity_id, message, received_badge):
     return HttpResponse('');
 
 def khanAcademyCompletionList (request):
-    query = khanAcademyAnswer.objects.filter(ka_id=1).values('posted_by_id')
-    print(query)
+    query = khanAcademyAnswer.objects.filter(ka_id=1).values('posted_by_id').distinct()
+    #print(query)
 
     completed_user_list_name = []
     for i in query:
         completed_user_list_name.append(User.objects.get(id=i['posted_by_id']).username);
 
-    return HttpResponse(json.dumps(completed_user_list_name));
+    all_users_list = [str(user) for user in User.objects.all()]
+    did_not_complete = [x for x in all_users_list if x not in completed_user_list_name]
+
+    #return HttpResponse(json.dumps(completed_user_list_name));
+    return JsonResponse({'completed': completed_user_list_name,
+                         'did not complete':did_not_complete})
 
 # called from def getPrompt
 def computationalModel(request, charac, platform):
