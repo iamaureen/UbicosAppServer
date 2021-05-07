@@ -416,6 +416,20 @@ a.assignment {
     transition: all 0.4s;
 }
 
+.uploadNontech {
+    color: @gallery_link;
+}
+.activity-button.uploadNontech {
+    background-image: url('/static/pics/upload.png');
+}
+.activity-button.uploadNontech:after {
+    background: linear-gradient(@gallery_link, @gallery2);
+}
+.activity-button.uploadNontech:hover {
+    box-shadow: 0 0 30px @gallery1;
+    transition: all 0.4s;
+}
+
 /* individual (1) class color + activity button color */
 .self-gallery {
     color: @gallery_link;
