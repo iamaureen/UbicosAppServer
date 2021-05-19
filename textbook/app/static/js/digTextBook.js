@@ -15,7 +15,7 @@ window.onerror=function ( message, file, line ) {
     It is also used in: activityindex.js
 */
 
-var NUM_PAGES=35;
+var NUM_PAGES=20;
 
 //load all init function required for the digital textbook to load here
 $( function () {
