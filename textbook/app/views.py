@@ -538,7 +538,8 @@ def saveBadgeHistory(username, platform, activity_id, message, received_badge):
     return HttpResponse('');
 
 def khanAcademyCompletionList (request):
-    query = khanAcademyAnswer.objects.filter(ka_id=1).values('posted_by_id').distinct()
+    today = datetime.today()
+    query = khanAcademyAnswer.objects.filter(ka_id=1).filter(posted_at__date=today).values('posted_by_id').distinct()
     #print(query)
 
     completed_user_list_name = []
